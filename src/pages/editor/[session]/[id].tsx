@@ -4,8 +4,8 @@ import { createClerkSupabaseServer } from '@/services/supabaseServer';
 import DesignEditor from '@/components/DesignEditor';
 
 export default function Editor() {
-  const initialData = {}
-  return <DesignEditor initialData={initialData} />;
+
+  return <DesignEditor />;
 };
 
 // export const getServerSideProps: GetServerSideProps = async (context) => {

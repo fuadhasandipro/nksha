@@ -12,7 +12,7 @@ import Canvas from "../components/Canvas"
 import MobileContainer from "../MobileContainer"
 import Navbar from "../components/Navbar"
 
-const MobileEditor = ({ initialData }) => {
+const MobileEditor = ({ isLargeScreen }) => {
 
     return (
         // <EditorContainer>
@@ -29,9 +29,9 @@ const MobileEditor = ({ initialData }) => {
 
 
         <>
-            <Navbar initialData={initialData} />
+            <Navbar isLargeScreen={isLargeScreen} />
             <Panels />
-            <div style={{ flex: 1, display: "flex", flexDirection: "column", position: "relative", width: "auto", height: "700px" }}>
+            <div style={{ flex: 1, display: "flex", flexDirection: "column", position: "relative", width: "100%", height: "86vh" }}>
                 <Canvas />
                 <Toolbox />
                 <Footer />

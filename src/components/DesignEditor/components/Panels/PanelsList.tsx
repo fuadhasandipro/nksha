@@ -24,7 +24,7 @@ const PanelsList = () => {
   const editorType = useEditorType();
   const PANEL_ITEMS = editorType === 'VIDEO' ? VIDEO_PANEL_ITEMS : BASE_ITEMS;
   return (
-    <Container style={{ background: '#18191b' }}>
+    <Container style={{ background: '#bdbdbd' }}>
       <Scrollable autoHide={true}>
         {PANEL_ITEMS.map((panelListItem) => (
           <PanelListItem
@@ -69,7 +69,7 @@ const PanelListItem = ({ label, icon, activePanel, name }: any) => {
         gap: '0.1rem',
         ':hover': {
           cursor: 'pointer',
-          backgroundColor: '#252627',
+          backgroundColor: '#d8d8d8',
           transition: 'all 0.2s ease',
         },
       }}

@@ -20,6 +20,7 @@ import { useIsDarkMode } from '@/lib/hooks/use-is-dark-mode';
 import { useModalAction } from '@/components/modal-views/context';
 import usePaymentUrl from '@/lib/hooks/use-payment-url';
 import { useUser } from '@clerk/nextjs';
+import { useRouter } from 'next/router';
 
 interface NavLinkProps {
   href: string;
@@ -68,6 +69,8 @@ export function Sidebar({
   const { isDarkMode } = useIsDarkMode();
   const { openModal } = useModalAction();
   const { fetchPaymentUrl } = usePaymentUrl();
+
+  const router = useRouter()
 
   return (
     <aside
@@ -146,7 +149,9 @@ export function Sidebar({
                   // openModal('PRODUCT_DETAILS')
 
                   const paymentUrl = await fetchPaymentUrl();
+
                   window.open(paymentUrl, '_blank');
+                  router.push('/');
                 }}
               >
                 Buy Now

@@ -6,11 +6,11 @@ import Footer from "./components/Footer"
 import Toolbox from "./components/Toolbox"
 import EditorContainer from "./components/EditorContainer"
 
-const GraphicEditor = ({ initialData }) => {
+const GraphicEditor = ({ isLargeScreen }) => {
 
   return (
     <EditorContainer>
-      <Navbar initialData={initialData} />
+      <Navbar isLargeScreen={isLargeScreen} />
       <div style={{ display: "flex", flex: 1 }}>
         <Panels />
         <div style={{ flex: 1, display: "flex", flexDirection: "column", position: "relative" }}>

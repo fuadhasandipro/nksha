@@ -18,6 +18,7 @@ import { loadVideoEditorAssets } from '../../utils/video';
 import { useRouter } from 'next/router';
 import supabases, { createClerkSupabaseClient } from '@/services/server';
 import { useAuth, useUser } from '@clerk/nextjs';
+import MobileDesignTitle from './MobileDesignTitle';
 
 const Container = styled<'div', {}, Theme>('div', ({ $theme }) => ({
   height: '64px',
@@ -29,7 +30,7 @@ const Container = styled<'div', {}, Theme>('div', ({ $theme }) => ({
   overflowX: 'hidden',
 }));
 
-const Navbar = ({ initialData }) => {
+const Navbar = ({ isLargeScreen }) => {
   const {
     setDisplayPreview,
     setScenes,
@@ -352,10 +353,93 @@ const Navbar = ({ initialData }) => {
     }
   };
 
+  const handleSaveDownload = async () => {
+
+    const currentScene = editor.scene.exportToJSON();
+
+    const updatedScenes = scenes.map((scn) => {
+      if (scn.id === currentScene.id) {
+        return {
+          id: currentScene.id,
+          layers: currentScene.layers,
+          name: currentScene.name,
+        };
+      }
+      return {
+        id: scn.id,
+        layers: scn.layers,
+        name: scn.name,
+      };
+    });
+
+    if (currentDesign) {
+      const graphicTemplate: IDesign = {
+        id: currentDesign.id,
+        type: 'GRAPHIC',
+        name: currentDesign.name,
+        frame: currentDesign.frame,
+        scenes: updatedScenes,
+        metadata: {},
+        preview: '',
+      };
+
+      const supabase = createClerkSupabaseClient();
+
+      const { data: existingSession, error: sessionError } =
+        await supabase
+          .from('user_designs')
+          .select('id')
+          .eq('session', router.query.session)
+          .single();
+
+      if (sessionError) {
+        const { error: insertError } = await supabase
+          .from('user_designs')
+          .insert({
+            title: currentDesign.name,
+            json: JSON.stringify(graphicTemplate),
+            user_id: userId,
+            session: router.query.session,
+            thumbnail:
+              'https://marketplace.canva.com/EAF2HYhH51c/2/0/800w/canva-4B2qPkf31Iw.jpg',
+            updated_at: new Date().toISOString(),
+            template_id: router.query.id,
+          });
+
+        if (insertError) {
+          console.error(
+            'Error inserting session:',
+            insertError.message
+          );
+        }
+      } else {
+        // Session does not exist, perform insert
+        const { error: updateError } = await supabase
+          .from('user_designs')
+          .update({
+            title: currentDesign.name,
+            json: JSON.stringify(graphicTemplate),
+            user_id: userId,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('session', router.query.session);
+
+        if (updateError) {
+          console.error(
+            'Error updating session:',
+            updateError.message
+          );
+        }
+      }
+    }
+  }
+
+
   return (
     // @ts-ignore
     <ThemeProvider theme={DarkTheme}>
-      <Container>
+
+      {isLargeScreen ? <Container>
         <div style={{ color: '#ffffff' }}>
           <Logo size={36} />
         </div>
@@ -407,84 +491,8 @@ const Navbar = ({ initialData }) => {
 
           <Button
             size="compact"
-            onClick={async () => {
-              const currentScene = editor.scene.exportToJSON();
-
-              const updatedScenes = scenes.map((scn) => {
-                if (scn.id === currentScene.id) {
-                  return {
-                    id: currentScene.id,
-                    layers: currentScene.layers,
-                    name: currentScene.name,
-                  };
-                }
-                return {
-                  id: scn.id,
-                  layers: scn.layers,
-                  name: scn.name,
-                };
-              });
-
-              if (currentDesign) {
-                const graphicTemplate: IDesign = {
-                  id: currentDesign.id,
-                  type: 'GRAPHIC',
-                  name: currentDesign.name,
-                  frame: currentDesign.frame,
-                  scenes: updatedScenes,
-                  metadata: {},
-                  preview: '',
-                };
-
-                const supabase = createClerkSupabaseClient();
-
-                const { data: existingSession, error: sessionError } =
-                  await supabase
-                    .from('user_designs')
-                    .select('id')
-                    .eq('session', router.query.session)
-                    .single();
-
-                if (sessionError) {
-                  const { error: insertError } = await supabase
-                    .from('user_designs')
-                    .insert({
-                      title: currentDesign.name,
-                      json: JSON.stringify(graphicTemplate),
-                      user_id: userId,
-                      session: router.query.session,
-                      thumbnail:
-                        'https://marketplace.canva.com/EAF2HYhH51c/2/0/800w/canva-4B2qPkf31Iw.jpg',
-                      updated_at: new Date().toISOString(),
-                      template_id: router.query.id,
-                    });
-
-                  if (insertError) {
-                    console.error(
-                      'Error inserting session:',
-                      insertError.message
-                    );
-                  }
-                } else {
-                  // Session does not exist, perform insert
-                  const { error: updateError } = await supabase
-                    .from('user_designs')
-                    .update({
-                      title: currentDesign.name,
-                      json: JSON.stringify(graphicTemplate),
-                      user_id: userId,
-                      updated_at: new Date().toISOString(),
-                    })
-                    .eq('session', router.query.session);
-
-                  if (updateError) {
-                    console.error(
-                      'Error updating session:',
-                      updateError.message
-                    );
-                  }
-                }
-              }
+            onClick={() => {
+              handleSaveDownload()
             }}
             kind={KIND.tertiary}
             overrides={{
@@ -506,7 +514,33 @@ const Navbar = ({ initialData }) => {
             <Github size={24} />
           </Button>
         </Block>
-      </Container>
+      </Container> :
+
+        <div className='bg-black flex items-center justify-between h-14 px-4'>
+          <div style={{ color: '#ffffff' }}>
+            <Logo size={36} />
+          </div>
+
+          <MobileDesignTitle />
+
+          <Button
+            size="compact"
+            onClick={() => {
+              handleSaveDownload()
+            }}
+            kind={KIND.tertiary}
+            overrides={{
+              StartEnhancer: {
+                style: {
+                  marginRight: '4px',
+                },
+              },
+            }}
+          >
+            Save & Download
+          </Button>
+        </div>}
+
     </ThemeProvider>
   );
 };

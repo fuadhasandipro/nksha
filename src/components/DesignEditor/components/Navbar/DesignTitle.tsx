@@ -103,7 +103,7 @@ const DesignTitle = () => {
             },
           },
         }}
-        content={() => <Block backgroundColor="#ffffff">All changes are saved</Block>}
+        content={() => <Block backgroundColor="#ffffff">Enter Design Title</Block>}
       >
         <Block
           $style={{

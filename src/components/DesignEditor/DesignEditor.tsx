@@ -9,7 +9,7 @@ import MobileContainer from "./MobileContainer"
 import MobileEditor from "./MobileEditor/MobileEditor"
 
 
-const DesignEditor = ({ initialData }) => {
+const DesignEditor = () => {
   const { displayPreview, setDisplayPreview } = useDesignEditorContext()
 
 
@@ -35,9 +35,9 @@ const DesignEditor = ({ initialData }) => {
 
       <Provider>
         {isLargeScreen ? <Container>
-          <GraphicEditor initialData={initialData} />
+          <GraphicEditor isLargeScreen={isLargeScreen} />
         </Container> : <MobileContainer>
-          <MobileEditor initialData={initialData} />
+          <MobileEditor isLargeScreen={isLargeScreen} />
         </MobileContainer>}
       </Provider>
     </>
