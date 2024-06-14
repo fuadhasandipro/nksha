@@ -13,10 +13,10 @@ export default async function handler(
 
   const options = {
     method: 'POST',
-    url: 'https://sandbox.uddoktapay.com/api/verify-payment',
+    url: 'https://pay.noksha.site/api/verify-payment',
     headers: {
       accept: 'application/json',
-      'RT-UDDOKTAPAY-API-KEY': '982d381360a69d419689740d9f2e26ce36fb7a50',
+      'RT-UDDOKTAPAY-API-KEY': 'f1d5bd54b659a131aad3020f1bbcd15e5bd275d9',
       'content-type': 'application/json',
     },
     data: { invoice_id },

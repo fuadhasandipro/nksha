@@ -38,7 +38,7 @@ function OrderedItem({ item }: { item: OrderedFile }) {
   const { title, session, template_id, updated_at, thumbnail } = item;
 
   return (
-    <div className="flex items-start gap-4 border-b border-light-400 py-4 last:border-b-0 dark:border-dark-400 sm:gap-5">
+    <div className="flex items-center gap-4 border-b border-light-400 py-4 last:border-b-0 dark:border-dark-400 sm:gap-5">
       <AnchorLink
         href={routes.existingTemplateUrl(`${session}/${template_id}`)}
       >
@@ -81,7 +81,7 @@ function OrderedItem({ item }: { item: OrderedFile }) {
             <DetailsIcon className="h-auto w-4" />
             Edit
           </a>
-          <div className="relative shrink-0">
+          {/* <div className="relative shrink-0">
             <Menu>
               <Menu.Button className="flex items-center space-x-[3px] font-semibold text-brand hover:text-brand-dark sm:h-12 sm:rounded sm:border sm:border-light-500 sm:px-4 sm:py-3 sm:dark:border-dark-600">
                 <span className="inline-flex h-1 w-1 shrink-0 rounded-full bg-dark-700 dark:bg-light-800"></span>
@@ -111,7 +111,7 @@ function OrderedItem({ item }: { item: OrderedFile }) {
                 </Menu.Items>
               </Transition>
             </Menu>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

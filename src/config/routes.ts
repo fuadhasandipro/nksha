@@ -21,6 +21,7 @@ const routes = {
   privacy: '/privacy',
   password: '/profile/security',
   feed: '/feed',
+  subscription: '/subscription',
   wallet: '/wallet',
   followedShop: '/followed-authors',
   orderUrl: (tracking_number: string) =>

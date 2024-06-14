@@ -7,10 +7,12 @@ import { GetStaticProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 const Buy: NextPageWithLayout = () => {
   const { isDarkMode } = useIsDarkMode();
   const { fetchPaymentUrl } = usePaymentUrl();
+  const router = useRouter()
 
   return (
     <nav className="flex flex-1 flex-col items-center justify-center pb-4">
@@ -31,7 +33,9 @@ const Buy: NextPageWithLayout = () => {
           e.preventDefault();
 
           const paymentUrl = await fetchPaymentUrl();
-          window.open(paymentUrl);
+
+          window.open(paymentUrl, '_blank');
+          router.push('/');
         }}
       >
         Get Noksha Pro

@@ -1,14 +1,12 @@
 import { useState } from 'react';
 import { useInfiniteQuery } from 'react-query';
 import { PAGE_SIZE } from './static/constants';
-import { createClerkSupabaseClient } from '@/services/server';
-import { useUser } from '@clerk/nextjs';
 import { fetchMyDesigns } from '@/services/mydesigns/fetchMyDesigns';
+import { useAuth } from '@clerk/nextjs';
 
 export const useUserAllDesigns = () => {
+  const { userId } = useAuth(); // Ensure useAuth is called inside a component or another hook
   const [page, setPage] = useState(0);
-
-  const { isLoaded, user } = useUser();
 
   const {
     data,
@@ -17,13 +15,14 @@ export const useUserAllDesigns = () => {
     hasNextPage,
     isFetchingNextPage,
     isLoading,
-  } = useInfiniteQuery('userdesigns', fetchMyDesigns, {
+  } = useInfiniteQuery(['userdesigns', userId], ({ pageParam = 0 }) => fetchMyDesigns(userId, pageParam), {
     getNextPageParam: (lastPage) => {
       if (lastPage.length < PAGE_SIZE) {
         return undefined;
       }
       return lastPage[lastPage.length - 1].id;
     },
+    enabled: !!userId, // Ensure query runs only if userId is available
   });
 
   const loadMore = () => {

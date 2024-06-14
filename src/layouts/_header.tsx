@@ -26,7 +26,7 @@ import { DetailsIcon } from '@/components/icons/details-icon';
 
 const AuthorizedMenuItems = [
   {
-    label: 'text-auth-profile',
+    label: "Profile",
     path: routes.profile,
   },
   {
@@ -34,7 +34,7 @@ const AuthorizedMenuItems = [
     path: routes.mydesigns,
   },
   {
-    label: 'text-auth-password',
+    label: 'Password',
     path: routes.password,
   },
 ];
@@ -80,7 +80,7 @@ function AuthorizedMenu({ user }: { user: User }) {
                 type="button"
                 className="transition-fill-colors w-full px-5 py-2.5 hover:bg-light-400 ltr:text-left rtl:text-right dark:hover:bg-dark-600"
               >
-                {t('text-logout')}
+                Logout
               </button>
             </Menu.Item>
           </SignOutButton>
@@ -134,7 +134,7 @@ export default function Header({
   showHamburger = false,
   onClickHamburger,
 }: HeaderProps) {
-  const { asPath } = useRouter();
+  const router = useRouter();
   const { t } = useTranslation('common');
   useSwapBodyClassOnScrollDirection();
   const isMultiLangEnable =
@@ -152,7 +152,7 @@ export default function Header({
         )}
         <Logo />
       </div>
-      <div className="relative flex items-center gap-5 pr-0.5 xs:gap-6 sm:gap-7">
+      <div className="relative flex items-center gap-2 pr-0.5 xs:gap-3 sm:gap-4">
         <SearchButton className="hidden sm:flex" />
         <ThemeSwitcher />
         <GridSwitcher />
@@ -166,7 +166,10 @@ export default function Header({
         )} */}
 
         <Link
-          href={routes.templateUrl('1')}
+          href=""
+          onClick={() => {
+            router.push(routes.templateUrl('1'));
+          }}
           rel="noreferrer"
           target="_blank"
           className="focus:ring-accent-700 hidden h-9 w-36 shrink-0 items-center justify-center self-center rounded border border-transparent bg-brand px-3 py-0 text-sm font-semibold leading-none text-light outline-none transition duration-300 ease-in-out hover:bg-brand-dark focus:shadow focus:outline-none focus:ring-1 sm:inline-flex"

@@ -21,6 +21,7 @@ import { useModalAction } from '@/components/modal-views/context';
 import usePaymentUrl from '@/lib/hooks/use-payment-url';
 import { useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/router';
+import subscriptionTimeLeft from '@/lib/getSubscriptionDuration';
 
 interface NavLinkProps {
   href: string;
@@ -72,6 +73,13 @@ export function Sidebar({
 
   const router = useRouter()
 
+  const subscriptionDateStr = user?.unsafeMetadata.subscriptionDate;
+  let differenceInDays = null;
+  if (subscriptionDateStr) {
+    differenceInDays = subscriptionTimeLeft(subscriptionDateStr)
+  }
+
+
   return (
     <aside
       className={cn(
@@ -84,7 +92,7 @@ export function Sidebar({
         <div className="flex h-full w-full flex-col">
           <nav className="flex flex-col">
             <NavLink
-              title={t('text-home')}
+              title="Home"
               href={routes.home}
               isCollapse={isCollapse}
               icon={<HomeIcon className="h-[18px] w-[18px] text-current" />}
@@ -104,30 +112,33 @@ export function Sidebar({
               icon={<DiscoverIcon className="h-[18px] w-[18px] text-current" />}
             /> */}
 
-            <NavLink
-              title={t('text-feed')}
-              href={routes.feed}
-              isCollapse={isCollapse}
-              icon={<FeedIcon className="h-[17px] w-[17px] text-current" />}
-            />
 
-            <NavLink
+
+            {/* <NavLink
               title={t('text-contact')}
               href={routes.contact}
               isCollapse={isCollapse}
               icon={
                 <PaperPlaneIcon className="h-[18px] w-[18px] text-current" />
               }
-            />
+            /> */}
+
             <NavLink
               title="Profile"
               href={routes.profile}
               isCollapse={isCollapse}
               icon={<SettingIcon className="h-[18px] w-[18px] text-current" />}
             />
+
+            <NavLink
+              title="Your Subscription"
+              href={routes.subscription}
+              isCollapse={isCollapse}
+              icon={<FeedIcon className="h-[17px] w-[17px] text-current" />}
+            />
           </nav>
 
-          {!user?.unsafeMetadata.isSubscribed && (
+          {differenceInDays === null || differenceInDays > 30 ? (
             <nav className="mt-auto flex flex-col items-center pb-4">
               <Image
                 src={
@@ -157,7 +168,7 @@ export function Sidebar({
                 Buy Now
               </Link>
             </nav>
-          )}
+          ) : ""}
         </div>
       </Scrollbar>
 
@@ -172,19 +183,19 @@ export function Sidebar({
             href={routes.terms}
             className="block py-2 text-dark-700 hover:text-dark-100 dark:hover:text-brand"
           >
-            {t('text-terms')}
+            Terms
           </ActiveLink>
           <ActiveLink
             href={routes.privacy}
             className="block py-2 text-dark-700 hover:text-dark-100 dark:hover:text-brand"
           >
-            {t('text-privacy')}
+            Privacy
           </ActiveLink>
           <ActiveLink
             href={routes.help}
             className="block py-2 text-dark-700 hover:text-dark-100 dark:hover:text-brand"
           >
-            {t('text-help-page-title')}
+            Help
           </ActiveLink>
         </nav>
         <Copyright className="text-xs font-medium text-dark-800/80 dark:text-dark-700" />

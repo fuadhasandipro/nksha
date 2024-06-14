@@ -1,9 +1,10 @@
-import { PAGE_SIZE } from '@/data/static/constants';
+
 import { createClerkSupabaseClient } from '../server';
 
-export const fetchMyDesigns = async ({ pageParam = 0, userId }) => {
+export const fetchMyDesigns = async (userId, pageParam = 0) => {
   const supabase = createClerkSupabaseClient();
-  let query = supabase.from('user_designs').select().limit(PAGE_SIZE);
+
+  let query = supabase.from('user_designs').select().eq("user_id", userId);
 
   if (pageParam) {
     query = query.gt('id', pageParam);

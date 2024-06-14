@@ -19,6 +19,7 @@ import { useRouter } from 'next/router';
 import supabases, { createClerkSupabaseClient } from '@/services/server';
 import { useAuth, useUser } from '@clerk/nextjs';
 import MobileDesignTitle from './MobileDesignTitle';
+import subscriptionTimeLeft from '@/lib/getSubscriptionDuration';
 
 const Container = styled<'div', {}, Theme>('div', ({ $theme }) => ({
   height: '64px',
@@ -258,29 +259,33 @@ const Navbar = ({ isLargeScreen }) => {
   );
   const router = useRouter();
 
-  // const init = useCallback(async () => {
-  //   if (!editor || !initialData) return;
-
-  //   let template = await loadGraphicTemplate(initialData.jsonDesign);
-  //   setScenes(template.scenes);
-  //   setCurrentDesign(template.design);
-  // }, [editor, initialData, setScenes, setCurrentDesign]);
-
-  // useEffect(() => {
-  //   init();
-  // }, [init]);
-
-
-  // const { shouldFetchData, session, id, userId } = initialData
-
   const { session, id } = router.query
 
   const { userId } = useAuth()
+
+  const { user } = useUser()
+
 
   useEffect(() => {
     const fetchData = async () => {
 
       const supabase = createClerkSupabaseClient()
+
+      if (user?.unsafeMetadata.isSubscribed == false) {
+        router.push("/subscription")
+        return
+      }
+
+      const subscriptionDateStr = user?.unsafeMetadata.subscriptionDate;
+
+      if (subscriptionDateStr) {
+        const differenceInDays = subscriptionTimeLeft(subscriptionDateStr)
+
+        if (differenceInDays > 30) {
+          router.push("/subscription");
+          return;
+        }
+      }
 
       // Fetch existing session
       const { data: existingSession, error: sessionError } = await supabase
@@ -290,7 +295,7 @@ const Navbar = ({ isLargeScreen }) => {
         .single();
 
       if (sessionError) {
-        console.error('Session fetch error:', sessionError.message);
+        alert(sessionError.message)
       }
 
       if (existingSession) {
@@ -301,7 +306,7 @@ const Navbar = ({ isLargeScreen }) => {
           setScenes(template.scenes);
           setCurrentDesign(template.design);
         } else {
-          throw new Error("Hello")
+          router.push("/")
         }
       } else {
         const { data: designData, error: designError } = await supabase
@@ -311,8 +316,7 @@ const Navbar = ({ isLargeScreen }) => {
           .single();
 
         if (designError || !designData) {
-          // throw new Error(designError.message)
-          console.log(designError);
+          router.push("/")
         }
 
         const jsonDesign = JSON.parse(designData?.json);
@@ -323,10 +327,6 @@ const Navbar = ({ isLargeScreen }) => {
 
       }
     };
-
-    // if (shouldFetchData) {
-    //   fetchData();
-    // }
 
     fetchData();
 
