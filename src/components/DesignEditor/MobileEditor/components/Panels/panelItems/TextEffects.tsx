@@ -7,6 +7,7 @@ import { useActiveObject, useEditor } from "@layerhub-io/react"
 import { TEXT_EFFECTS } from "@/components/DesignEditor/constants/design-editor"
 import Outline from "./Common/Outline"
 import Shadow from "./Common/Shadow"
+import useSetIsSidebarOpen from "@/components/DesignEditor/hooks/useSetIsSidebarOpen"
 
 const EFFECTS = {
   None: {
@@ -82,6 +83,9 @@ const TextEffects = () => {
   const activeObject = useActiveObject()
   const editor = useEditor()
 
+  const setIsSidebarOpen = useSetIsSidebarOpen()
+
+
   const updateObjectFill = throttle((color: string) => {
     if (activeObject) {
       editor.objects.update({ fill: color })
@@ -111,8 +115,9 @@ const TextEffects = () => {
         }}
       >
         <Block>Effects</Block>
-
-        <Block $style={{ cursor: "pointer", display: "flex" }}>
+        <Block $style={{ cursor: "pointer", display: "flex" }} onClick={() => {
+          setIsSidebarOpen(false)
+        }}>
           <Delete size={24} />
         </Block>
       </Block>

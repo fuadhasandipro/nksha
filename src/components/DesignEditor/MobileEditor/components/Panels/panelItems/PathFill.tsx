@@ -34,7 +34,9 @@ const PathFill = () => {
 
     setColor(color)
   }, 100)
+
   const setIsSidebarOpen = useSetIsSidebarOpen()
+
   return (
     <Block $style={{ flex: 1, display: "flex", flexDirection: "column" }}>
       <Block
@@ -50,7 +52,7 @@ const PathFill = () => {
 
         <Block $style={{ cursor: "pointer", display: "flex" }} onClick={() => {
           setIsSidebarOpen(false)
-        }} >
+        }}>
           <Delete size={24} />
         </Block>
       </Block>

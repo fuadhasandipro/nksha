@@ -266,13 +266,16 @@ const Text = () => {
         <TextFontSize />
         <Block display="flex" alignItems="center">
           <StatefulTooltip
-            placement={PLACEMENT.bottom}
+            placement={PLACEMENT.rightBottom}
             showArrow={true}
             accessibilityType="tooltip"
             content="Text color"
           >
             <Button
-              onClick={() => setActiveSubMenu('TextFill')}
+              onClick={() => {
+                setActiveSubMenu('TextFill')
+                setIsSidebarOpen(true);
+              }}
               size={SIZE.mini}
               kind={KIND.tertiary}
             >
@@ -281,7 +284,7 @@ const Text = () => {
           </StatefulTooltip>
 
           <StatefulTooltip
-            placement={PLACEMENT.bottom}
+            placement={PLACEMENT.rightBottom}
             showArrow
             accessibilityType="tooltip"
             content="Bold"
@@ -298,7 +301,7 @@ const Text = () => {
           </StatefulTooltip>
 
           <StatefulTooltip
-            placement={PLACEMENT.bottom}
+            placement={PLACEMENT.rightBottom}
             showArrow={true}
             accessibilityType="tooltip"
             content="Italic"
@@ -315,7 +318,7 @@ const Text = () => {
           </StatefulTooltip>
 
           <StatefulTooltip
-            placement={PLACEMENT.bottom}
+            placement={PLACEMENT.rightBottom}
             showArrow={true}
             accessibilityType="tooltip"
             content="Underline"
@@ -356,7 +359,10 @@ const Text = () => {
             margin="0 4px"
           />
           <Button
-            onClick={() => setActiveSubMenu('TextEffects')}
+            onClick={() => {
+              setActiveSubMenu('TextEffects')
+              setIsSidebarOpen(true);
+            }}
             size={SIZE.compact}
             kind={KIND.tertiary}
           >
@@ -368,9 +374,9 @@ const Text = () => {
             backgroundColor="rgb(213,213,213)"
             margin="0 4px"
           />
-          <Button size={SIZE.compact} kind={KIND.tertiary}>
+          {/* <Button size={SIZE.compact} kind={KIND.tertiary}>
             Animate
-          </Button>
+          </Button> */}
         </Block>
       </Block>
       <Common />
@@ -483,7 +489,7 @@ const TextLetterCase = () => {
   const editor = useEditor();
   return (
     <StatefulTooltip
-      placement={PLACEMENT.bottom}
+      placement={PLACEMENT.rightBottom}
       showArrow={true}
       accessibilityType="tooltip"
       content="Letter case"
@@ -549,7 +555,7 @@ const TextSpacing = () => {
   return (
     <StatefulPopover
       showArrow={true}
-      placement={PLACEMENT.bottom}
+      placement={PLACEMENT.rightBottom}
       content={() => (
         <Block
           padding="12px"
@@ -592,7 +598,7 @@ const TextSpacing = () => {
                     InputContainer: {},
                   }}
                   size={SIZE.mini}
-                  onChange={() => {}}
+                  onChange={() => { }}
                   value={Math.round(state.lineHeight)}
                 />
               </Block>
@@ -660,7 +666,7 @@ const TextSpacing = () => {
                     InputContainer: {},
                   }}
                   size={SIZE.mini}
-                  onChange={() => {}}
+                  onChange={() => { }}
                   value={Math.round(state.charSpacing)}
                 />
               </Block>
@@ -698,7 +704,7 @@ const TextSpacing = () => {
     >
       <Block>
         <StatefulTooltip
-          placement={PLACEMENT.bottom}
+          placement={PLACEMENT.rightBottom}
           showArrow={true}
           accessibilityType="tooltip"
           content="Spacing"
@@ -730,7 +736,7 @@ const TextAlign = () => {
   return (
     <StatefulPopover
       showArrow={true}
-      placement={PLACEMENT.bottom}
+      placement={PLACEMENT.rightBottom}
       content={() => (
         <Block
           padding="12px"
@@ -794,7 +800,7 @@ const TextAlign = () => {
     >
       <Block>
         <StatefulTooltip
-          placement={PLACEMENT.bottom}
+          placement={PLACEMENT.rightBottom}
           showArrow={true}
           accessibilityType="tooltip"
           content="Align"

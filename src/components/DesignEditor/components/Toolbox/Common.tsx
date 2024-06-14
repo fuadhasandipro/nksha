@@ -80,12 +80,12 @@ const Common = () => {
       <CommonAlign />
       <Opacity />
       <LockUnlock />
-      <StatefulTooltip placement={PLACEMENT.bottom} showArrow={true} accessibilityType="tooltip" content="Duplicate">
+      <StatefulTooltip placement={PLACEMENT.rightBottom} showArrow={true} accessibilityType="tooltip" content="Duplicate">
         <Button onClick={() => editor.objects.clone()} size={SIZE.mini} kind={KIND.tertiary}>
           <DuplicateIcon size={22} />
         </Button>
       </StatefulTooltip>
-      <StatefulTooltip placement={PLACEMENT.bottom} showArrow={true} accessibilityType="tooltip" content="Delete">
+      <StatefulTooltip placement={PLACEMENT.rightBottom} showArrow={true} accessibilityType="tooltip" content="Delete">
         <Button onClick={() => editor.objects.remove()} size={SIZE.mini} kind={KIND.tertiary}>
           <DeleteIcon size={24} />
         </Button>
@@ -167,7 +167,7 @@ const CommonLayers = () => {
       autoFocus
     >
       <Block>
-        <StatefulTooltip placement={PLACEMENT.bottom} showArrow={true} accessibilityType="tooltip" content="Layers">
+        <StatefulTooltip placement={PLACEMENT.rightBottom} showArrow={true} accessibilityType="tooltip" content="Layers">
           <Button size={SIZE.mini} kind={KIND.tertiary}>
             <LayersIcon size={19} />
           </Button>
@@ -208,7 +208,7 @@ const CommonAlign = () => {
       autoFocus
     >
       <Block>
-        <StatefulTooltip placement={PLACEMENT.bottom} showArrow={true} accessibilityType="tooltip" content="Align">
+        <StatefulTooltip placement={PLACEMENT.rightBottom} showArrow={true} accessibilityType="tooltip" content="Align">
           <Button size={SIZE.mini} kind={KIND.tertiary}>
             <AlignCenter size={24} />
           </Button>
@@ -231,7 +231,7 @@ const LockUnlock = () => {
   }, [activeObject])
 
   return state.locked ? (
-    <StatefulTooltip placement={PLACEMENT.bottom} showArrow={true} accessibilityType="tooltip" content="Lock">
+    <StatefulTooltip placement={PLACEMENT.bottomLeft} showArrow={true} accessibilityType="tooltip" content="Lock">
       <Button
         onClick={() => {
           editor.objects.unlock()
@@ -244,7 +244,7 @@ const LockUnlock = () => {
       </Button>
     </StatefulTooltip>
   ) : (
-    <StatefulTooltip placement={PLACEMENT.bottom} showArrow={true} accessibilityType="tooltip" content="Lock">
+    <StatefulTooltip placement={PLACEMENT.rightBottom} showArrow={true} accessibilityType="tooltip" content="Lock">
       <Button
         onClick={() => {
           editor.objects.lock()

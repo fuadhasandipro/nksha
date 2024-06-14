@@ -57,6 +57,7 @@ const PanelListItem = ({ label, icon, activePanel, name }: any) => {
         width: '80px',
         height: '80px',
         // backgroundColor: name === activePanel ? "#252627" : "#18191b",
+        color: '#2c2c2c',
         display: 'flex',
         alignItems: 'center',
         flexDirection: 'column',

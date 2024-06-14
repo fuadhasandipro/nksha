@@ -18,7 +18,7 @@ const Locked = () => {
         justifyContent: "flex-end",
       }}
     >
-      <StatefulTooltip placement={PLACEMENT.bottom} showArrow={true} accessibilityType="tooltip" content="Unlock">
+      <StatefulTooltip placement={PLACEMENT.left} showArrow={true} accessibilityType="tooltip" content="Unlock">
         <Button
           onClick={() => {
             editor.objects.unlock()
