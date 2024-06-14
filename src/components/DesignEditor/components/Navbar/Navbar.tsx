@@ -295,7 +295,7 @@ const Navbar = ({ isLargeScreen }) => {
         .single();
 
       if (sessionError) {
-        alert(sessionError.message)
+        console.log(sessionError);
       }
 
       if (existingSession) {

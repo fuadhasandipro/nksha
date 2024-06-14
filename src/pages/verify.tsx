@@ -12,30 +12,40 @@ const Success: NextPageWithLayout = () => {
       const response = await axios.get(
         'https://noksha.site/api/verify?invoice_id=' + router.query.invoice_id
       );
-      if (response?.data?.status == 'COMPLETED') {
+
+      const paymentDate = new Date(response?.data?.date);
+      const currentDate = new Date();
+      const timeDifference = Math.abs(currentDate.getTime() - paymentDate.getTime());
+      const timeDifferenceInMinutes = timeDifference / (1000 * 60);
+
+      if (response?.data?.status == 'COMPLETED' && timeDifferenceInMinutes <= 5) {
         if (user) {
-          user.update({
+          await user.update({
             unsafeMetadata: {
               isSubscribed: true,
               subscriptionDate: new Date(),
             },
           });
         }
-        router.push('/');
+        router.push('/subscription');
       } else if (response?.data?.status == 'PENDING') {
         console.log('Payment Pending');
       } else {
         console.log(response?.data?.status);
+        alert("Payment Error")
+        router.push('/subscription');
       }
     } catch (err) {
+      alert("Payment Error")
       console.error(err);
+      router.push('/subscription');
       return null;
     }
   };
 
   verifyPayment();
 
-  return <div> {router.query.invoice_id}</div>;
+  return <div>{router.query.invoice_id}</div>;
 };
 
 export default Success;
