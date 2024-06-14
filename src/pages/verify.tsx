@@ -35,7 +35,7 @@ const Success: NextPageWithLayout = () => {
 
   verifyPayment();
 
-  return <div>PaymentSuccess {route.query.invoice_id}</div>;
+  return <div> {route.query.invoice_id}</div>;
 };
 
 export default Success;
