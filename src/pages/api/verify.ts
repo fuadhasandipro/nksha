@@ -1,6 +1,11 @@
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 
+import { headers } from "next/headers"
+
+const headersList = headers();
+const cookie = headersList.get('cookie');
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -18,6 +23,7 @@ export default async function handler(
       accept: 'application/json',
       'RT-UDDOKTAPAY-API-KEY': 'f1d5bd54b659a131aad3020f1bbcd15e5bd275d9',
       'content-type': 'application/json',
+      'Cookie': cookie
     },
     data: { invoice_id },
   };

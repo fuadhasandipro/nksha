@@ -161,8 +161,8 @@ export function Sidebar({
 
                   const paymentUrl = await fetchPaymentUrl();
 
-                  // window.open(paymentUrl, '_blank');
-                  router.push(paymentUrl);
+                  window.open(paymentUrl, '_blank');
+                  router.push('/');
                 }}
               >
                 Buy Now
