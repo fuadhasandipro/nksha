@@ -69,7 +69,7 @@ export function Sidebar({
 
   const { isDarkMode } = useIsDarkMode();
   const { openModal } = useModalAction();
-  const { fetchPaymentUrl } = usePaymentUrl();
+  const { fetchPaymentUrl, error } = usePaymentUrl();
 
   const router = useRouter()
 
@@ -160,6 +160,11 @@ export function Sidebar({
                   // openModal('PRODUCT_DETAILS')
 
                   const paymentUrl = await fetchPaymentUrl();
+
+                  if (error) {
+                    console.log(error);
+                    return
+                  }
 
                   window.open(paymentUrl, '_blank');
                   router.push('/');

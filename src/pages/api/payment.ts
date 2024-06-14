@@ -18,7 +18,7 @@ export default async function handler(
       email: 'userEmail@gmail.com',
       amount: '2',
       metadata: { user_id: '10', order_id: '50' },
-      redirect_url: `https://bnksha.vercel.app/verify`,
+      redirect_url: `http://localhost:3000/verify`,
       cancel_url: `https://bnksha.vercel.app/`,
       webhook_url: `https://bnksha.vercel.app/`,
       return_type: 'GET',
