@@ -49,7 +49,7 @@ const Navbar = ({ isLargeScreen }) => {
 
 
   // const { userId } = useAuth();
-  // const [previewImage, setPreviewImage] = useState("");
+  const [previewImage, setPreviewImage] = useState("");
 
   const parseGraphicJSON = () => {
     const currentScene = editor.scene.exportToJSON();
@@ -77,8 +77,9 @@ const Navbar = ({ isLargeScreen }) => {
         frame: currentDesign.frame,
         scenes: updatedScenes,
         metadata: {},
-        preview: '',
+        preview: currentDesign.preview || "",
       };
+
       makeDownload(graphicTemplate);
     } else {
       console.log('NO CURRENT DESIGN');
@@ -356,7 +357,7 @@ const Navbar = ({ isLargeScreen }) => {
   };
 
   const handleSaveDownload = async () => {
-
+    const supabase = createClerkSupabaseClient();
     const currentScene = editor.scene.exportToJSON();
 
     const image = (await editor.renderer.render(currentScene)) as string
@@ -385,13 +386,15 @@ const Navbar = ({ isLargeScreen }) => {
 
     if (currentDesign) {
 
-      setLoadingDownload(true);
+      const { data: existingThumbnail } = await supabase
+        .from('user_designs')
+        .select('thumbnail')
+        .eq('session', router.query.session)
+        .single();
 
-      const response = await axios.post(apiUrl, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      }).then(async (res) => {
+      if (existingThumbnail) {
+        setLoadingDownload(true);
+
         const graphicTemplate: IDesign = {
           id: currentDesign.id,
           type: 'GRAPHIC',
@@ -399,19 +402,50 @@ const Navbar = ({ isLargeScreen }) => {
           frame: currentDesign.frame,
           scenes: updatedScenes,
           metadata: {},
-          preview: res.data.data.display_url,
+          preview: existingThumbnail,
         };
 
-        const supabase = createClerkSupabaseClient();
+        const { error: updateError } = await supabase
+          .from('user_designs')
+          .update({
+            title: currentDesign.name,
+            json: JSON.stringify(graphicTemplate),
+            user_id: userId,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('session', router.query.session);
 
-        const { data: existingSession, error: sessionError } =
-          await supabase
-            .from('user_designs')
-            .select('id')
-            .eq('session', router.query.session)
-            .single();
+        if (updateError) {
+          alert(updateError.message)
+        }
 
-        if (sessionError) {
+        const link = document.createElement('a');
+        link.download = 'image.png';
+
+        link.href = image;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        setLoadingDownload(false);
+      } else {
+
+        setLoadingDownload(true);
+
+        const response = await axios.post(apiUrl, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }).then(async (res) => {
+          const graphicTemplate: IDesign = {
+            id: currentDesign.id,
+            type: 'GRAPHIC',
+            name: currentDesign.name,
+            frame: currentDesign.frame,
+            scenes: updatedScenes,
+            metadata: {},
+            preview: res.data.data.display_url,
+          };
+
           const { error: insertError } = await supabase
             .from('user_designs')
             .insert({
@@ -425,47 +459,23 @@ const Navbar = ({ isLargeScreen }) => {
             });
 
           if (insertError) {
-            console.error(
-              'Error inserting session:',
-              insertError.message
-            );
+            alert(insertError.message)
           }
-        } else {
-          // Session does not exist, perform insert
-          const { error: updateError } = await supabase
-            .from('user_designs')
-            .update({
-              title: currentDesign.name,
-              json: JSON.stringify(graphicTemplate),
-              user_id: userId,
-              updated_at: new Date().toISOString(),
-              thumbnail: res.data.data.display_url,
-            })
-            .eq('session', router.query.session);
 
-          if (updateError) {
-            console.error(
-              'Error updating session:',
-              updateError.message
-            );
-          }
-        }
+          const link = document.createElement('a');
+          link.download = 'image.png';
 
-        const link = document.createElement('a');
-        link.download = 'image.png';
+          link.href = image;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
 
-        link.href = image;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-
-        setLoadingDownload(false);
-      }).catch(e => {
-        setLoadingDownload(false);
-        alert("Error, Please try again later")
-      });
-
-
+          setLoadingDownload(false);
+        }).catch(e => {
+          setLoadingDownload(false);
+          alert("Error, Please try again later")
+        });
+      }
     }
   }
 
@@ -548,7 +558,7 @@ const Navbar = ({ isLargeScreen }) => {
             isLoading={loadingDownload}
 
           >
-            Save & Download
+            Save Image
           </SaveButton>
 
 
