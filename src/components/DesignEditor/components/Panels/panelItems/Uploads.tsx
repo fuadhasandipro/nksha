@@ -11,6 +11,7 @@ import { captureFrame, loadVideoResource } from "@/components/DesignEditor/utils
 import { ILayer } from "@layerhub-io/types"
 import { toBase64 } from "@/components/DesignEditor/utils/data"
 import axios from "axios"
+import Image from "next/image"
 
 
 export default function () {
@@ -40,7 +41,6 @@ export default function () {
     }).then(res => {
       preview = res.data.data.display_url
 
-      console.log(res.data);
     }).catch(e => {
       alert("Upload Error, Please try again later")
     });
@@ -106,10 +106,13 @@ export default function () {
                 },
               }}
             >
-              Computer
+              Upload from Device
             </Button>
             <input onChange={handleFileInput} type="file" id="file" ref={inputFileRef} style={{ display: "none" }} />
-
+            {uploads.length == 0 && <div className="flex items-center flex-col text-center justify-center h-[80vh]">
+              <Image alt="drop bg" src="https://i.ibb.co/3yWJrsY/drop-bg.png" width={150} height={150} className="pointer-events-none" />
+              <p className="font-body mt-5">Choose a file or drag it here</p>
+            </div>}
             <div
               style={{
                 marginTop: "1rem",

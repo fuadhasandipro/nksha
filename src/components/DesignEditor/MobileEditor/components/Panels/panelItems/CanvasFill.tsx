@@ -1,7 +1,7 @@
 import React from "react"
 import { Block } from "baseui/block"
 import Scrollable from "@/components/DesignEditor/components/Scrollable"
-import { HexColorPicker } from "react-colorful"
+import { HexColorInput, HexColorPicker } from "react-colorful"
 import { Delete } from "baseui/icon"
 import { throttle } from "lodash"
 import { useEditor } from "@layerhub-io/react"
@@ -27,6 +27,8 @@ const CanvasFill = () => {
 
   const updateCanvasBackground = throttle((color: string) => {
     editor.canvas.setBackgroundColor(color)
+
+
   }, 100)
 
   const setIsSidebarOpen = useSetIsSidebarOpen()
@@ -52,7 +54,9 @@ const CanvasFill = () => {
       </Block>
       <Scrollable>
         <Block padding="0 1.5rem">
-          <HexColorPicker onChange={updateCanvasBackground} style={{ width: "100%" }} />
+          <HexColorPicker onChange={updateCanvasBackground} color={editor.canvas.backgroundColor} style={{ width: "100%" }} />
+          <p className="text-xs text-left ">Hex Code</p>
+          <HexColorInput onChange={updateCanvasBackground} color={editor.canvas.backgroundColor} style={{ border: "1px solid #000", background: "#ddd" }} placeholder="Enter Color" />
           <Block>
             <Block $style={{ padding: "0.75rem 0", fontWeight: 500, fontSize: "14px" }}>Preset colors</Block>
             <Block $style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr 1fr", gap: "0.25rem" }}>

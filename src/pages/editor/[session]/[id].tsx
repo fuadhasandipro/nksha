@@ -2,10 +2,22 @@ import { GetServerSideProps } from 'next';
 import { clerkClient, getAuth } from '@clerk/nextjs/server';
 import { createClerkSupabaseServer } from '@/services/supabaseServer';
 import DesignEditor from '@/components/DesignEditor';
+import Seo from '@/layouts/_seo';
 
 export default function Editor() {
 
   return <DesignEditor />;
+};
+
+Editor.getLayout = function getLayout(page: any) {
+  return <>
+    <Seo
+      title="Noksha Editor"
+      description="Customize Bengali Templates"
+      url='editor'
+    />
+    <>{page}</>
+  </>
 };
 
 // export const getServerSideProps: GetServerSideProps = async (context) => {

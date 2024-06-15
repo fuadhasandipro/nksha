@@ -4,6 +4,6 @@ import darkModeLogo from '@/assets/images/logo-white.svg';
 export const siteSettings = {
   lightLogo: lightModeLogo,
   darkLogo: darkModeLogo,
-  width: 128,
+  width: 200,
   height: 40,
 };

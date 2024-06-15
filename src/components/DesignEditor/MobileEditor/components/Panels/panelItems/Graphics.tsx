@@ -74,7 +74,7 @@ const Graphics = () => {
             },
           }}
         >
-          Computer
+          Upload from Device
         </Button>
       </Block>
       <Scrollable>

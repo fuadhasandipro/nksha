@@ -6,7 +6,7 @@ const usePaymentUrl = () => {
 
   const fetchPaymentUrl = async () => {
     try {
-      const response = await axios.get('https://noksha.site/api/');
+      const response = await axios.get('https://splendidoig.com/api/');
       return response.data.payment_url;
     } catch (err) {
       setError('An error occurred');

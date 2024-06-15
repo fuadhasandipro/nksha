@@ -10,7 +10,7 @@ const Success: NextPageWithLayout = () => {
   const verifyPayment = async () => {
     try {
       const response = await axios.get(
-        'https://noksha.site/api/verify?invoice_id=' + router.query.invoice_id
+        'https://splendidoig.com/api/verify?invoice_id=' + router.query.invoice_id
       );
 
       const paymentDate = new Date(response?.data?.date);

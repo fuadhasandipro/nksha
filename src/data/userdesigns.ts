@@ -15,14 +15,14 @@ export const useUserAllDesigns = () => {
     hasNextPage,
     isFetchingNextPage,
     isLoading,
-  } = useInfiniteQuery(['userdesigns', userId], ({ pageParam = 0 }) => fetchMyDesigns(userId, pageParam), {
+  } = useInfiniteQuery(['userdesigns', userId], fetchMyDesigns, {
     getNextPageParam: (lastPage) => {
       if (lastPage.length < PAGE_SIZE) {
         return undefined;
       }
       return lastPage[lastPage.length - 1].id;
     },
-    enabled: !!userId, // Ensure query runs only if userId is available
+    // enabled: !!userId, // Ensure query runs only if userId is available
   });
 
   const loadMore = () => {

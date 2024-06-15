@@ -1,3 +1,4 @@
+import Seo from '@/layouts/_seo';
 import { SignIn } from '@clerk/nextjs';
 
 export default function SignInPage() {
@@ -7,3 +8,14 @@ export default function SignInPage() {
     </div>
   );
 }
+
+SignInPage.getLayout = function getLayout(page: any) {
+  return <>
+    <Seo
+      title="Sign In - Noksha"
+      description="Noksha Sign In Page"
+      url='/sign-in'
+    />
+    <>{page}</>
+  </>
+};

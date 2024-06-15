@@ -1,6 +1,8 @@
 
 import { DetailsIcon } from '@/components/icons/details-icon';
+import routes from '@/config/routes';
 import Layout from '@/layouts/_layout';
+import Seo from '@/layouts/_seo';
 import subscriptionTimeLeft from '@/lib/getSubscriptionDuration';
 import { useIsDarkMode } from '@/lib/hooks/use-is-dark-mode';
 import usePaymentUrl from '@/lib/hooks/use-payment-url';
@@ -108,8 +110,15 @@ const Subscription = () => {
     )
 }
 
-Subscription.getLayout = function getLayout(page) {
-    return <Layout>{page}</Layout>;
+Subscription.getLayout = function getLayout(page: any) {
+    return <>
+        <Seo
+            title="You Subscription"
+            description="You Subscription"
+            url={routes.subscription}
+        />
+        <Layout>{page}</Layout>
+    </>
 };
 
 

@@ -29,6 +29,7 @@ import type { GetStaticProps } from 'next';
 
 import Layout from '@/layouts/_layout';
 import { DetailsIcon } from '@/components/icons/details-icon';
+import Seo from '@/layouts/_seo';
 
 dayjs.extend(relativeTime);
 
@@ -185,7 +186,17 @@ const Purchases: NextPageWithLayout = () => {
 
 Purchases.authorization = true;
 Purchases.getLayout = function getLayout(page) {
-  return <Layout>{page}</Layout>;
+
+  return (
+    <>
+      <Seo
+        title="You Designs"
+        description="List of all your designs"
+        url={routes.mydesigns}
+      />
+      <Layout>{page}</Layout>
+    </>
+  );
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {

@@ -1,6 +1,6 @@
 import React from "react"
 import { Block } from "baseui/block"
-import { HexColorPicker } from "react-colorful"
+import { HexColorInput, HexColorPicker } from "react-colorful"
 import Common from "./Common"
 import { useActiveObject } from "@layerhub-io/react"
 import { groupBy } from "lodash"
@@ -67,7 +67,13 @@ const Vector = () => {
                         onChange={(color) => {
                           changeBackgroundColor(c, color)
                         }}
+                        color={state.colorMap[c]}
                       />
+                      <p className="text-xs text-left ">Hex Code</p>
+                      <HexColorInput onChange={(color) => {
+                        changeBackgroundColor(c, color)
+                      }} color={state.colorMap[c]} style={{ border: "1px solid #000", background: "#ddd" }} placeholder="Enter Color" />
+
                     </div>
                   }
                   accessibilityType="tooltip"

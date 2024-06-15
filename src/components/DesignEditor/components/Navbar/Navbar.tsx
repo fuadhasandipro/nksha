@@ -77,7 +77,7 @@ const Navbar = ({ isLargeScreen }) => {
         frame: currentDesign.frame,
         scenes: updatedScenes,
         metadata: {},
-        preview: currentDesign.preview || "",
+        preview: "",
       };
 
       makeDownload(graphicTemplate);
@@ -420,7 +420,7 @@ const Navbar = ({ isLargeScreen }) => {
         }
 
         const link = document.createElement('a');
-        link.download = 'image.png';
+        link.download = currentDesign.name;
 
         link.href = image;
         document.body.appendChild(link);
@@ -463,7 +463,7 @@ const Navbar = ({ isLargeScreen }) => {
           }
 
           const link = document.createElement('a');
-          link.download = 'image.png';
+          link.download = currentDesign.name;
 
           link.href = image;
           document.body.appendChild(link);

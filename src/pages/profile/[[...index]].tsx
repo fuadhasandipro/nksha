@@ -1,4 +1,6 @@
+import routes from "@/config/routes";
 import Layout from "@/layouts/_layout";
+import Seo from "@/layouts/_seo";
 import { SignedIn, UserProfile, useAuth } from "@clerk/nextjs";
 import Link from "next/link";
 
@@ -15,8 +17,16 @@ const UserProfilePage = () => {
   </div>
 }
 
-UserProfilePage.getLayout = function getLayout(page) {
-  return <Layout>{page}</Layout>;
+UserProfilePage.getLayout = function getLayout(page: any) {
+  return <>
+    <Seo
+      title="You Profile"
+      description="You Profile"
+      url={routes.profile}
+    />
+    <Layout>{page}</Layout>
+  </>
+
 };
 
 export default UserProfilePage;

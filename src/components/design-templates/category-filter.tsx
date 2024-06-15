@@ -90,11 +90,11 @@ export default function CategoryFilter({
             isActive={defaultActivePath === router.asPath}
             onClick={() => handleClick(defaultActivePath)}
           />
-          <CategoryItem
+          {/* <CategoryItem
             categoryName="adadada"
             isActive={Boolean(router.query.price)}
             onClick={handleFree}
-          />
+          /> */}
 
           {categories
             .filter((category) => category.slug.toLowerCase() !== 'free')

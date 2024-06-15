@@ -79,8 +79,8 @@ const Templates: NextPageWithLayout = () => {
   return (
     <>
       <Seo
-        title="UI Design Resources, UI Kits, Wireframes, Icons and More"
-        description="Fastest digital download template built with React, NextJS, TypeScript, React-Query and Tailwind CSS."
+        title="Noksha Editor"
+        description="All Collections of bengali graphics elements, easy to customize"
         url={routes.home}
       />
       {/* <PromotionalSlider /> */}
