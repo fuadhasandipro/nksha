@@ -10,6 +10,7 @@ import { nanoid } from "nanoid"
 import { captureFrame, loadVideoResource } from "@/components/DesignEditor/utils/video"
 import { ILayer } from "@layerhub-io/types"
 import { toBase64 } from "@/components/DesignEditor/utils/data"
+import axios from "axios"
 
 
 export default function () {
@@ -23,7 +24,28 @@ export default function () {
 
     const isVideo = file.type.includes("video")
     const base64 = (await toBase64(file)) as string
-    let preview = base64
+
+    const apiKey = '007aff46bb49446f04020287cfbcb445';
+    const apiUrl = 'https://api.imgbb.com/1/upload';
+    const formData = new FormData();
+    formData.append('key', apiKey);
+    formData.append('image', base64);
+
+    let preview
+
+    const response = await axios.post(apiUrl, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    }).then(res => {
+      preview = res.data.data.display_url
+
+      console.log(res.data);
+    }).catch(e => {
+      alert("Upload Error, Please try again later")
+    });
+
+
     if (isVideo) {
       const video = await loadVideoResource(base64)
       const frame = await captureFrame(video)
@@ -34,7 +56,7 @@ export default function () {
 
     const upload = {
       id: nanoid(),
-      src: base64,
+      src: preview,
       preview: preview,
       type: type,
     }

@@ -56,6 +56,7 @@ const DropZone = ({ children, handleDropFiles }: Props) => {
       e.dataTransfer.clearData()
       dragCounter = 0
     }
+
   }
 
   return (
