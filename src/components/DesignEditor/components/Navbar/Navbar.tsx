@@ -46,11 +46,10 @@ const Navbar = ({ isLargeScreen }) => {
   const [editorDetails, setEditorDetails] = useState();
 
   // const { userId } = useAuth();
+  const [data, setData] = useState(null);
+
   const parseGraphicJSON = () => {
     const currentScene = editor.scene.exportToJSON();
-
-    const [data, setData] = useState(null);
-
 
     const updatedScenes = scenes.map((scn) => {
       if (scn.id === currentScene.id) {

@@ -56,7 +56,7 @@ const Subscription = () => {
                         href=""
                         rel="noreferrer"
                         target="_blank"
-                        className="focus:ring-accent-700 hidden h-9 w-36 shrink-0 items-center justify-center self-center rounded border border-transparent bg-brand px-3 py-0 text-sm font-semibold leading-none text-light outline-none transition duration-300 ease-in-out hover:bg-brand-dark focus:shadow focus:outline-none focus:ring-1 sm:inline-flex mt-4"
+                        className="focus:ring-accent-700 h-9 w-36 shrink-0 items-center justify-center self-center rounded border border-transparent bg-brand px-3 py-0 text-sm font-semibold leading-none text-light outline-none transition duration-300 ease-in-out hover:bg-brand-dark focus:shadow focus:outline-none focus:ring-1 inline-flex mt-4"
                         onClick={async (e) => {
                             e.preventDefault();
                             // openModal('PRODUCT_DETAILS')
@@ -68,7 +68,7 @@ const Subscription = () => {
                         }}
                     >
                         Buy Now
-                        <span className="ml-1 flex w-auto flex-shrink-0 items-center justify-start xl:w-3">
+                        <span className="ml-1 flex flex-shrink-0 items-center justify-start w-3">
                             <DetailsIcon />
                         </span>
                     </Link>
@@ -94,10 +94,10 @@ const Subscription = () => {
                     <Link
                         href="/"
                         rel="noreferrer"
-                        className="focus:ring-accent-700 hidden h-9 w-36 shrink-0 items-center justify-center self-center rounded border border-transparent bg-brand px-3 py-0 text-sm font-semibold leading-none text-light outline-none transition duration-300 ease-in-out hover:bg-brand-dark focus:shadow focus:outline-none focus:ring-1 sm:inline-flex mt-4"
+                        className="focus:ring-accent-700 h-9 w-36 shrink-0 items-center justify-center self-center rounded border border-transparent bg-brand px-3 py-0 text-sm font-semibold leading-none text-light outline-none transition duration-300 ease-in-out hover:bg-brand-dark focus:shadow focus:outline-none focus:ring-1 inline-flex mt-4"
                     >
                         Start Editing
-                        <span className="ml-1 flex w-auto flex-shrink-0 items-center justify-start xl:w-3">
+                        <span className="ml-1 flex flex-shrink-0 items-center justify-start w-3">
                             <DetailsIcon />
                         </span>
                     </Link>
