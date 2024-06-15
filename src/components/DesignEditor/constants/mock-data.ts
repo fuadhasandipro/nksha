@@ -401,6 +401,7 @@ export const graphics = [
 ]
 
 export const vectors = [
+  "https://ik.imagekit.io/gztsu1sbh/Noksha%20Logo.svg",
   "https://ik.imagekit.io/gztsu1sbh/Eid%20Symbols/Eid%20svg%20(97).svg",
   "https://ik.imagekit.io/gztsu1sbh/Eid%20Symbols/Eid%20svg%20(98).svg",
   "https://ik.imagekit.io/gztsu1sbh/Eid%20Symbols/Eid%20svg%20(96).svg",
