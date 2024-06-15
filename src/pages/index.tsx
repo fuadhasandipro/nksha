@@ -79,8 +79,8 @@ const Templates: NextPageWithLayout = () => {
   return (
     <>
       <Seo
-        title="Noksha Editor"
-        description="All Collections of bengali graphics elements, easy to customize"
+        title="নকশা - Noksha"
+        description="বাংলা ডিজাইন টুল"
         url={routes.home}
       />
       {/* <PromotionalSlider /> */}

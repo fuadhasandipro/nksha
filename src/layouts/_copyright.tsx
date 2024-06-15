@@ -8,12 +8,12 @@ export default function Copyright({ className }: { className?: string }) {
     <div className={cn('tracking-[0.2px]', className)}>
       &copy; {t('text-copy-right')} {currentYear} {t('text-copy-right-by')}{' '}
       <a
-        href="https://redq.io"
+        href="https://ritto360.com/"
         target="_blank"
         rel="noopener noreferrer"
         className="hover:text-brand-dark"
       >
-        RedQ
+        Ritto360
       </a>
       .
     </div>
