@@ -174,13 +174,13 @@ const Text = () => {
       }
 
       const font = {
-        name: desiredFont.postscript_name,
-        url: desiredFont.url,
+        name: desiredFont?.postscript_name,
+        url: desiredFont?.url,
       };
       await loadFonts([font]);
 
       editor.objects.update({
-        fontFamily: desiredFont.postscript_name,
+        fontFamily: desiredFont?.postscript_name,
         fontURL: font.url,
       });
       setState({ ...state, italic: false });
