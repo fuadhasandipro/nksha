@@ -20,6 +20,7 @@ module.exports = withPWA({
       'pixarlaravel.s3.ap-southeast-1.amazonaws.com',
       'pickbazarlaravel.s3.ap-southeast-1.amazonaws.com',
       'marketplace.canva.com',
+      'i.ibb.co',
     ],
   },
   ...(process.env.APPLICATION_MODE === 'production' && {

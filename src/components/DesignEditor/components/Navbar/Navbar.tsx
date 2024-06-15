@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { styled, ThemeProvider, DarkTheme } from 'baseui';
 import { Theme } from 'baseui/theme';
 import { Button, KIND } from 'baseui/button';
+import SaveButton from '@/components/ui/button';
 import Logo from '@/components/DesignEditor/components/Icons/Logo';
 import useDesignEditorContext from '@/components/DesignEditor/hooks/useDesignEditorContext';
 import Play from '@/components/DesignEditor/components/Icons/Play';
@@ -20,6 +21,7 @@ import supabases, { createClerkSupabaseClient } from '@/services/server';
 import { useAuth, useUser } from '@clerk/nextjs';
 import MobileDesignTitle from './MobileDesignTitle';
 import subscriptionTimeLeft from '@/lib/getSubscriptionDuration';
+import axios from 'axios';
 
 const Container = styled<'div', {}, Theme>('div', ({ $theme }) => ({
   height: '64px',
@@ -43,10 +45,11 @@ const Navbar = ({ isLargeScreen }) => {
   const editor = useEditor();
   const inputFileRef = React.useRef<HTMLInputElement>(null);
 
-  const [editorDetails, setEditorDetails] = useState();
+  const [loadingDownload, setLoadingDownload] = useState(false);
+
 
   // const { userId } = useAuth();
-  const [data, setData] = useState(null);
+  // const [previewImage, setPreviewImage] = useState("");
 
   const parseGraphicJSON = () => {
     const currentScene = editor.scene.exportToJSON();
@@ -356,6 +359,15 @@ const Navbar = ({ isLargeScreen }) => {
 
     const currentScene = editor.scene.exportToJSON();
 
+    const image = (await editor.renderer.render(currentScene)) as string
+    const baseImage = image.split(',')[1];
+
+    const apiKey = '007aff46bb49446f04020287cfbcb445';
+    const apiUrl = 'https://api.imgbb.com/1/upload';
+    const formData = new FormData();
+    formData.append('key', apiKey);
+    formData.append('image', baseImage);
+
     const updatedScenes = scenes.map((scn) => {
       if (scn.id === currentScene.id) {
         return {
@@ -372,64 +384,88 @@ const Navbar = ({ isLargeScreen }) => {
     });
 
     if (currentDesign) {
-      const graphicTemplate: IDesign = {
-        id: currentDesign.id,
-        type: 'GRAPHIC',
-        name: currentDesign.name,
-        frame: currentDesign.frame,
-        scenes: updatedScenes,
-        metadata: {},
-        preview: '',
-      };
 
-      const supabase = createClerkSupabaseClient();
+      setLoadingDownload(true);
 
-      const { data: existingSession, error: sessionError } =
-        await supabase
-          .from('user_designs')
-          .select('id')
-          .eq('session', router.query.session)
-          .single();
+      const response = await axios.post(apiUrl, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }).then(async (res) => {
+        const graphicTemplate: IDesign = {
+          id: currentDesign.id,
+          type: 'GRAPHIC',
+          name: currentDesign.name,
+          frame: currentDesign.frame,
+          scenes: updatedScenes,
+          metadata: {},
+          preview: res.data.data.display_url,
+        };
 
-      if (sessionError) {
-        const { error: insertError } = await supabase
-          .from('user_designs')
-          .insert({
-            title: currentDesign.name,
-            json: JSON.stringify(graphicTemplate),
-            user_id: userId,
-            session: router.query.session,
-            thumbnail:
-              'https://marketplace.canva.com/EAF2HYhH51c/2/0/800w/canva-4B2qPkf31Iw.jpg',
-            updated_at: new Date().toISOString(),
-            template_id: router.query.id,
-          });
+        const supabase = createClerkSupabaseClient();
 
-        if (insertError) {
-          console.error(
-            'Error inserting session:',
-            insertError.message
-          );
+        const { data: existingSession, error: sessionError } =
+          await supabase
+            .from('user_designs')
+            .select('id')
+            .eq('session', router.query.session)
+            .single();
+
+        if (sessionError) {
+          const { error: insertError } = await supabase
+            .from('user_designs')
+            .insert({
+              title: currentDesign.name,
+              json: JSON.stringify(graphicTemplate),
+              user_id: userId,
+              session: router.query.session,
+              thumbnail: res.data.data.display_url,
+              updated_at: new Date().toISOString(),
+              template_id: router.query.id,
+            });
+
+          if (insertError) {
+            console.error(
+              'Error inserting session:',
+              insertError.message
+            );
+          }
+        } else {
+          // Session does not exist, perform insert
+          const { error: updateError } = await supabase
+            .from('user_designs')
+            .update({
+              title: currentDesign.name,
+              json: JSON.stringify(graphicTemplate),
+              user_id: userId,
+              updated_at: new Date().toISOString(),
+              thumbnail: res.data.data.display_url,
+            })
+            .eq('session', router.query.session);
+
+          if (updateError) {
+            console.error(
+              'Error updating session:',
+              updateError.message
+            );
+          }
         }
-      } else {
-        // Session does not exist, perform insert
-        const { error: updateError } = await supabase
-          .from('user_designs')
-          .update({
-            title: currentDesign.name,
-            json: JSON.stringify(graphicTemplate),
-            user_id: userId,
-            updated_at: new Date().toISOString(),
-          })
-          .eq('session', router.query.session);
 
-        if (updateError) {
-          console.error(
-            'Error updating session:',
-            updateError.message
-          );
-        }
-      }
+        const link = document.createElement('a');
+        link.download = 'image.png';
+
+        link.href = image;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        setLoadingDownload(false);
+      }).catch(e => {
+        setLoadingDownload(false);
+        alert("Error, Please try again later")
+      });
+
+
     }
   }
 
@@ -487,7 +523,7 @@ const Navbar = ({ isLargeScreen }) => {
           >
             Export
           </Button>
-
+          {/* 
           <Button
             size="compact"
             onClick={() => {
@@ -503,15 +539,19 @@ const Navbar = ({ isLargeScreen }) => {
             }}
           >
             Save & Download
-          </Button>
+          </Button> */}
 
-          <Button
-            size="compact"
-            onClick={() => editor.scene.exportAsComponent()}
-            kind={KIND.tertiary}
+          <SaveButton
+            onClick={handleSaveDownload}
+            className=''
+            // disabled={isLoadingMore}
+            isLoading={loadingDownload}
+
           >
-            <Github size={24} />
-          </Button>
+            Save & Download
+          </SaveButton>
+
+
         </Block>
       </Container> :
 
