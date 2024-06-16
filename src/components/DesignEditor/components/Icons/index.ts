@@ -24,10 +24,12 @@ import ArrowBackOutline from "./ArrowBackOutline"
 import Underline from "./Underline"
 import Add from "./Add"
 import Video from "./Video"
+import UploadLogo from "./UploadLogo"
 class Icons {
   static Background = Background
   static Elements = Elements
   static Text = Text
+  static UploadLogo = UploadLogo
   static Templates = Templates
   static Search = Search
   static Images = Images

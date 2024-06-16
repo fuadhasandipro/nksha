@@ -62,7 +62,7 @@ const Graphics = () => {
         </Block>
       </Block>
 
-      <Block padding="0 1.5rem">
+      {/* <Block padding="0 1.5rem">
         <Button
           onClick={handleInputFileRefClick}
           size={SIZE.compact}
@@ -76,7 +76,7 @@ const Graphics = () => {
         >
           Upload from Device
         </Button>
-      </Block>
+      </Block> */}
       <Scrollable>
         <input onChange={handleFileInput} type="file" id="file" ref={inputFileRef} style={{ display: "none" }} />
         <Block>

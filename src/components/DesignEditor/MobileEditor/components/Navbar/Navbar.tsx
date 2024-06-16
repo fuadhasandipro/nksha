@@ -301,7 +301,7 @@ const Navbar = ({ initialData }) => {
             ref={inputFileRef}
             style={{ display: "none" }}
           />
-          <Button
+          {/* <Button
             size="compact"
             onClick={handleInputFileRefClick}
             kind={KIND.tertiary}
@@ -329,7 +329,7 @@ const Navbar = ({ initialData }) => {
             }}
           >
             Export
-          </Button>
+          </Button> */}
 
 
           <Button

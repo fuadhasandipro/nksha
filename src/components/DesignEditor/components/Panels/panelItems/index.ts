@@ -14,11 +14,14 @@ import TextFill from "./TextFill"
 import PathFill from "./PathFill"
 import CanvasFill from "./CanvasFill"
 import TextEffects from "./TextEffects"
+import UploadLogo from './UploadLogo'
+
 export default {
   StaticText: TextProperties,
   Text: Text,
   Customize: Customize,
   FontSelector: FontSelector,
+  UploadLogo: UploadLogo,
   Pixabay: Pixabay,
   Templates: Templates,
   Uploads: Uploads,

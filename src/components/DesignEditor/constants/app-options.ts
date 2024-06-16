@@ -4,12 +4,12 @@ export const BASE_ITEMS = [
   //   name: 'Templates',
   // },
   {
-    id: 'customize',
-    name: 'Customize',
-  },
-  {
     id: 'graphics',
     name: 'Graphics',
+  },
+  {
+    id: 'uploadlogo',
+    name: 'UploadLogo',
   },
   {
     id: 'text',
@@ -26,6 +26,10 @@ export const BASE_ITEMS = [
   {
     id: 'images',
     name: 'Images',
+  },
+  {
+    id: 'customize',
+    name: 'Customize',
   },
 
   // {
@@ -40,10 +44,6 @@ export const BASE_ITEMS = [
 
 export const BASE_MOBILE_ITEMS = [
   {
-    id: 'customize',
-    name: 'Customize',
-  },
-  {
     id: 'graphics',
     name: 'Graphics',
   },
@@ -62,6 +62,10 @@ export const BASE_MOBILE_ITEMS = [
   {
     id: 'images',
     name: 'Images',
+  },
+  {
+    id: 'customize',
+    name: 'Customize',
   },
 
   // {
