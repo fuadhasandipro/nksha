@@ -168,7 +168,7 @@ export default function Header({
         <Link
           href=""
           onClick={() => {
-            window.open(routes.templateUrl("37"), '_blank', 'noopener,noreferrer');
+            window.open(routes.templateUrl("1"), '_blank', 'noopener,noreferrer');
           }}
           rel="noreferrer"
           target="_blank"
