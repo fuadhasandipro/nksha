@@ -1,146 +1,160 @@
 import React from "react"
+import { useStyletron } from "baseui"
 import { Block } from "baseui/block"
+import { Button, SIZE } from "baseui/button"
 import AngleDoubleLeft from "@/components/DesignEditor/components/Icons/AngleDoubleLeft"
 import Scrollable from "@/components/DesignEditor/components/Scrollable"
-import { Button, SIZE } from "baseui/button"
-import DropZone from "@/components/DesignEditor/components/Dropzone"
+import { vectors } from "@/components/DesignEditor/constants/mock-data"
 import { useEditor } from "@layerhub-io/react"
 import useSetIsSidebarOpen from "@/components/DesignEditor/hooks/useSetIsSidebarOpen"
-import { nanoid } from "nanoid"
-import { captureFrame, loadVideoResource } from "@/components/DesignEditor/utils/video"
-import { ILayer } from "@layerhub-io/types"
-import { toBase64 } from "@/components/DesignEditor/utils/data"
-import axios from "axios"
-import Image from "next/image"
 
-
-export default function () {
+const Graphics = () => {
   const inputFileRef = React.useRef<HTMLInputElement>(null)
-  const [uploads, setUploads] = React.useState<any[]>([])
+
   const editor = useEditor()
   const setIsSidebarOpen = useSetIsSidebarOpen()
 
-  const handleDropFiles = async (files: FileList) => {
+  const addObject = React.useCallback(
+    (url: string) => {
+      if (editor) {
+        const options = {
+          type: "StaticVector",
+          src: url,
+        }
+        editor.objects.add(options)
+      }
+    },
+    [editor]
+  )
+
+  const handleDropFiles = (files: FileList) => {
     const file = files[0]
-
-    const isVideo = file.type.includes("video")
-    const base64 = (await toBase64(file)) as string
-
-    const apiKey = '007aff46bb49446f04020287cfbcb445';
-    const apiUrl = 'https://api.imgbb.com/1/upload';
-    const formData = new FormData();
-    formData.append('key', apiKey);
-    formData.append('image', base64);
-
-    let preview
-
-    const response = await axios.post(apiUrl, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    }).then(res => {
-      preview = res.data.data.display_url
-
-    }).catch(e => {
-      alert("Upload Error, Please try again later")
-    });
-
-
-    if (isVideo) {
-      const video = await loadVideoResource(base64)
-      const frame = await captureFrame(video)
-      preview = frame
-    }
-
-    const type = isVideo ? "StaticVideo" : "StaticImage"
-
-    const upload = {
-      id: nanoid(),
-      src: preview,
-      preview: preview,
-      type: type,
-    }
-
-    setUploads([...uploads, upload])
-  }
-
-  const handleInputFileRefClick = () => {
-    inputFileRef.current?.click()
+    const url = URL.createObjectURL(file)
+    editor.objects.add({
+      src: url,
+      type: "StaticVector",
+    })
   }
 
   const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     handleDropFiles(e.target.files!)
   }
 
-  const addImageToCanvas = (props: Partial<ILayer>) => {
-    editor.objects.add(props)
+  const handleInputFileRefClick = () => {
+    inputFileRef.current?.click()
   }
+
   return (
-    <DropZone handleDropFiles={handleDropFiles}>
-      <Block $style={{ flex: 1, display: "flex", flexDirection: "column" }}>
-        <Block
-          $style={{
-            display: "flex",
-            alignItems: "center",
-            fontWeight: 500,
-            justifyContent: "space-between",
-            padding: "1.5rem",
+    <Block $style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+      <Block
+        $style={{
+          display: "flex",
+          alignItems: "center",
+          fontWeight: 500,
+          justifyContent: "space-between",
+          padding: "1.5rem",
+        }}
+      >
+        <Block>Graphics</Block>
+
+        <Block onClick={() => setIsSidebarOpen(false)} $style={{ cursor: "pointer", display: "flex" }}>
+          <AngleDoubleLeft size={18} />
+        </Block>
+      </Block>
+
+      {/* <Block padding="0 1.5rem">
+        <Button
+          onClick={handleInputFileRefClick}
+          size={SIZE.compact}
+          overrides={{
+            Root: {
+              style: {
+                width: "100%",
+              },
+            },
           }}
         >
-          <Block>Uploads</Block>
-
-          <Block onClick={() => setIsSidebarOpen(false)} $style={{ cursor: "pointer", display: "flex" }}>
-            <AngleDoubleLeft size={18} />
+          Upload from Device
+        </Button>
+      </Block> */}
+      <Scrollable>
+        <input onChange={handleFileInput} type="file" id="file" ref={inputFileRef} style={{ display: "none" }} />
+        <Block>
+          <Block $style={{ display: "grid", gap: "8px", padding: "1.5rem", gridTemplateColumns: "1fr 1fr" }}>
+            {vectors.map((vector, index) => (
+              <GraphicItem onClick={() => addObject(vector)} key={index} preview={vector} />
+            ))}
           </Block>
         </Block>
-        <Scrollable>
-          <Block padding={"0 1.5rem"} >
-            <Button
-              onClick={handleInputFileRefClick}
-              size={SIZE.compact}
-              overrides={{
-                Root: {
-                  style: {
-                    width: "100%",
-                  },
-                },
-              }}
-            >
-              Upload from Device
-            </Button>
-            <input onChange={handleFileInput} type="file" id="file" ref={inputFileRef} style={{ display: "none" }} />
-            {uploads.length == 0 && <div className="flex items-center flex-col text-center justify-center h-[80vh]">
-              <Image alt="drop bg" src="https://i.ibb.co/3yWJrsY/drop-bg.png" width={150} height={150} className="pointer-events-none" />
-              <p className="font-body mt-5">Choose a file or drag it here</p>
-            </div>}
-            <div
-              style={{
-                marginTop: "1rem",
-                display: "grid",
-                gap: "0.5rem",
-                gridTemplateColumns: "1fr 1fr",
-              }}
-            >
-              {uploads.map((upload) => (
-                <div
-                  key={upload.id}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    position: "relative",
-                    height: "84px",
-                  }}
-                  onClick={() => addImageToCanvas(upload)}
-                >
-                  <div className="bg-[#ddd] p-4 rounded-xl">
-                    <img width="100%" src={upload.preview ? upload.preview : upload.url} alt="preview" />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </Block>
-        </Scrollable>
-      </Block>
-    </DropZone>
+      </Scrollable>
+    </Block>
   )
 }
+
+const GraphicItem = ({ preview, onClick }: { preview: any; onClick?: (option: any) => void }) => {
+  const [css] = useStyletron()
+  return (
+    <div
+      onClick={onClick}
+      // onClick={() => onClick(component.layers[0])}
+      className={css({
+        position: "relative",
+        height: "84px",
+        background: "#f8f8fb",
+        cursor: "pointer",
+        padding: "12px",
+        borderRadius: "8px",
+        overflow: "hidden",
+        "::before:hover": {
+          opacity: 1,
+        },
+      })}
+    >
+      <div
+        className={css({
+          backgroundImage: `linear-gradient(to bottom,
+          rgba(0, 0, 0, 0) 0,
+          rgba(0, 0, 0, 0.006) 8.1%,
+          rgba(0, 0, 0, 0.022) 15.5%,
+          rgba(0, 0, 0, 0.047) 22.5%,
+          rgba(0, 0, 0, 0.079) 29%,
+          rgba(0, 0, 0, 0.117) 35.3%,
+          rgba(0, 0, 0, 0.158) 41.2%,
+          rgba(0, 0, 0, 0.203) 47.1%,
+          rgba(0, 0, 0, 0.247) 52.9%,
+          rgba(0, 0, 0, 0.292) 58.8%,
+          rgba(0, 0, 0, 0.333) 64.7%,
+          rgba(0, 0, 0, 0.371) 71%,
+          rgba(0, 0, 0, 0.403) 77.5%,
+          rgba(0, 0, 0, 0.428) 84.5%,
+          rgba(0, 0, 0, 0.444) 91.9%,
+          rgba(0, 0, 0, 0.45) 100%)`,
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          opacity: 0,
+          transition: "opacity 0.3s ease-in-out",
+          height: "100%",
+          width: "100%",
+          ":hover": {
+            opacity: 1,
+          },
+        })}
+      />
+      <img
+        src={preview}
+        className={css({
+          width: "100%",
+          height: "100%",
+          objectFit: "contain",
+          pointerEvents: "none",
+          verticalAlign: "middle",
+        })}
+      />
+    </div>
+  )
+}
+
+export default Graphics
