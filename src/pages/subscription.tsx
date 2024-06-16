@@ -3,6 +3,7 @@ import { DetailsIcon } from '@/components/icons/details-icon';
 import routes from '@/config/routes';
 import Layout from '@/layouts/_layout';
 import Seo from '@/layouts/_seo';
+import { event } from '@/lib/events';
 import subscriptionTimeLeft from '@/lib/getSubscriptionDuration';
 import { useIsDarkMode } from '@/lib/hooks/use-is-dark-mode';
 import usePaymentUrl from '@/lib/hooks/use-payment-url';
@@ -61,6 +62,13 @@ const Subscription = () => {
                         className="focus:ring-accent-700 h-9 w-36 shrink-0 items-center justify-center self-center rounded border border-transparent bg-brand px-3 py-0 text-sm font-semibold leading-none text-light outline-none transition duration-300 ease-in-out hover:bg-brand-dark focus:shadow focus:outline-none focus:ring-1 inline-flex mt-4"
                         onClick={async (e) => {
                             e.preventDefault();
+
+                            event({
+                                action: 'click',
+                                category: 'Button',
+                                label: 'Pay Button',
+                                value: 'Clicked on Pay Button '
+                            });
                             // openModal('PRODUCT_DETAILS')
 
                             const paymentUrl = await fetchPaymentUrl();

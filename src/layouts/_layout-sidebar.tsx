@@ -23,6 +23,7 @@ import { useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/router';
 import subscriptionTimeLeft from '@/lib/getSubscriptionDuration';
 import { DetailsIcon } from '@/components/icons/details-icon';
+import { event } from '@/lib/events';
 
 interface NavLinkProps {
   href: string;
@@ -157,6 +158,14 @@ export function Sidebar({
                 rel="noreferrer"
                 className="focus:ring-accent-700  mt-5 inline-flex h-9 w-36 shrink-0 items-center justify-center rounded border border-transparent bg-brand px-3 py-0 text-sm font-semibold leading-none text-light outline-none transition duration-300 ease-in-out hover:bg-brand-dark focus:shadow focus:outline-none focus:ring-1"
                 onClick={async (e) => {
+
+                  event({
+                    action: 'click',
+                    category: 'Button',
+                    label: 'Pay Button',
+                    value: 'Clicked on Pay Button '
+                  });
+
                   e.preventDefault();
                   // openModal('PRODUCT_DETAILS')
 
