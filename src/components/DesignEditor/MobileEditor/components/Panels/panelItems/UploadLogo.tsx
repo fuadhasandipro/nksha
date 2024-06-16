@@ -160,7 +160,7 @@ export default function () {
                   }}
                   onClick={() => addImageToCanvas(upload)}
                 >
-                  <div>
+                  <div className="bg-[#ddd] p-4 rounded-xl">
                     <img width="100%" src={upload.preview ? upload.preview : upload.url} alt="preview" />
                   </div>
                 </div>

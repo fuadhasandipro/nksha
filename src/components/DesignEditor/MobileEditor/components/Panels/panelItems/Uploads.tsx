@@ -109,10 +109,10 @@ export default function () {
               Upload from Device
             </Button>
             <input onChange={handleFileInput} type="file" id="file" ref={inputFileRef} style={{ display: "none" }} />
-            <div className="flex items-center flex-col text-center justify-center h-[80vh]">
+            {uploads.length == 0 && <div className="flex items-center flex-col text-center justify-center h-[80vh]">
               <Image alt="drop bg" src="https://i.ibb.co/3yWJrsY/drop-bg.png" width={150} height={150} className="pointer-events-none" />
               <p className="font-body mt-5">Choose a file or drag it here</p>
-            </div>
+            </div>}
             <div
               style={{
                 marginTop: "1rem",
