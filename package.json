@@ -55,6 +55,7 @@
     "next-seo": "6.0.0",
     "next-sitemap": "4.0.7",
     "next-themes": "0.2.1",
+    "nextjs-google-analytics": "^2.3.3",
     "node-fetch": "^3.3.2",
     "npm": "^10.8.1",
     "overlayscrollbars": "2.1.1",

@@ -26,6 +26,7 @@ import '../components/DesignEditor/styles/styles.css';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { getDirection } from '@/lib/constants';
+import GoogleAnalytics from '@/components/GoogleAnalytics';
 
 const PrivateRoute = dynamic(() => import('@/layouts/_private-route'), {
   ssr: false,
@@ -48,36 +49,39 @@ function CustomApp({ Component, pageProps }: AppPropsWithLayout) {
   }, [dir]);
   const authenticationRequired = Component.authorization ?? false;
   return (
-    <QueryClientProvider client={queryClient}>
-      <Hydrate state={pageProps.dehydratedState}>
-        <ClerkProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="dark"
-            enableSystem={false}
-          >
-            <SearchProvider>
-              <ModalProvider>
-                <AnimatePresence
-                  initial={false}
-                  onExitComplete={() => window.scrollTo(0, 0)}
-                >
-                  <>
-                    {/* <DefaultSeo /> */}
-                    {getLayout(<Component {...pageProps} />)}
-                    <SearchView />
-                    <ModalsContainer />
-                    <DrawersContainer />
-                    <Toaster containerClassName="!top-16 sm:!top-3.5 !bottom-16 sm:!bottom-3.5" />
-                  </>
-                </AnimatePresence>
-              </ModalProvider>
-            </SearchProvider>
-          </ThemeProvider>
-        </ClerkProvider>
-      </Hydrate>
-      {/* <ReactQueryDevtools initialIsOpen={false} position="bottom-right" /> */}
-    </QueryClientProvider>
+    <>
+      <GoogleAnalytics />
+      <QueryClientProvider client={queryClient}>
+        <Hydrate state={pageProps.dehydratedState}>
+          <ClerkProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="dark"
+              enableSystem={false}
+            >
+              <SearchProvider>
+                <ModalProvider>
+                  <AnimatePresence
+                    initial={false}
+                    onExitComplete={() => window.scrollTo(0, 0)}
+                  >
+                    <>
+                      {/* <DefaultSeo /> */}
+                      {getLayout(<Component {...pageProps} />)}
+                      <SearchView />
+                      <ModalsContainer />
+                      <DrawersContainer />
+                      <Toaster containerClassName="!top-16 sm:!top-3.5 !bottom-16 sm:!bottom-3.5" />
+                    </>
+                  </AnimatePresence>
+                </ModalProvider>
+              </SearchProvider>
+            </ThemeProvider>
+          </ClerkProvider>
+        </Hydrate>
+        {/* <ReactQueryDevtools initialIsOpen={false} position="bottom-right" /> */}
+      </QueryClientProvider>
+    </>
   );
 }
 
