@@ -139,10 +139,11 @@ const Purchases: NextPageWithLayout = () => {
   const { t } = useTranslation('common');
   const {
     downloadableFiles,
-    isLoading,
-    isLoading: isLoadingMore,
-    hasNextPage,
+    error,
     loadMore,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
   } = useUserAllDesigns();
 
   return (
@@ -157,24 +158,24 @@ const Purchases: NextPageWithLayout = () => {
         </span>
       </h1>
 
-      {isLoading &&
-        !downloadableFiles?.pages[0]?.length &&
-        rangeMap(15, (i) => <OrderItemLoader key={`order-loader-${i}`} />)}
 
-      {!isLoading && !downloadableFiles?.pages[0]?.length ? (
-        <div>No Design Found</div>
-      ) : (
-        downloadableFiles?.pages[0]?.map((file) => (
-          <OrderedItem key={file.id} item={file} />
+
+      {isLoading && !downloadableFiles?.pages.length
+        ? rangeMap(15, (i) => (
+          <OrderItemLoader key={`order-loader-${i}`} />
         ))
-      )}
+        : downloadableFiles?.pages?.map((product) =>
+          product.map((mini) => {
+            return <OrderedItem key={mini.id} item={mini} />;
+          })
+        )}
 
       {hasNextPage && (
         <div className="mt-10 grid place-content-center">
           <Button
             onClick={loadMore}
-            disabled={isLoadingMore}
-            isLoading={isLoadingMore}
+            disabled={isFetchingNextPage}
+            isLoading={isFetchingNextPage}
           >
             {t('text-loadmore')}
           </Button>

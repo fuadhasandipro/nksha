@@ -1,15 +1,33 @@
-import { fetchDesigns } from "@/services/designs/fetchDesigns";
 import { useRouter } from "next/router";
-import { useState } from "react";
-import {
-    useInfiniteQuery,
-} from 'react-query';
+import { useInfiniteQuery } from 'react-query';
 import { PAGE_SIZE } from "./static/constants";
+import supabases from "@/services/server";
 
 export const useAllDesigns = () => {
-    const [page, setPage] = useState(0);
     const router = useRouter();
     const category = router.query.category || '';
+
+    const fetchDesigns = async ({ pageParam = 0, queryKey }) => {
+        const [, category] = queryKey;
+
+        let query = supabases
+            .from('designs')
+            .select('*')
+            .range(pageParam * PAGE_SIZE, (pageParam + 1) * PAGE_SIZE - 1)
+            .order("id", { ascending: false });
+
+        if (category) {
+            query = query.ilike('categories', `%${category}%`);
+        }
+
+        const { data, error } = await query;
+
+        if (error) {
+            throw new Error('Error fetching designs');
+        }
+
+        return data;
+    };
 
     const {
         data,
@@ -17,20 +35,26 @@ export const useAllDesigns = () => {
         fetchNextPage,
         hasNextPage,
         isFetchingNextPage,
-        isLoading
-    } = useInfiniteQuery(['categories', category], fetchDesigns, {
-        getNextPageParam: (lastPage) => {
+        isLoading,
+    } = useInfiniteQuery(['designs', category], fetchDesigns, {
+        getNextPageParam: (lastPage, allPages) => {
             if (lastPage.length < PAGE_SIZE) {
                 return undefined; // No more pages
             }
-            return lastPage[lastPage.length - 1].id;
+            return allPages.length; // This will be used as the pageParam in the next fetch
         },
     });
 
     const loadMore = () => {
-        setPage(page + 1);
         fetchNextPage();
     };
 
-    return { templates: data, error, loadMore, hasNextPage, isFetchingNextPage, isLoading };
+    return {
+        templates: data,
+        error,
+        loadMore,
+        hasNextPage,
+        isFetchingNextPage,
+        isLoading,
+    };
 };

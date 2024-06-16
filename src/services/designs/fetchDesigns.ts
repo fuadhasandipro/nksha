@@ -5,7 +5,7 @@ import supabase from "../server";
 export const fetchDesigns = async ({ pageParam = 0, queryKey }) => {
   const [, category] = queryKey;
 
-  let query = supabase.from('designs').select('*').limit(PAGE_SIZE).order("id", { ascending: false });
+  let query = supabase.from('designs').select('*').limit(PAGE_SIZE);
 
   if (category) {
     query = query.filter('categories', 'ilike', `%${category}%`);
