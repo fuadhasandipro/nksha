@@ -18,6 +18,7 @@ const Container = styled('div', (props) => ({
   height: '50px',
   display: 'flex',
   overflow: 'scroll',
+  background: "#fff"
 }));
 
 const Toolbox = () => {

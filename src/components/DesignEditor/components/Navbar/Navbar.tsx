@@ -22,6 +22,9 @@ import { useAuth, useUser } from '@clerk/nextjs';
 import MobileDesignTitle from './MobileDesignTitle';
 import subscriptionTimeLeft from '@/lib/getSubscriptionDuration';
 import axios from 'axios';
+import Image from 'next/image';
+import { siteSettings } from '@/data/static/site-settings';
+import Link from 'next/link';
 
 const Container = styled<'div', {}, Theme>('div', ({ $theme }) => ({
   height: '64px',
@@ -479,6 +482,8 @@ const Navbar = ({ isLargeScreen }) => {
     }
   }
 
+  const { darkLogo } = siteSettings;
+
 
   return (
     // @ts-ignore
@@ -486,7 +491,10 @@ const Navbar = ({ isLargeScreen }) => {
 
       {isLargeScreen ? <Container>
         <div style={{ color: '#ffffff' }}>
-          <Logo size={36} />
+
+          <Link href="/" target='_blank'>
+            <Image alt='Logo' src={darkLogo} width={120} height={36} />
+          </Link>
         </div>
         <DesignTitle />
         <Block
@@ -566,28 +574,21 @@ const Navbar = ({ isLargeScreen }) => {
       </Container> :
 
         <div className='bg-black flex items-center justify-between h-14 px-4'>
-          <div style={{ color: '#ffffff' }}>
-            <Logo size={36} />
-          </div>
+          <Link href="/" target='_blank'>
+            <Image alt='Logo' src={darkLogo} width={90} height={30} />
+          </Link>
 
           <MobileDesignTitle />
 
-          <Button
-            size="compact"
-            onClick={() => {
-              handleSaveDownload()
-            }}
-            kind={KIND.tertiary}
-            overrides={{
-              StartEnhancer: {
-                style: {
-                  marginRight: '4px',
-                },
-              },
-            }}
+          <SaveButton
+            onClick={handleSaveDownload}
+            className=''
+            // disabled={isLoadingMore}
+            isLoading={loadingDownload}
+
           >
-            Save & Download
-          </Button>
+            Save Image
+          </SaveButton>
         </div>}
 
     </ThemeProvider>

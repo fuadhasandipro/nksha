@@ -31,7 +31,7 @@ const MobileEditor = ({ isLargeScreen }) => {
         <>
             <Navbar isLargeScreen={isLargeScreen} />
             <Panels />
-            <div style={{ flex: 1, display: "flex", flexDirection: "column", position: "relative", width: "100%", height: "86vh" }}>
+            <div style={{ flex: 1, display: "flex", flexDirection: "column", position: "relative", width: "100%", height: "80vh" }}>
                 <Canvas />
                 <Toolbox />
                 <Footer />

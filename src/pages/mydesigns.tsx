@@ -19,7 +19,7 @@ import Button from '@/components/ui/button';
 import placeholder from '@/assets/images/placeholders/product.svg';
 import { useModalAction } from '@/components/modal-views/context';
 
-import Link from '@/components/ui/link';
+import Link from 'next/link';
 import routes from '@/config/routes';
 import AnchorLink from '@/components/ui/links/anchor-link';
 
@@ -30,6 +30,8 @@ import type { GetStaticProps } from 'next';
 import Layout from '@/layouts/_layout';
 import { DetailsIcon } from '@/components/icons/details-icon';
 import Seo from '@/layouts/_seo';
+import HomeButton from '@/components/ui/button';
+import { useRouter } from 'next/router';
 
 dayjs.extend(relativeTime);
 
@@ -146,6 +148,21 @@ const Purchases: NextPageWithLayout = () => {
     isLoading,
   } = useUserAllDesigns();
 
+
+
+  if (!downloadableFiles?.pages[0]?.length) {
+    return <div className="flex justify-center items-center h-full flex-col">
+      <h1 className='text-2xl font-bold'>No Design Found</h1>
+      <Link
+        href="/"
+        rel="noreferrer"
+        className="focus:ring-accent-700  mt-5 inline-flex h-9 w-36 shrink-0 items-center justify-center rounded border border-transparent bg-brand px-3 py-0 text-sm font-semibold leading-none text-light outline-none transition duration-300 ease-in-out hover:bg-brand-dark focus:shadow focus:outline-none focus:ring-1"
+      >
+        Browse Designs
+      </Link>
+    </div>
+  }
+
   return (
     <motion.div
       variants={fadeInBottom()}
@@ -153,12 +170,7 @@ const Purchases: NextPageWithLayout = () => {
     >
       <h1 className="mb-3 text-15px font-medium text-dark dark:text-light">
         Your Recent Designs
-        <span className="ml-1 text-light-900">
-          ({downloadableFiles?.pages[0]?.length})
-        </span>
       </h1>
-
-
 
       {isLoading && !downloadableFiles?.pages.length
         ? rangeMap(15, (i) => (

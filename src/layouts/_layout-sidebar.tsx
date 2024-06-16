@@ -22,6 +22,7 @@ import usePaymentUrl from '@/lib/hooks/use-payment-url';
 import { useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/router';
 import subscriptionTimeLeft from '@/lib/getSubscriptionDuration';
+import { DetailsIcon } from '@/components/icons/details-icon';
 
 interface NavLinkProps {
   href: string;
@@ -171,6 +172,9 @@ export function Sidebar({
                 }}
               >
                 Buy Now
+                <span className="ml-1 flex w-auto flex-shrink-0 items-center justify-start xl:w-3">
+                  <DetailsIcon />
+                </span>
               </Link>
             </nav>
           ) : ""}
