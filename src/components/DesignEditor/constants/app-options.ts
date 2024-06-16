@@ -48,6 +48,10 @@ export const BASE_MOBILE_ITEMS = [
     name: 'Graphics',
   },
   {
+    id: 'uploadlogo',
+    name: 'UploadLogo',
+  },
+  {
     id: 'text',
     name: 'Text',
   },

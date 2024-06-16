@@ -29,7 +29,7 @@ class Icons {
   static Background = Background
   static Elements = Elements
   static Text = Text
-  static UploadLogo = UploadLogo
+  static UploadLogo = Uploads
   static Templates = Templates
   static Search = Search
   static Images = Images

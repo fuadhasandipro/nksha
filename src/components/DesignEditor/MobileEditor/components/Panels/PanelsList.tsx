@@ -41,7 +41,6 @@ const PanelsList = () => {
 const PanelListItem = ({ label, icon, activePanel, name }: any) => {
   const { setActivePanel } = useAppContext()
   const setIsSidebarOpen = useSetIsSidebarOpen()
-  const [css, theme] = useStyletron()
   // @ts-ignore
   const Icon = Icons[icon]
   return (
@@ -55,6 +54,7 @@ const PanelListItem = ({ label, icon, activePanel, name }: any) => {
         width: "60px",
         height: "60px",
         // backgroundColor: name === activePanel ? "#252627" : "#18191b",
+        color: "#ddd",
         display: "flex",
         alignItems: "center",
         flexDirection: "column",
