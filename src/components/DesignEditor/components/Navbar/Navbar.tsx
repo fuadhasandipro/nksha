@@ -482,7 +482,7 @@ const Navbar = ({ isLargeScreen }) => {
     }
   }
 
-  const { darkLogo } = siteSettings;
+  const { editorLogo, darkLogo } = siteSettings;
 
 
   return (
@@ -561,7 +561,7 @@ const Navbar = ({ isLargeScreen }) => {
 
           <SaveButton
             onClick={handleSaveDownload}
-            className=''
+            className='font-body'
             // disabled={isLoadingMore}
             isLoading={loadingDownload}
 
@@ -573,21 +573,23 @@ const Navbar = ({ isLargeScreen }) => {
         </Block>
       </Container> :
 
-        <div className='bg-black flex items-center justify-between h-14 px-4'>
-          <Link href="/" target='_blank'>
-            <Image alt='Logo' src={darkLogo} width={90} height={30} />
-          </Link>
+        <div className='bg-black flex items-center justify-between h-14 px-3'>
+          <div className='flex-1'>
+            <Link href="/" target='_blank'>
+              <Image alt='Logo' src={editorLogo} width={30} height={30} />
+            </Link>
 
+          </div>
           <MobileDesignTitle />
 
           <SaveButton
             onClick={handleSaveDownload}
-            className=''
+            className='min-h-[15px] py-2.5 px-5 font-body'
             // disabled={isLoadingMore}
             isLoading={loadingDownload}
 
           >
-            Save Image
+            Save
           </SaveButton>
         </div>}
 

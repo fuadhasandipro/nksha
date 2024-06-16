@@ -40,6 +40,7 @@ const MobileDesignTitle = () => {
                 justifyContent: "center",
                 color: "#ffffff",
                 opacity: 1,
+                flex: 1
             }}
         >
             <Block width={`auto`} display="flex">
