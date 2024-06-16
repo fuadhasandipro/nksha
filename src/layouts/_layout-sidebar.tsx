@@ -187,26 +187,28 @@ export function Sidebar({
           isCollapse ? 'flex xl:hidden' : 'hidden xl:flex'
         )}
       >
-        {/* <nav className="flex items-center justify-center gap-5 pb-1.5 text-13px font-medium capitalize tracking-[0.2px]">
+        <nav className="flex items-center justify-center gap-5 pb-1.5 text-13px font-medium capitalize tracking-[0.2px]">
           <ActiveLink
-            href={routes.terms}
+            href="https://www.facebook.com/noksha.site"
+            target='_blank'
             className="block py-2 text-dark-700 hover:text-dark-100 dark:hover:text-brand"
           >
-            Terms
+            Facebook Page
           </ActiveLink>
           <ActiveLink
-            href={routes.privacy}
+            href="https://wa.me/+8801971271317?text="
+            target='_blank'
             className="block py-2 text-dark-700 hover:text-dark-100 dark:hover:text-brand"
           >
-            Privacy
+            WhatsApp
           </ActiveLink>
-          <ActiveLink
+          {/* <ActiveLink
             href={routes.help}
             className="block py-2 text-dark-700 hover:text-dark-100 dark:hover:text-brand"
           >
             Help
-          </ActiveLink>
-        </nav> */}
+          </ActiveLink> */}
+        </nav>
         <Copyright className="text-xs font-medium text-dark-800/80 dark:text-dark-700" />
       </footer>
     </aside>
