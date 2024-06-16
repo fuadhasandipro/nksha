@@ -14,7 +14,7 @@ const PrivacyPage: NextPageWithLayout = () => {
     <>
       <Seo
         title="Privacy Policy"
-        description="Fastest digital download template built with React, NextJS, TypeScript, React-Query and Tailwind CSS."
+        description="Noksha Privacy Policy."
         url={routes.privacy}
       />
       <div className="mx-auto flex h-full w-full max-w-screen-xl flex-col p-4 sm:p-5">

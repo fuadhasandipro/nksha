@@ -187,7 +187,7 @@ export function Sidebar({
           isCollapse ? 'flex xl:hidden' : 'hidden xl:flex'
         )}
       >
-        <nav className="flex items-center justify-center gap-5 pb-1.5 text-13px font-medium capitalize tracking-[0.2px]">
+        {/* <nav className="flex items-center justify-center gap-5 pb-1.5 text-13px font-medium capitalize tracking-[0.2px]">
           <ActiveLink
             href={routes.terms}
             className="block py-2 text-dark-700 hover:text-dark-100 dark:hover:text-brand"
@@ -206,7 +206,7 @@ export function Sidebar({
           >
             Help
           </ActiveLink>
-        </nav>
+        </nav> */}
         <Copyright className="text-xs font-medium text-dark-800/80 dark:text-dark-700" />
       </footer>
     </aside>
