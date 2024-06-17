@@ -13,7 +13,7 @@ const Container = styled<'div', {}, Theme>('div', ({ $theme }) => ({
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
-
+  overflow: "scroll"
 }));
 
 interface Options {
