@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { Block } from "baseui/block"
 import AngleDoubleLeft from "@/components/DesignEditor/components/Icons/AngleDoubleLeft"
 import Scrollable from "@/components/DesignEditor/components/Scrollable"
@@ -13,11 +13,13 @@ import { toBase64 } from "@/components/DesignEditor/utils/data"
 import axios from "axios"
 import Image from "next/image"
 import { useUser } from "@clerk/nextjs"
+import { SpinnerIcon } from "@/components/icons/spinner-icon"
 
 
 export default function () {
   const inputFileRef = React.useRef<HTMLInputElement>(null)
   const [uploads, setUploads] = React.useState<any[]>([])
+  const [loading, setIsLoading] = useState(false)
   const editor = useEditor()
   const setIsSidebarOpen = useSetIsSidebarOpen()
   const { user } = useUser();
@@ -51,12 +53,12 @@ export default function () {
 
     let preview
 
+    setIsLoading(true)
     const response = await axios.post(apiUrl, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
     }).then(async (res) => {
-
       if (user) {
         await user.update({
           unsafeMetadata: {
@@ -66,13 +68,11 @@ export default function () {
         });
       }
       preview = res.data.data.display_url
-
-
-
+      setIsLoading(false)
     }).catch(e => {
       alert("Upload Error, Please try again later")
+      setIsLoading(false)
     });
-
 
     if (isVideo) {
       const video = await loadVideoResource(base64)
@@ -136,6 +136,9 @@ export default function () {
             >
               Upload logo (jpg, png, jpeg)
             </Button>
+            <div className="my-3">
+              {loading && <SpinnerIcon className="h-auto w-5 animate-spin" />}
+            </div>
             <input onChange={handleFileInput} type="file" id="file" ref={inputFileRef} style={{ display: "none" }} />
             {uploads.length == 0 && <div className="flex items-center flex-col text-center justify-center h-[80vh]">
               <Image alt="drop bg" src="https://i.ibb.co/3yWJrsY/drop-bg.png" width={150} height={150} className="pointer-events-none" />

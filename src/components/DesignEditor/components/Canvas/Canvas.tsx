@@ -8,7 +8,7 @@ const Canvas = () => {
   const { displayPlayback } = useDesignEditorContext();
 
   return (
-    <div style={{ flex: 1, display: 'flex', position: 'relative' }}>
+    <div style={{ flex: 1, display: 'flex', position: 'relative', }}>
       {displayPlayback && <Playback />}
       <ContextMenu />
       <LayerhubCanvas

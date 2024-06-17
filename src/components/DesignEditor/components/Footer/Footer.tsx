@@ -3,14 +3,14 @@ import Presentation from "./Presentation"
 import Video from "./Video"
 import useEditorType from "../../hooks/useEditorType"
 
-const Footer = () => {
+const Footer = ({ isLargeScreen }) => {
   const editorType = useEditorType()
 
   return {
     NONE: <></>,
     PRESENTATION: <Presentation />,
     VIDEO: <Video />,
-    GRAPHIC: <Graphic />,
+    GRAPHIC: <Graphic isLargeScreen={isLargeScreen} />,
   }[editorType]
 }
 

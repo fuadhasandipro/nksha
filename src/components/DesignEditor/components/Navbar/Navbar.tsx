@@ -573,7 +573,7 @@ const Navbar = ({ isLargeScreen }) => {
         </Block>
       </Container> :
 
-        <div className='bg-black flex items-center justify-between h-14 px-3'>
+        <div className='bg-black flex items-center justify-between h-14 px-3 flex-none'>
           <div className='flex-1'>
             <Link href="/" target='_blank'>
               <Image alt='Logo' src={editorLogo} width={30} height={30} />

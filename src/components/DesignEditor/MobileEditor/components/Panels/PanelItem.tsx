@@ -22,7 +22,7 @@ const PanelsList = () => {
     if (activeSubMenu) {
       setState({ panel: activeSubMenu })
     } else {
-      setState({ panel: "Uploads" })
+      // setState({ panel: "Uploads" })
     }
   }, [activeSubMenu])
 
@@ -34,7 +34,7 @@ const PanelsList = () => {
       id="EditorPanelItem"
       $style={{
         background: "#ffffff",
-        width: "306px",
+        width: "100vw",
         height: isSidebarOpen ? "100vh" : 0,
         flex: "none",
         borderRight: "1px solid #d7d8e3",
@@ -42,7 +42,7 @@ const PanelsList = () => {
         transition: "ease width 0.1s",
         overflow: "hidden",
         position: "absolute",
-        zIndex: 1,
+
       }}
     >
       {<Component />}

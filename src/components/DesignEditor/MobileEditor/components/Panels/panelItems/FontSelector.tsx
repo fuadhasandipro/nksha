@@ -48,6 +48,8 @@ const FontSelector = () => {
         fontFamily: x.postscript_name,
         fontURL: font.url,
       })
+
+      setIsSidebarOpen(false)
     }
 
 
@@ -65,7 +67,9 @@ const FontSelector = () => {
         }}
       >
         <Block $style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-          <ArrowBackOutline size={24} />
+          <div onClick={() => {
+            setIsSidebarOpen(false)
+          }}> <ArrowBackOutline size={24} /></div>
           <Block>Choose font</Block>
         </Block>
         <Block onClick={() => setIsSidebarOpen(false)} $style={{ cursor: "pointer", display: "flex" }}>

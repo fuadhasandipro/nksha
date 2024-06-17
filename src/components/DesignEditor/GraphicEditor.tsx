@@ -16,7 +16,7 @@ const GraphicEditor = ({ isLargeScreen }) => {
         <div style={{ flex: 1, display: "flex", flexDirection: "column", position: "relative" }}>
           <Toolbox />
           <Canvas />
-          <Footer />
+          <Footer isLargeScreen={isLargeScreen} />
         </div>
       </div>
     </EditorContainer>

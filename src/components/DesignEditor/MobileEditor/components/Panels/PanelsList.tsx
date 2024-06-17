@@ -1,17 +1,13 @@
-import { useStyletron, styled } from "baseui"
+
 import { BASE_MOBILE_ITEMS } from "@/components/DesignEditor/constants/app-options"
 
 import Icons from "@/components/DesignEditor/components/Icons"
 import { useTranslation } from "react-i18next"
-
-import useEditorType from "@/components/DesignEditor/hooks/useEditorType"
-import Scrollable from "@/components/DesignEditor/components/Scrollable"
 import { Block } from "baseui/block"
 
 import useAppContext from "@/components/DesignEditor/hooks/useAppContext"
 import useSetIsSidebarOpen from "@/components/DesignEditor/hooks/useSetIsSidebarOpen"
 
-import PanelItem from './PanelItem'
 
 
 const PanelsList = () => {
@@ -20,7 +16,7 @@ const PanelsList = () => {
 
   return (
     <>
-      <div className="flex gap-x-3 overflow-scroll ">
+      <div className="flex gap-x-6 overflow-scroll bg-white px-3">
 
         {BASE_MOBILE_ITEMS.map((panelListItem) => (
           <PanelListItem
@@ -54,7 +50,8 @@ const PanelListItem = ({ label, icon, activePanel, name }: any) => {
       $style={{
         width: "60px",
         height: "60px",
-        // backgroundColor: name === activePanel ? "#252627" : "#18191b",
+        backgroundColor: name === activePanel ? "#fff" : "#fff",
+        color: "#4b4b4b",
         display: "flex",
         alignItems: "center",
         flexDirection: "column",
@@ -67,7 +64,7 @@ const PanelListItem = ({ label, icon, activePanel, name }: any) => {
         gap: "0.1rem",
         ":hover": {
           cursor: "pointer",
-          backgroundColor: "#cdcdcd",
+          backgroundColor: "#ffffff",
           transition: "all 0.2s ease"
         },
       }}

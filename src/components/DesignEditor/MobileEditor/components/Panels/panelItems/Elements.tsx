@@ -56,7 +56,10 @@ const Elements = () => {
         <Block>
           <Block $style={{ display: "grid", gap: "8px", padding: "1.5rem", gridTemplateColumns: "1fr 1fr 1fr 1fr" }}>
             {graphics.map((graphic, index) => (
-              <ImageItem onClick={() => addObject(graphic)} key={index} preview={graphic.preview} />
+              <ImageItem onClick={() => {
+                addObject(graphic)
+                setIsSidebarOpen(false)
+              }} key={index} preview={graphic.preview} />
             ))}
           </Block>
         </Block>

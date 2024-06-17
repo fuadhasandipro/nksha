@@ -13,7 +13,7 @@ const Container = styled<'div', {}, Theme>('div', ({ $theme }) => ({
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
-  overflow: 'scroll',
+
 }));
 
 interface Options {
@@ -45,11 +45,11 @@ const Common = () => {
 
   return (
     <Container>
-      <div>
+      {/* <div>
         <Button kind={KIND.tertiary} size={SIZE.compact}>
           <Icons.Layers size={20} />
         </Button>
-      </div>
+      </div> */}
       <div
         style={{
           display: 'flex',
@@ -57,13 +57,7 @@ const Common = () => {
           justifyContent: 'center',
         }}
       >
-        <Button
-          kind={KIND.tertiary}
-          size={SIZE.compact}
-          onClick={() => editor.zoom.zoomToFit()}
-        >
-          <Icons.Compress size={16} />
-        </Button>
+
         <Button
           kind={KIND.tertiary}
           size={SIZE.compact}
@@ -77,7 +71,7 @@ const Common = () => {
             ThumbValue: () => null,
             TickBar: () => null,
             Root: {
-              style: { width: '140px' },
+              style: { width: '120px' },
             },
             Thumb: {
               style: {
@@ -128,6 +122,13 @@ const Common = () => {
       <div
         style={{ display: 'flex', alignItems: 'center', justifyContent: 'end' }}
       >
+        <Button
+          kind={KIND.tertiary}
+          size={SIZE.compact}
+          onClick={() => editor.zoom.zoomToFit()}
+        >
+          <Icons.Compress size={16} />
+        </Button>
         <Button
           kind={KIND.tertiary}
           size={SIZE.compact}

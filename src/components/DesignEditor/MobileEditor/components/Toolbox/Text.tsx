@@ -27,11 +27,10 @@ import {
 } from '@/components/DesignEditor/constants/editor';
 import getSelectionType from '@/components/DesignEditor/utils/get-selection-type';
 import { IStaticText } from '@layerhub-io/types';
-import { getTextProperties } from '../../utils/text';
+import { getTextProperties } from '@/components/DesignEditor/utils/text';
 import { loadFonts } from '@/components/DesignEditor/utils/fonts';
 import Scrollbar from '@layerhub-io/react-custom-scrollbar';
-import useSetIsSidebarOpen from '../../hooks/useSetIsSidebarOpen';
-import FontSelector from '../../MobileEditor/components/Panels/panelItems/FontSelector';
+import useSetIsSidebarOpen from '@/components/DesignEditor/hooks/useSetIsSidebarOpen';
 
 interface TextState {
   color: string;
@@ -254,10 +253,11 @@ const Text = () => {
             fontWeight: 500,
             fontSize: '14px',
             gap: '0.5rem',
+            color: "#2e2e2e"
           }}
-          height="24px"
+          height="30px"
           display="flex"
-          width="220px"
+          width="170px"
           alignItems="center"
         >
           <Block>{state.family}</Block>
@@ -435,7 +435,7 @@ const TextFontSize = () => {
         </Scrollbar>
       )}
     >
-      <Block width="80px">
+      <Block width="70px">
         <Input
           value={value}
           onChange={(e: any) => onChange(e.target.value)}

@@ -3,9 +3,9 @@ import { useActiveObject, useEditor } from '@layerhub-io/react';
 
 import { styled } from 'baseui';
 import Items from './Items';
-import useAppContext from '../../hooks/useAppContext';
+import useAppContext from '@/components/DesignEditor/hooks/useAppContext';
 import { ILayer } from '@layerhub-io/types';
-import getSelectionType from '../../utils/get-selection-type';
+import getSelectionType from '@/components/DesignEditor/utils/get-selection-type';
 
 const DEFAULT_TOOLBOX = 'Canvas';
 

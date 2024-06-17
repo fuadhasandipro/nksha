@@ -84,7 +84,10 @@ const Text = () => {
       <Scrollable>
         <Block padding="0 1.5rem">
           <Button
-            onClick={addObject}
+            onClick={() => {
+              addObject()
+              setIsSidebarOpen(false)
+            }}
             size={SIZE.compact}
             overrides={{
               Root: {
@@ -106,7 +109,10 @@ const Text = () => {
             }}
           >
             {[...textComponents].map((tc) => (
-              <TextComponentItem onClick={addComponent} key={tc.id} component={tc} />
+              <TextComponentItem onClick={(e) => {
+                addComponent(e)
+                setIsSidebarOpen(false)
+              }} key={tc.id} component={tc} />
             ))}
           </Block>
         </Block>

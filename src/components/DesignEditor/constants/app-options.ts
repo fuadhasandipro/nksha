@@ -27,6 +27,7 @@ export const BASE_ITEMS = [
     id: 'images',
     name: 'Images',
   },
+
   {
     id: 'customize',
     name: 'Customize',

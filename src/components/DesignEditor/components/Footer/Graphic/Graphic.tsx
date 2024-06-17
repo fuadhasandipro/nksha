@@ -6,12 +6,15 @@ import Scenes from "./Scenes"
 
 const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   background: $theme.colors.white,
+
 }))
 
-const Graphic = () => {
+const Graphic = ({ isLargeScreen }) => {
   return (
     <Container>
-      <Scenes />
+      <div className={`${isLargeScreen ? "block" : "hidden"}`}>
+        <Scenes />
+      </div>
       <Common />
     </Container>
   )

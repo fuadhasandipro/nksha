@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { Block } from "baseui/block"
 import AngleDoubleLeft from "@/components/DesignEditor/components/Icons/AngleDoubleLeft"
 import Scrollable from "@/components/DesignEditor/components/Scrollable"
@@ -12,6 +12,7 @@ import { ILayer } from "@layerhub-io/types"
 import { toBase64 } from "@/components/DesignEditor/utils/data"
 import axios from "axios"
 import Image from "next/image"
+import { SpinnerIcon } from "@/components/icons/spinner-icon"
 
 
 export default function () {
@@ -19,6 +20,7 @@ export default function () {
   const [uploads, setUploads] = React.useState<any[]>([])
   const editor = useEditor()
   const setIsSidebarOpen = useSetIsSidebarOpen()
+  const [loading, setIsLoading] = useState(false)
 
   const handleDropFiles = async (files: FileList) => {
     const file = files[0]
@@ -33,16 +35,17 @@ export default function () {
     formData.append('image', base64);
 
     let preview
-
+    setIsLoading(true)
     const response = await axios.post(apiUrl, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
     }).then(res => {
       preview = res.data.data.display_url
-
+      setIsLoading(false)
     }).catch(e => {
       alert("Upload Error, Please try again later")
+      setIsLoading(false)
     });
 
 
@@ -108,6 +111,9 @@ export default function () {
             >
               Upload from Device
             </Button>
+            <div className="my-3">
+              {loading && <SpinnerIcon className="h-auto w-5 animate-spin" />}
+            </div>
             <input onChange={handleFileInput} type="file" id="file" ref={inputFileRef} style={{ display: "none" }} />
             {uploads.length == 0 && <div className="flex items-center flex-col text-center justify-center h-[80vh]">
               <Image alt="drop bg" src="https://i.ibb.co/3yWJrsY/drop-bg.png" width={150} height={150} className="pointer-events-none" />
@@ -129,7 +135,10 @@ export default function () {
                     alignItems: "center",
                     cursor: "pointer",
                   }}
-                  onClick={() => addImageToCanvas(upload)}
+                  onClick={() => {
+                    addImageToCanvas(upload)
+                    setIsSidebarOpen(false)
+                  }}
                 >
                   <div>
                     <img width="100%" src={upload.preview ? upload.preview : upload.url} alt="preview" />

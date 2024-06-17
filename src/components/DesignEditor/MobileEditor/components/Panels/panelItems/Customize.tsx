@@ -95,6 +95,8 @@ const Customize = () => {
                         flexDirection: "column",
                         gap: "1rem",
                         textAlign: "center",
+                        position: "absolute",
+                        zIndex: 999999,
                       }}
                     >
                       <HexColorPicker onChange={(v) => handleChange("backgroundColor", v)} />
@@ -107,7 +109,7 @@ const Customize = () => {
                       />
                     </div>
                   }
-                  accessibilityType="tooltip"
+                  accessibilityType="menu"
                 >
                   <div>
                     <div

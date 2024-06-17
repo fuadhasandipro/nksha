@@ -4190,7 +4190,7 @@ const textComponent1 = {
   id: "CN3w326wV9VUbq-CMkRxQ",
   layers: [
     {
-      id: "CN3w326wV9VUbq-CMkRxQ",
+      id: "CN3w3235359VUbq-CMkRxQ",
       angle: 0,
       stroke: "#ffffff",
       strokeWidth: 0,
@@ -4234,10 +4234,10 @@ const textComponent1 = {
 }
 
 const textComponent2 = {
-  id: "CN3w326wV9VUbq-CMkRxQ",
+  id: "CN3w326wV756VUbq-CMkRxQ",
   layers: [
     {
-      id: "CN3w326wV9VUbq-CMkRxQ",
+      id: "CN2453456wV756VUbq-CMkRxQ",
       angle: 0,
       stroke: "#ffffff",
       strokeWidth: 0,

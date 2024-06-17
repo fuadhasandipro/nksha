@@ -82,7 +82,10 @@ const Graphics = () => {
         <Block>
           <Block $style={{ display: "grid", gap: "8px", padding: "1.5rem", gridTemplateColumns: "1fr 1fr" }}>
             {vectors.map((vector, index) => (
-              <GraphicItem onClick={() => addObject(vector)} key={index} preview={vector} />
+              <GraphicItem onClick={() => {
+                addObject(vector)
+                setIsSidebarOpen(false)
+              }} key={index} preview={vector} />
             ))}
           </Block>
         </Block>
