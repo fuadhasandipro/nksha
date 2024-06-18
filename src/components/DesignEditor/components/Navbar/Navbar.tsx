@@ -300,9 +300,6 @@ const Navbar = ({ isLargeScreen }) => {
         .eq('session', session)
         .single();
 
-      if (sessionError) {
-        console.log(sessionError);
-      }
 
       if (existingSession) {
         if (existingSession.user_id == userId) {

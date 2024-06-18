@@ -13,58 +13,35 @@ import { toBase64 } from "@/components/DesignEditor/utils/data"
 import axios from "axios"
 import Image from "next/image"
 import { SpinnerIcon } from "@/components/icons/spinner-icon"
+import useImageUpload from "@/lib/hooks/use-imgbb"
 
 
 export default function () {
   const inputFileRef = React.useRef<HTMLInputElement>(null)
-  const [uploads, setUploads] = React.useState<any[]>([])
   const editor = useEditor()
   const setIsSidebarOpen = useSetIsSidebarOpen()
-  const [loading, setIsLoading] = useState(false)
+  const { isLoading, uploads, uploadImage } = useImageUpload();
 
   const handleDropFiles = async (files: FileList) => {
-    const file = files[0]
+    const file = files[0];
+    if (!file) return;
+    const base64 = await toBase64(file) as string;
 
-    const isVideo = file.type.includes("video")
-    const base64 = (await toBase64(file)) as string
+    try {
 
-    const apiKey = '007aff46bb49446f04020287cfbcb445';
-    const apiUrl = 'https://api.imgbb.com/1/upload';
-    const formData = new FormData();
-    formData.append('key', apiKey);
-    formData.append('image', base64);
+      // Assuming you have code to handle videos, which is commented out for now
+      // const isVideo = file.type.includes("video");
+      // if (isVideo) {
+      //   const video = await loadVideoResource(base64);
+      //   const frame = await captureFrame(video);
+      //   preview = frame;
+      // }
 
-    let preview
-    setIsLoading(true)
-    const response = await axios.post(apiUrl, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    }).then(res => {
-      preview = res.data.data.display_url
-      setIsLoading(false)
-    }).catch(e => {
-      alert("Upload Error, Please try again later")
-      setIsLoading(false)
-    });
-
-
-    if (isVideo) {
-      const video = await loadVideoResource(base64)
-      const frame = await captureFrame(video)
-      preview = frame
+      await uploadImage(base64, false);
+    } catch (err) {
+      console.error(err);
+      alert("Error processing file");
     }
-
-    const type = isVideo ? "StaticVideo" : "StaticImage"
-
-    const upload = {
-      id: nanoid(),
-      src: preview,
-      preview: preview,
-      type: type,
-    }
-
-    setUploads([...uploads, upload])
   }
 
   const handleInputFileRefClick = () => {
@@ -112,7 +89,7 @@ export default function () {
               Upload from Device
             </Button>
             <div className="my-3">
-              {loading && <SpinnerIcon className="h-auto w-5 animate-spin" />}
+              {isLoading && <SpinnerIcon className="h-auto w-5 animate-spin" />}
             </div>
             <input onChange={handleFileInput} type="file" id="file" ref={inputFileRef} style={{ display: "none" }} />
             {uploads.length == 0 && <div className="flex items-center flex-col text-center justify-center h-[80vh]">

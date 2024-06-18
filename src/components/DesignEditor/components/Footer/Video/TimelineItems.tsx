@@ -26,7 +26,6 @@ const TimelineItems = () => {
     (id: string, props: any) => {
       const updatedItems = scenes.map((scene) => {
         if (scene.id === id) {
-          console.log(props)
           return {
             ...scene,
             duration: props.width * 40,

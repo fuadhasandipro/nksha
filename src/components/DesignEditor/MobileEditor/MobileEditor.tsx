@@ -14,7 +14,7 @@ const MobileEditor = ({ isLargeScreen }) => {
                 <Toolbox />
                 <Canvas />
                 <Panels />
-                <div className="">
+                <div className="flex-none">
                     <Footer isLargeScreen={isLargeScreen} />
                 </div>
             </div>

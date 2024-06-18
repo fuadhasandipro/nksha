@@ -22,7 +22,6 @@ const Container = styled('div', (props) => ({
 }));
 
 const Toolbox = () => {
-  console.log(useAppContext());
   const [state, setState] = React.useState<ToolboxState>({ toolbox: 'Text' });
   const { setActiveSubMenu } = useAppContext();
   const activeObject = useActiveObject() as ILayer;

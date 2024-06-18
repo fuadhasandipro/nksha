@@ -14,15 +14,16 @@ import axios from "axios"
 import Image from "next/image"
 import { useUser } from "@clerk/nextjs"
 import { SpinnerIcon } from "@/components/icons/spinner-icon"
+import useImageUpload from "@/lib/hooks/use-imgbb"
 
 
 export default function () {
   const inputFileRef = React.useRef<HTMLInputElement>(null)
-  const [uploads, setUploads] = React.useState<any[]>([])
-  const [loading, setIsLoading] = useState(false)
+  const [existingUploads, setExistingUploads] = React.useState<any[]>([])
   const editor = useEditor()
   const setIsSidebarOpen = useSetIsSidebarOpen()
   const { user } = useUser();
+  const { isLoading, uploads, uploadImage } = useImageUpload();
 
   useEffect(() => {
     if (user) {
@@ -34,62 +35,32 @@ export default function () {
           type: "StaticImage",
         }
 
-        setUploads([...uploads, upload])
+        setExistingUploads([...uploads, upload])
       }
     }
   }, [])
 
   const handleDropFiles = async (files: FileList) => {
-    const file = files[0]
+    const file = files[0];
+    if (!file) return;
+    const base64 = await toBase64(file) as string;
 
-    const isVideo = file.type.includes("video")
-    const base64 = (await toBase64(file)) as string
+    try {
 
-    const apiKey = '007aff46bb49446f04020287cfbcb445';
-    const apiUrl = 'https://api.imgbb.com/1/upload';
-    const formData = new FormData();
-    formData.append('key', apiKey);
-    formData.append('image', base64);
+      // Assuming you have code to handle videos, which is commented out for now
+      // const isVideo = file.type.includes("video");
+      // if (isVideo) {
+      //   const video = await loadVideoResource(base64);
+      //   const frame = await captureFrame(video);
+      //   preview = frame;
+      // }
 
-    let preview
+      await uploadImage(base64, true);
 
-    setIsLoading(true)
-    const response = await axios.post(apiUrl, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    }).then(async (res) => {
-      if (user) {
-        await user.update({
-          unsafeMetadata: {
-            ...user.unsafeMetadata,
-            userLogo: res.data.data.display_url
-          },
-        });
-      }
-      preview = res.data.data.display_url
-      setIsLoading(false)
-    }).catch(e => {
-      alert("Upload Error, Please try again later")
-      setIsLoading(false)
-    });
-
-    if (isVideo) {
-      const video = await loadVideoResource(base64)
-      const frame = await captureFrame(video)
-      preview = frame
+    } catch (err) {
+      console.error(err);
+      alert("Error processing file");
     }
-
-    const type = isVideo ? "StaticVideo" : "StaticImage"
-
-    const upload = {
-      id: nanoid(),
-      src: preview,
-      preview: preview,
-      type: type,
-    }
-
-    setUploads([...uploads, upload])
   }
 
   const handleInputFileRefClick = () => {
@@ -103,6 +74,10 @@ export default function () {
   const addImageToCanvas = (props: Partial<ILayer>) => {
     editor.objects.add(props)
   }
+
+  const totalUploads = [...existingUploads, ...uploads]
+
+
   return (
     <DropZone handleDropFiles={handleDropFiles}>
       <Block $style={{ flex: 1, display: "flex", flexDirection: "column" }}>
@@ -137,10 +112,10 @@ export default function () {
               Upload logo (jpg, png, jpeg)
             </Button>
             <div className="my-3">
-              {loading && <SpinnerIcon className="h-auto w-5 animate-spin" />}
+              {isLoading && <SpinnerIcon className="h-auto w-5 animate-spin" />}
             </div>
             <input onChange={handleFileInput} type="file" id="file" ref={inputFileRef} style={{ display: "none" }} />
-            {uploads.length == 0 && <div className="flex items-center flex-col text-center justify-center h-[80vh]">
+            {totalUploads.length == 0 && <div className="flex items-center flex-col text-center justify-center h-[80vh]">
               <Image alt="drop bg" src="https://i.ibb.co/3yWJrsY/drop-bg.png" width={150} height={150} className="pointer-events-none" />
               <p className="font-body mt-5">Choose a file or drag it here</p>
             </div>}
@@ -152,7 +127,7 @@ export default function () {
                 gridTemplateColumns: "1fr 1fr",
               }}
             >
-              {uploads.map((upload) => (
+              {totalUploads.map((upload) => (
                 <div
                   key={upload.id}
                   style={{

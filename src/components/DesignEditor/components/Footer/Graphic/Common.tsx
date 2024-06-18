@@ -90,7 +90,6 @@ const Common = () => {
           value={[options.zoomRatio]}
           onChange={({ value }) => {
             handleChange('zoomRatio', value[0]);
-            console.log(editor);
           }}
           min={zoomMin}
           max={zoomMax}

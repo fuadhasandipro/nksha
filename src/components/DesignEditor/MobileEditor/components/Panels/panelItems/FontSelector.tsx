@@ -50,6 +50,7 @@ const FontSelector = () => {
       })
 
       setIsSidebarOpen(false)
+      setActiveSubMenu("Text")
     }
 
 
@@ -72,7 +73,10 @@ const FontSelector = () => {
           }}> <ArrowBackOutline size={24} /></div>
           <Block>Choose font</Block>
         </Block>
-        <Block onClick={() => setIsSidebarOpen(false)} $style={{ cursor: "pointer", display: "flex" }}>
+        <Block onClick={() => {
+          setIsSidebarOpen(false)
+          setActiveSubMenu("Text")
+        }} $style={{ cursor: "pointer", display: "flex" }}>
           <AngleDoubleLeft size={18} />
         </Block>
       </Block>

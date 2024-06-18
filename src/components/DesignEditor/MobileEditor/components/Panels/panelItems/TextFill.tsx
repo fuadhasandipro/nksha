@@ -6,6 +6,7 @@ import { Delete } from "baseui/icon"
 import { throttle } from "lodash"
 import { useActiveObject, useEditor } from "@layerhub-io/react"
 import useSetIsSidebarOpen from "@/components/DesignEditor/hooks/useSetIsSidebarOpen"
+import useAppContext from "@/components/DesignEditor/hooks/useAppContext"
 
 const PRESET_COLORS = [
   "#f44336",
@@ -36,6 +37,7 @@ const TextFill = () => {
   }, 100)
 
   const setIsSidebarOpen = useSetIsSidebarOpen()
+  const { setActiveSubMenu } = useAppContext();
 
   return (
     <Block $style={{ flex: 1, display: "flex", flexDirection: "column" }}>
@@ -52,6 +54,7 @@ const TextFill = () => {
 
         <Block $style={{ cursor: "pointer", display: "flex" }} onClick={() => {
           setIsSidebarOpen(false)
+          setActiveSubMenu("Text")
         }}>
           <Delete size={24} />
         </Block>

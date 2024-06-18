@@ -6,7 +6,7 @@ import Scenes from "./Scenes"
 
 const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   background: $theme.colors.white,
-
+  flex: "0 0 "
 }))
 
 const Graphic = ({ isLargeScreen }) => {
