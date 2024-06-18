@@ -38,7 +38,6 @@ const TextFill = () => {
 
   const setIsSidebarOpen = useSetIsSidebarOpen()
 
-
   return (
     <Block $style={{ flex: 1, display: "flex", flexDirection: "column" }}>
       <Block

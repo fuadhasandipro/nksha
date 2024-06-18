@@ -3,6 +3,8 @@ import { groupBy } from "lodash"
 
 export const getTextProperties = (object: Required<IStaticText>, fonts: any[]) => {
   const color = object.fill
+  const stroke = object.stroke
+  const strokeWidth = object.strokeWidth
   const family = object.fontFamily
   const selectedFont = fonts.find((sampleFont) => sampleFont.postscript_name === family)
   const groupedFonts = groupBy(fonts, "family")
@@ -16,6 +18,8 @@ export const getTextProperties = (object: Required<IStaticText>, fonts: any[]) =
   }
   return {
     color,
+    stroke,
+    strokeWidth,
     family: selectedFamily[0].family,
     bold: family.includes("Bold"),
     italic: family.includes("Italic"),

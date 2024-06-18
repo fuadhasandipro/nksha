@@ -71,7 +71,10 @@ const FontSelector = () => {
           <Block>Choose font</Block>
         </Block>
         <Block
-          onClick={() => setIsSidebarOpen(false)}
+          onClick={() => {
+            setIsSidebarOpen(false)
+            setActiveSubMenu("Text")
+          }}
           $style={{ cursor: 'pointer', display: 'flex' }}
         >
           <AngleDoubleLeft size={18} />

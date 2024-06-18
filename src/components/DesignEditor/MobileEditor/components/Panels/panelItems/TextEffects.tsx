@@ -8,6 +8,7 @@ import { TEXT_EFFECTS } from "@/components/DesignEditor/constants/design-editor"
 import Outline from "./Common/Outline"
 import Shadow from "./Common/Shadow"
 import useSetIsSidebarOpen from "@/components/DesignEditor/hooks/useSetIsSidebarOpen"
+import useAppContext from "@/components/DesignEditor/hooks/useAppContext"
 
 const EFFECTS = {
   None: {
@@ -83,6 +84,7 @@ const TextEffects = () => {
   const activeObject = useActiveObject()
   const editor = useEditor()
 
+  const { setActiveSubMenu } = useAppContext()
   const setIsSidebarOpen = useSetIsSidebarOpen()
 
 
@@ -117,18 +119,23 @@ const TextEffects = () => {
         <Block>Effects</Block>
         <Block $style={{ cursor: "pointer", display: "flex" }} onClick={() => {
           setIsSidebarOpen(false)
+          setActiveSubMenu("Text")
         }}>
           <Delete size={24} />
         </Block>
       </Block>
       <Scrollable>
         <Block padding="0 1.5rem">
-          <Block $style={{ display: "grid", gridTemplateColumns: "80px 80px 80px", gap: "0.5rem" }}>
+          <Block $style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "0.5rem" }}>
             {TEXT_EFFECTS.map((effect, index) => {
               return (
                 <Block style={{ cursor: "pointer" }} key={index}>
                   <Block
-                    onClick={() => applyEffect(effect.name)}
+                    onClick={() => {
+                      applyEffect(effect.name)
+                      setIsSidebarOpen(false)
+                      setActiveSubMenu("Text")
+                    }}
                     $style={{
                       border: "1px solid #afafaf",
                       display: "flex",

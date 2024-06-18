@@ -13,14 +13,15 @@ const Canvas = () => {
       <ContextMenu />
       <LayerhubCanvas
         config={{
-          background: '#ecf0f1',
-          frameMargin: 100,
+          background: '#dfdfdf',
+          frameMargin: 20,
           shadow: {
             blur: 5,
             color: '#e74c3c',
             offsetX: 0,
             offsetY: 0,
           },
+
         }}
       />
     </div>

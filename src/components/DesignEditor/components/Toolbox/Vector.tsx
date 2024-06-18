@@ -19,6 +19,7 @@ const Vector = () => {
       vectorPaths.current = objectColors
       setState({ ...state, colors: Object.keys(objectColors), colorMap: activeObject.colorMap })
     }
+    console.log(activeObject);
   }, [activeObject])
 
   const changeBackgroundColor = (prev: string, next: string) => {
@@ -56,7 +57,7 @@ const Vector = () => {
                       style={{
                         padding: "1rem",
                         background: "#ffffff",
-                        width: "200px",
+                        width: "233px",
                         display: "flex",
                         flexDirection: "column",
                         gap: "1rem",

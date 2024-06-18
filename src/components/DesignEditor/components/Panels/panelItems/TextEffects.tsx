@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { Block } from "baseui/block"
 import Scrollable from "@/components/DesignEditor/components/Scrollable"
 import { Delete } from "baseui/icon"
@@ -8,6 +8,7 @@ import { TEXT_EFFECTS } from "@/components/DesignEditor/constants/design-editor"
 import Outline from "./Common/Outline"
 import Shadow from "./Common/Shadow"
 import useSetIsSidebarOpen from "@/components/DesignEditor/hooks/useSetIsSidebarOpen"
+import useAppContext from "@/components/DesignEditor/hooks/useAppContext"
 
 const EFFECTS = {
   None: {
@@ -43,7 +44,7 @@ const EFFECTS = {
   },
   Hollow: {
     stroke: "#000000",
-    fill: null,
+    fill: "#fff",
     strokeWidth: 2,
     shadow: {
       blur: 25,
@@ -83,7 +84,9 @@ const TextEffects = () => {
   const [color, setColor] = React.useState("#b32aa9")
   const activeObject = useActiveObject()
   const editor = useEditor()
+  const [activeEffect, setActiveEffect] = useState("None");
 
+  const { setActiveSubMenu } = useAppContext()
   const setIsSidebarOpen = useSetIsSidebarOpen()
 
 
@@ -99,11 +102,15 @@ const TextEffects = () => {
     if (editor) {
       //  @ts-ignore
       const effect = EFFECTS[name]
-      if (effect) {
+      if (activeObject) {
         editor.objects.update(effect)
+        setActiveEffect(name);
       }
     }
   }
+
+
+
   return (
     <Block $style={{ flex: 1, display: "flex", flexDirection: "column" }}>
       <Block
@@ -118,6 +125,7 @@ const TextEffects = () => {
         <Block>Effects</Block>
         <Block $style={{ cursor: "pointer", display: "flex" }} onClick={() => {
           setIsSidebarOpen(false)
+          setActiveSubMenu("Text")
         }}>
           <Delete size={24} />
         </Block>
@@ -129,7 +137,10 @@ const TextEffects = () => {
               return (
                 <Block style={{ cursor: "pointer" }} key={index}>
                   <Block
-                    onClick={() => applyEffect(effect.name)}
+                    onClick={() => {
+                      applyEffect(effect.name)
+                      setActiveEffect(effect.name)
+                    }}
                     $style={{
                       border: "1px solid #afafaf",
                       display: "flex",

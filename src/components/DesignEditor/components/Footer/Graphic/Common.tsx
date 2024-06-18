@@ -71,7 +71,7 @@ const Common = () => {
             ThumbValue: () => null,
             TickBar: () => null,
             Root: {
-              style: { width: '120px' },
+              style: { width: '120px', position: "relative", zIndex: 0 },
             },
             Thumb: {
               style: {

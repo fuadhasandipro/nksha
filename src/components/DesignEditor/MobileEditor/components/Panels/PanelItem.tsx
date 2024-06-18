@@ -42,7 +42,7 @@ const PanelsList = () => {
         transition: "ease width 0.1s",
         overflow: "hidden",
         position: "absolute",
-
+        zIndex: 99
       }}
     >
       {<Component />}

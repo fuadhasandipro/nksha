@@ -24,6 +24,7 @@ import useAppContext from '@/components/DesignEditor/hooks/useAppContext';
 import {
   FONT_SIZES,
   SAMPLE_FONTS,
+  STROKE_SIZES,
 } from '@/components/DesignEditor/constants/editor';
 import getSelectionType from '@/components/DesignEditor/utils/get-selection-type';
 import { IStaticText } from '@layerhub-io/types';
@@ -32,9 +33,12 @@ import { loadFonts } from '@/components/DesignEditor/utils/fonts';
 import Scrollbar from '@layerhub-io/react-custom-scrollbar';
 import useSetIsSidebarOpen from '../../hooks/useSetIsSidebarOpen';
 import FontSelector from '../../MobileEditor/components/Panels/panelItems/FontSelector';
+import StrokeColor from './StrokeColor';
 
 interface TextState {
   color: string;
+  stroke: string;
+  strokeWidth: number;
   bold: boolean;
   italic: boolean;
   underline: boolean;
@@ -59,11 +63,13 @@ const initialOptions: TextState = {
     hasItalic: true,
     options: [],
   },
+  stroke: "#000",
+  strokeWidth: 0
 };
 const Text = () => {
   const [state, setState] = React.useState<TextState>(initialOptions);
   const activeObject = useActiveObject() as Required<IStaticText>;
-  const { setActiveSubMenu } = useAppContext();
+  const { setActiveSubMenu, activeEffect } = useAppContext();
   const editor = useEditor();
 
   React.useEffect(() => {
@@ -254,6 +260,7 @@ const Text = () => {
             fontWeight: 500,
             fontSize: '14px',
             gap: '0.5rem',
+            color: "#2e2e2e"
           }}
           height="24px"
           display="flex"
@@ -361,6 +368,16 @@ const Text = () => {
             backgroundColor="rgb(213,213,213)"
             margin="0 4px"
           />
+          <TextStrokeWidth strokeWidth={state.strokeWidth} />
+          <StrokeColor stroke={state.stroke} />
+
+          <Block
+            width="1px"
+            height="24px"
+            backgroundColor="rgb(213,213,213)"
+            margin="0 4px"
+          />
+
           <Button
             onClick={() => {
               setActiveSubMenu('TextEffects')
@@ -371,12 +388,12 @@ const Text = () => {
           >
             Effects
           </Button>
-          <Block
-            width="1px"
-            height="24px"
-            backgroundColor="rgb(213,213,213)"
-            margin="0 4px"
-          />
+
+          {/* {activeEffect == "Hollow" && <>
+
+           
+
+          </>} */}
           {/* <Button size={SIZE.compact} kind={KIND.tertiary}>
             Animate
           </Button> */}
@@ -387,7 +404,119 @@ const Text = () => {
   );
 };
 
-const TextFontSize = () => {
+
+const TextStrokeWidth = ({ strokeWidth }) => {
+  const editor = useEditor();
+  const activeObject = useActiveObject();
+  const [value, setValue] = React.useState(3);
+  const { setActiveEffect } = useAppContext();
+
+  React.useEffect(() => {
+    // @ts-ignore
+    if (activeObject && activeObject.type === 'StaticText') {
+      // @ts-ignore
+      setValue(activeObject.strokeWidth);
+    }
+
+  }, [activeObject]);
+
+
+  React.useEffect(() => {
+    // @ts-ignore
+    if (activeObject && activeObject.type === 'StaticText') {
+      // @ts-ignore
+      setValue(strokeWidth);
+    }
+
+  }, [strokeWidth]);
+
+  const onChange = (size: number) => {
+    editor.objects.update({ strokeWidth: size });
+    setValue(size);
+  };
+
+  return (
+    <StatefulPopover
+      content={({ close }) => (
+        <Scrollbar style={{ height: '340px', width: '90px', }}>
+          <Block backgroundColor="#ffffff" padding="10px 0">
+            {STROKE_SIZES.map((size, index) => (
+              <Block
+                onClick={() => {
+                  onChange(size);
+                  close();
+                }}
+                $style={{
+                  height: '32px',
+                  fontSize: '14px',
+                  cursor: 'pointer',
+                  padding: '0 20px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  ':hover': {
+                    background: 'rgb(243,243,243)',
+                  },
+                }}
+                key={index}
+              >
+                {size}
+              </Block>
+            ))}
+          </Block>
+        </Scrollbar>
+      )}
+    >
+      <Block width="80px">
+        <Input
+          value={value}
+          onChange={(e: any) => onChange(e.target.value)}
+          endEnhancer={<ChevronDown size={22} />}
+          overrides={{
+            Input: {
+              style: {
+                backgroundColor: '#ffffff',
+                paddingRight: 0,
+                fontWeight: 500,
+                fontFamily: 'Uber Move Text',
+                fontSize: '14px',
+              },
+            },
+            EndEnhancer: {
+              style: {
+                paddingRight: '8px',
+                paddingLeft: 0,
+                backgroundColor: '#ffffff',
+              },
+            },
+            Root: {
+              style: {
+                paddingRight: 0,
+                borderTopWidth: '1px',
+                borderBottomWidth: '1px',
+                borderRightWidth: '1px',
+                borderLeftWidth: '1px',
+                borderBottomColor: 'rgb(185,185,185)',
+                borderTopColor: 'rgb(185,185,185)',
+                borderRightColor: 'rgb(185,185,185)',
+                borderLeftColor: 'rgb(185,185,185)',
+                borderEndEndRadius: '4px',
+                borderTopLeftRadius: '4px',
+                borderTopRightRadius: '4px',
+                borderStartEndRadius: '4px',
+                borderBottomLeftRadius: '4px',
+                backgroundColor: '#ffffff',
+              },
+            },
+          }}
+          type="number"
+          size={SIZE.mini}
+        />
+      </Block>
+    </StatefulPopover>
+  );
+};
+
+const TextFontSize = ({ strokeWidth }) => {
   const editor = useEditor();
   const activeObject = useActiveObject();
   const [value, setValue] = React.useState(12);
@@ -398,7 +527,8 @@ const TextFontSize = () => {
       // @ts-ignore
       setValue(activeObject.fontSize);
     }
-  }, [activeObject]);
+  }, [activeObject, strokeWidth]);
+
   const onChange = (size: number) => {
     editor.objects.update({ fontSize: size });
     setValue(size);
