@@ -9,7 +9,7 @@ import Toolbox from "./components/Toolbox";
 const MobileEditor = ({ isLargeScreen }) => {
     return (
         <>
-            <div style={{ flex: 1, display: "flex", flexDirection: "column", position: "relative", width: "100%", height: "100vh", overflow: "auto" }}>
+            <div style={{ flex: 1, display: "flex", flexDirection: "column", position: "relative", width: "100%", height: "91vh", overflow: "auto" }}>
                 <Navbar isLargeScreen={isLargeScreen} />
                 <Toolbox />
                 <Canvas />
