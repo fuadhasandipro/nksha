@@ -38,7 +38,7 @@ const Toolbox = () => {
       }
     } else {
       setState({ toolbox: DEFAULT_TOOLBOX });
-      setActiveSubMenu('');
+      setActiveSubMenu(null);
     }
   }, [activeObject]);
 

@@ -125,7 +125,7 @@ const TextEffects = () => {
         <Block>Effects</Block>
         <Block $style={{ cursor: "pointer", display: "flex" }} onClick={() => {
           setIsSidebarOpen(false)
-          setActiveSubMenu("Text")
+          setActiveSubMenu(null)
         }}>
           <Delete size={24} />
         </Block>

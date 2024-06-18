@@ -64,7 +64,7 @@ const Customize = () => {
             <Block $style={{ fontSize: "14px", textAlign: "center", paddingTop: "0.35rem" }}>1200 x 1200px</Block>
           </Block>
 
-          <Block paddingTop="0.5rem">
+          {/* <Block paddingTop="0.5rem">
             <div
               style={{
                 background: "#fafafa",
@@ -155,7 +155,7 @@ const Customize = () => {
                 ))}
               </div>
             </div>
-          </Block>
+          </Block> */}
         </Block>
       </Scrollable>
     </Block>

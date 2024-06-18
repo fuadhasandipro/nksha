@@ -46,13 +46,10 @@ const Navbar = ({ isLargeScreen }) => {
   } = useDesignEditorContext();
   const editorType = useEditorType();
   const editor = useEditor();
+
   const inputFileRef = React.useRef<HTMLInputElement>(null);
 
   const [loadingDownload, setLoadingDownload] = useState(false);
-
-
-  // const { userId } = useAuth();
-  const [previewImage, setPreviewImage] = useState("");
 
   const parseGraphicJSON = () => {
     const currentScene = editor.scene.exportToJSON();
@@ -181,6 +178,7 @@ const Navbar = ({ isLargeScreen }) => {
     }
   };
 
+
   const loadGraphicTemplate = async (payload: IDesign) => {
     const scenes = [];
     const { scenes: scns, ...design } = payload;
@@ -203,158 +201,156 @@ const Navbar = ({ isLargeScreen }) => {
     return { scenes, design };
   };
 
-  const loadPresentationTemplate = async (payload: IDesign) => {
-    const scenes = [];
-    const { scenes: scns, ...design } = payload;
 
-    for (const scn of scns) {
-      const scene: IScene = {
-        name: scn.name,
-        frame: payload.frame,
-        id: scn,
-        layers: scn.layers,
-        metadata: {},
-      };
-      const loadedScene = await loadVideoEditorAssets(scene);
 
-      const preview = (await editor.renderer.render(loadedScene)) as string;
-      await loadTemplateFonts(loadedScene);
-      scenes.push({ ...loadedScene, preview });
-    }
-    return { scenes, design };
-  };
+  // const loadPresentationTemplate = async (payload: IDesign) => {
+  //   const scenes = [];
+  //   const { scenes: scns, ...design } = payload;
 
-  const loadVideoTemplate = async (payload: IDesign) => {
-    const scenes = [];
-    const { scenes: scns, ...design } = payload;
+  //   for (const scn of scns) {
+  //     const scene: IScene = {
+  //       name: scn.name,
+  //       frame: payload.frame,
+  //       id: scn,
+  //       layers: scn.layers,
+  //       metadata: {},
+  //     };
+  //     const loadedScene = await loadVideoEditorAssets(scene);
 
-    for (const scn of scns) {
-      const design: IScene = {
-        name: 'Awesome template',
-        frame: payload.frame,
-        id: scn.id,
-        layers: scn.layers,
-        metadata: {},
-        duration: scn.duration,
-      };
-      const loadedScene = await loadVideoEditorAssets(design);
+  //     const preview = (await editor.renderer.render(loadedScene)) as string;
+  //     await loadTemplateFonts(loadedScene);
+  //     scenes.push({ ...loadedScene, preview });
+  //   }
+  //   return { scenes, design };
+  // };
 
-      const preview = (await editor.renderer.render(loadedScene)) as string;
-      await loadTemplateFonts(loadedScene);
-      scenes.push({ ...loadedScene, preview });
-    }
-    return { scenes, design };
-  };
+  // const loadVideoTemplate = async (payload: IDesign) => {
+  //   const scenes = [];
+  //   const { scenes: scns, ...design } = payload;
 
-  const handleImportTemplate = React.useCallback(
+  //   for (const scn of scns) {
+  //     const design: IScene = {
+  //       name: 'Awesome template',
+  //       frame: payload.frame,
+  //       id: scn.id,
+  //       layers: scn.layers,
+  //       metadata: {},
+  //       duration: scn.duration,
+  //     };
+  //     const loadedScene = await loadVideoEditorAssets(design);
+
+  //     const preview = (await editor.renderer.render(loadedScene)) as string;
+  //     await loadTemplateFonts(loadedScene);
+  //     scenes.push({ ...loadedScene, preview });
+  //   }
+  //   return { scenes, design };
+  // };
+
+
+  const handleImportTemplate = useCallback(
+
     async (data: any) => {
-      let template;
-      if (data.type === 'GRAPHIC') {
-        template = await loadGraphicTemplate(data, editor);
-      } else if (data.type === 'PRESENTATION') {
-        template = await loadPresentationTemplate(data);
-      } else if (data.type === 'VIDEO') {
-        template = await loadVideoTemplate(data);
+      if (editor) {
+        if (data.type === "GRAPHIC") {
+          const template = await loadGraphicTemplate(data);
+          setScenes(template.scenes);
+          //@ts-ignore
+          setCurrentDesign(template.design);
+        }
+      } else {
+        console.error("Editor is not initialized.");
       }
-      //   @ts-ignore
-      setScenes(template.scenes);
-      //   @ts-ignore
-      setCurrentDesign(template.design);
     },
     [editor]
   );
+
+
   const router = useRouter();
-
   const { session, id } = router.query
-
   const { userId } = useAuth()
-
   const { user } = useUser()
 
+  const fetchData = useCallback(async () => {
+    const supabase = createClerkSupabaseClient();
 
-  useEffect(() => {
-    const fetchData = async () => {
+    if (user?.unsafeMetadata.isSubscribed === false) {
+      router.push("/subscription");
+      return;
+    }
 
-      const supabase = createClerkSupabaseClient()
+    const subscriptionDateStr = user?.unsafeMetadata.subscriptionDate;
 
-      if (user?.unsafeMetadata.isSubscribed == false) {
-        router.push("/subscription")
-        return
+    if (subscriptionDateStr) {
+      const differenceInDays = subscriptionTimeLeft(subscriptionDateStr);
+
+      if (differenceInDays > 30) {
+        router.push("/subscription");
+        return;
       }
+    }
 
-      const subscriptionDateStr = user?.unsafeMetadata.subscriptionDate;
+    const { data: existingSession, error: sessionError } = await supabase
+      .from('user_designs')
+      .select('user_id, json')
+      .eq('session', session)
+      .single();
 
-      if (subscriptionDateStr) {
-        const differenceInDays = subscriptionTimeLeft(subscriptionDateStr)
-
-        if (differenceInDays > 30) {
-          router.push("/subscription");
-          return;
-        }
-      }
-
-      // Fetch existing session
-      const { data: existingSession, error: sessionError } = await supabase
-        .from('user_designs')
-        .select('user_id, json')
-        .eq('session', session)
-        .single();
-
-
-      if (existingSession) {
-        if (existingSession.user_id == userId) {
-          const jsonDesign = JSON.parse(existingSession.json);
-
-          let template = await loadGraphicTemplate(jsonDesign);
-          setScenes(template.scenes);
-          setCurrentDesign(template.design);
-        } else {
-          router.push("/")
-        }
-      } else {
-        const { data: designData, error: designError } = await supabase
-          .from('designs')
-          .select('json, cover')
-          .eq('id', id)
-          .single();
-
-        if (designError || !designData) {
-          router.push("/")
-        }
-
-        const jsonDesign = JSON.parse(designData?.json);
+    if (existingSession) {
+      if (existingSession.user_id == userId) {
+        const jsonDesign = JSON.parse(existingSession.json);
 
         let template = await loadGraphicTemplate(jsonDesign);
         setScenes(template.scenes);
         setCurrentDesign(template.design);
-
+      } else {
+        router.push("/");
       }
-    };
+    } else {
+      const { data: designData, error: designError } = await supabase
+        .from('designs')
+        .select('json, cover')
+        .eq('id', id)
+        .single();
 
-    fetchData();
+      if (designError || !designData) {
+        router.push("/");
+      }
 
+      const jsonDesign = JSON.parse(designData?.json);
+
+      let template = await loadGraphicTemplate(jsonDesign);
+      setScenes(template.scenes);
+      setCurrentDesign(template.design);
+    }
   }, [session, id, userId]);
 
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
   const handleInputFileRefClick = () => {
-    inputFileRef.current?.click();
-  };
-
+    inputFileRef?.current?.click()
+  }
   const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files![0];
+    const file = e.target.files![0]
     if (file) {
-      const reader = new FileReader();
+      const reader = new FileReader()
       reader.onload = (res) => {
-        const result = res.target!.result as string;
-        const design = JSON.parse(result);
-        handleImportTemplate(design);
-      };
+        const result = res.target!.result as string
+        const design = JSON.parse(result)
+        handleImportTemplate(design)
+      }
       reader.onerror = (err) => {
-        console.log(err);
-      };
+        console.log(err)
+      }
 
-      reader.readAsText(file);
+      reader.readAsText(file)
     }
-  };
+
+  }
+
+  const { editorLogo, darkLogo } = siteSettings;
 
   const handleSaveDownload = async () => {
     const supabase = createClerkSupabaseClient();
@@ -479,9 +475,6 @@ const Navbar = ({ isLargeScreen }) => {
     }
   }
 
-  const { editorLogo, darkLogo } = siteSettings;
-
-
   return (
     // @ts-ignore
     <ThemeProvider theme={DarkTheme}>
@@ -494,20 +487,14 @@ const Navbar = ({ isLargeScreen }) => {
           </Link>
         </div>
         <DesignTitle />
-        <Block
-          $style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'flex-end',
-          }}
-        >
+        <Block $style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
           <input
             multiple={false}
             onChange={handleFileInput}
             type="file"
             id="file"
             ref={inputFileRef}
-            style={{ display: 'none' }}
+            style={{ display: "none" }}
           />
           <Button
             size="compact"
@@ -516,7 +503,7 @@ const Navbar = ({ isLargeScreen }) => {
             overrides={{
               StartEnhancer: {
                 style: {
-                  marginRight: '4px',
+                  marginRight: "4px",
                 },
               },
             }}

@@ -6,6 +6,7 @@ import { Delete } from "baseui/icon"
 import { throttle } from "lodash"
 import { useEditor } from "@layerhub-io/react"
 import useSetIsSidebarOpen from "@/components/DesignEditor/hooks/useSetIsSidebarOpen"
+import useAppContext from "@/components/DesignEditor/hooks/useAppContext"
 
 const PRESET_COLORS = [
   "#f44336",
@@ -27,11 +28,10 @@ const CanvasFill = () => {
 
   const updateCanvasBackground = throttle((color: string) => {
     editor.canvas.setBackgroundColor(color)
-
-
   }, 100)
 
   const setIsSidebarOpen = useSetIsSidebarOpen()
+  const { setActiveSubMenu, setActivePanel } = useAppContext()
 
   return (
     <Block $style={{ flex: 1, display: "flex", flexDirection: "column" }}>
@@ -48,6 +48,8 @@ const CanvasFill = () => {
 
         <Block $style={{ cursor: "pointer", display: "flex" }} onClick={() => {
           setIsSidebarOpen(false)
+          setActiveSubMenu(null)
+          setActivePanel("Customize")
         }}>
           <Delete size={24} />
         </Block>

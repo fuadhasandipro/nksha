@@ -73,7 +73,8 @@ const FontSelector = () => {
         <Block
           onClick={() => {
             setIsSidebarOpen(false)
-            setActiveSubMenu("Text")
+            setActiveSubMenu(null)
+
           }}
           $style={{ cursor: 'pointer', display: 'flex' }}
         >

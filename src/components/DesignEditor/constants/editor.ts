@@ -4290,7 +4290,7 @@ export const sampleFrames = [
     width: 1024,
     height: 768,
     unit: "px",
-    preview: "https://ik.imagekit.io/scenify/social-presentation-4x3.svg",
+    preview: "https://category-public.canva.com/icons/presentation.svg",
   },
   {
     id: 2,
@@ -4298,7 +4298,7 @@ export const sampleFrames = [
     width: 1920,
     height: 1080,
     unit: "px",
-    preview: "https://ik.imagekit.io/scenify/social-presentation-16x9.svg",
+    preview: "https://category-public.canva.com/icons/presentation.svg",
   },
   {
     id: 3,
@@ -4306,7 +4306,7 @@ export const sampleFrames = [
     width: 1080,
     height: 1920,
     unit: "px",
-    preview: "https://ik.imagekit.io/scenify/social-social-media-story.svg",
+    preview: "https://category-public.canva.com/icons/presentation.svg",
   },
   {
     id: 4,
@@ -4314,7 +4314,7 @@ export const sampleFrames = [
     width: 1080,
     height: 1080,
     unit: "px",
-    preview: "https://ik.imagekit.io/scenify/social-social-media-post.svg",
+    preview: "https://category-public.canva.com/icons/presentation.svg",
   },
   {
     id: 5,
@@ -4322,7 +4322,7 @@ export const sampleFrames = [
     width: 1200,
     height: 1200,
     unit: "px",
-    preview: "https://ik.imagekit.io/scenify/social-social-media-post.svg",
+    preview: "https://category-public.canva.com/icons/presentation.svg",
   },
   {
     id: 6,
@@ -4330,7 +4330,7 @@ export const sampleFrames = [
     width: 1702,
     height: 630,
     unit: "px",
-    preview: "https://ik.imagekit.io/scenify/social-facebook-event-cover.svg",
+    preview: "https://category-public.canva.com/icons/presentation.svg",
   },
   {
     id: 7,
@@ -4338,15 +4338,14 @@ export const sampleFrames = [
     width: 1920,
     height: 1080,
     unit: "px",
-    preview: "https://ik.imagekit.io/scenify/social-facebook-event-cover.svg",
+    preview: "https://category-public.canva.com/icons/presentation.svg",
   },
   {
     id: 8,
     name: "YouTube Channel Art",
     width: 2560,
     height: 1440,
-    unit: "px",
-    preview: "https://ik.imagekit.io/scenify/social-youtube-channel-art.svg",
+    preview: "https://category-public.canva.com/icons/presentation.svg",
   },
   {
     id: 9,
@@ -4354,7 +4353,7 @@ export const sampleFrames = [
     width: 1280,
     height: 720,
     unit: "px",
-    preview: "https://ik.imagekit.io/scenify/social-youtube-thumbnail.svg",
+    preview: "https://category-public.canva.com/icons/presentation.svg",
   },
   {
     id: 10,
@@ -4362,7 +4361,7 @@ export const sampleFrames = [
     width: 1200,
     height: 675,
     unit: "px",
-    preview: "https://ik.imagekit.io/scenify/social-twittter-post.svg",
+    preview: "https://category-public.canva.com/icons/presentation.svg",
   },
 ]
 

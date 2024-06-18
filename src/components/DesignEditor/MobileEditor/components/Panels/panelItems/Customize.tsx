@@ -58,13 +58,13 @@ const Customize = () => {
         </Block>
       </Block>
       <Scrollable>
-        <Block padding="0 1.5rem">
+        <Block >
           <Block>
             <ResizeTemplate />
             <Block $style={{ fontSize: "14px", textAlign: "center", paddingTop: "0.35rem" }}>1200 x 1200px</Block>
           </Block>
 
-          <Block paddingTop="0.5rem">
+          {/* <Block paddingTop="0.5rem">
             <div
               style={{
                 background: "#fafafa",
@@ -95,8 +95,6 @@ const Customize = () => {
                         flexDirection: "column",
                         gap: "1rem",
                         textAlign: "center",
-                        position: "absolute",
-                        zIndex: 999999,
                       }}
                     >
                       <HexColorPicker onChange={(v) => handleChange("backgroundColor", v)} />
@@ -109,7 +107,7 @@ const Customize = () => {
                       />
                     </div>
                   }
-                  accessibilityType="menu"
+                  accessibilityType="tooltip"
                 >
                   <div>
                     <div
@@ -157,7 +155,7 @@ const Customize = () => {
                 ))}
               </div>
             </div>
-          </Block>
+          </Block> */}
         </Block>
       </Scrollable>
     </Block>
@@ -179,6 +177,7 @@ const ResizeTemplate = () => {
     height: 0,
   })
   const frame = useFrame()
+  const setIsSidebarOpen = useSetIsSidebarOpen()
 
   React.useEffect(() => {
     if (frame) {
@@ -206,6 +205,7 @@ const ResizeTemplate = () => {
       })
     }
     setIsOpen(false)
+    setIsSidebarOpen(false)
   }
   const isEnabled =
     // @ts-ignore
@@ -215,151 +215,117 @@ const ResizeTemplate = () => {
 
   return (
     <>
-      <Button
-        onClick={() => setIsOpen(true)}
-        size={SIZE.compact}
-        overrides={{
-          Root: {
-            style: {
-              width: "100%",
-            },
-          },
-        }}
-      >
-        Resize template
-      </Button>
-      <Modal
-        onClose={() => setIsOpen(false)}
-        closeable={true}
-        isOpen={isOpen}
-        animate
-        autoFocus
-        size="auto"
-        role={ROLE.dialog}
-        overrides={{
-          Dialog: {
-            style: {
-              borderTopRightRadius: "8px",
-              borderEndStartRadius: "8px",
-              borderEndEndRadius: "8px",
-              borderStartEndRadius: "8px",
-              borderStartStartRadius: "8px",
-            },
-          },
-        }}
-      >
-        <Block $style={{ padding: "0 1.5rem", width: "640px" }}>
-          <Block
-            $style={{
-              padding: "2rem 1rem 1rem",
-              textAlign: "center",
-              fontWeight: 500,
-            }}
-          >
-            Choose a format and resize your template.
-          </Block>
-          <Tabs
-            overrides={{
-              TabContent: {
-                style: {
-                  paddingLeft: 0,
-                  paddingRight: 0,
-                },
+      <Block $style={{ padding: "0 1rem", width: "100vw" }}>
+        <Block
+          $style={{
+            padding: "2rem 1rem 1rem",
+            textAlign: "center",
+            fontWeight: 500,
+          }}
+        >
+          Choose a format and resize your template.
+        </Block>
+        <Tabs
+          overrides={{
+            TabContent: {
+              style: {
+                paddingLeft: 0,
+                paddingRight: 0,
               },
-              TabBar: {
-                style: {
-                  alignItems: "center",
-                  display: "flex",
-                  justifyContent: "center",
-                  backgroundColor: "#ffffff",
-                },
+            },
+            TabBar: {
+              style: {
+                alignItems: "center",
+                display: "flex",
+                justifyContent: "center",
+                backgroundColor: "#ffffff",
               },
-            }}
-            activeKey={activeKey}
-            onChange={({ activeKey }) => {
-              setActiveKey(activeKey)
-            }}
-          >
-            <Tab title="Preset size">
-              <Block $style={{ width: "100%", height: "400px" }}>
-                <Scrollbar>
-                  <Block $style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr" }}>
-                    {sampleFrames.map((sampleFrame, index) => (
+            },
+          }}
+          activeKey={activeKey}
+          onChange={({ activeKey }) => {
+            setActiveKey(activeKey)
+          }}
+        >
+          <Tab title="Preset size">
+            <Block $style={{ width: "100%", height: "400px" }}>
+              <Scrollbar>
+                <Block $style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr" }}>
+                  {sampleFrames.map((sampleFrame, index) => (
+                    <Block
+                      onClick={() => setSelectedFrame(sampleFrame)}
+                      $style={{
+                        padding: "0.5rem",
+                        backgroundColor: selectedFrame.id === sampleFrame.id ? "rgb(243,244,245)" : "#ffffff",
+                        ":hover": {
+                          backgroundColor: "rgb(246,247,248)",
+                          cursor: "pointer",
+                        },
+                      }}
+                      key={index}
+                    >
                       <Block
-                        onClick={() => setSelectedFrame(sampleFrame)}
                         $style={{
-                          padding: "0.5rem",
-                          backgroundColor: selectedFrame.id === sampleFrame.id ? "rgb(243,244,245)" : "#ffffff",
-                          ":hover": {
-                            backgroundColor: "rgb(246,247,248)",
-                            cursor: "pointer",
-                          },
+                          height: "120px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
                         }}
-                        key={index}
                       >
-                        <Block
-                          $style={{
-                            height: "120px",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                          }}
-                        >
-                          <img src={sampleFrame.preview} />
-                        </Block>
-                        <Block $style={{ fontSize: "13px", textAlign: "center" }}>
-                          <Block $style={{ fontWeight: 500 }}>{sampleFrame.name}</Block>
-                          <Block $style={{ color: "rgb(119,119,119)" }}>
-                            {sampleFrame.width} x {sampleFrame.height}px
-                          </Block>
+                        <img src={sampleFrame.preview} />
+                      </Block>
+                      <Block $style={{ fontSize: "13px", textAlign: "center" }}>
+                        <Block $style={{ fontWeight: 500 }}>{sampleFrame.name}</Block>
+                        <Block $style={{ color: "rgb(119,119,119)" }}>
+                          {sampleFrame.width} x {sampleFrame.height}px
                         </Block>
                       </Block>
-                    ))}
-                  </Block>
-                </Scrollbar>
-              </Block>
-            </Tab>
-            <Tab title="Custom size">
-              <Block $style={{ padding: "2rem 2rem" }}>
-                <Block
-                  $style={{ display: "grid", gridTemplateColumns: "1fr 50px 1fr", alignItems: "end", fontSize: "14px" }}
-                >
-                  <Input
-                    onChange={(e: any) => setDesiredFrame({ ...desiredFrame, width: e.target.value })}
-                    value={desiredFrame.width}
-                    startEnhancer="W"
-                    size={SIZE.compact}
-                  />
-                  <Button
-                    overrides={{
-                      Root: {
-                        style: {
-                          height: "32px",
-                        },
-                      },
-                    }}
-                    size={SIZE.compact}
-                    kind="tertiary"
-                  >
-                    <SwapHorizontal size={24} />
-                  </Button>
-                  <Input
-                    onChange={(e: any) => setDesiredFrame({ ...desiredFrame, height: e.target.value })}
-                    value={desiredFrame.height}
-                    startEnhancer="H"
-                    size={SIZE.compact}
-                  />
+                    </Block>
+                  ))}
                 </Block>
+              </Scrollbar>
+            </Block>
+          </Tab>
+          <Tab title="Custom size">
+            <Block $style={{ padding: "2rem 2rem" }}>
+              <Block
+                $style={{ display: "grid", gridTemplateColumns: "1fr 50px 1fr", alignItems: "end", fontSize: "14px" }}
+              >
+                <Input
+                  onChange={(e: any) => setDesiredFrame({ ...desiredFrame, width: e.target.value })}
+                  value={desiredFrame.width}
+                  startEnhancer="W"
+                  size={SIZE.compact}
+                />
+                <Button
+                  overrides={{
+                    Root: {
+                      style: {
+                        height: "32px",
+                      },
+                    },
+                  }}
+                  size={SIZE.compact}
+                  kind="tertiary"
+                >
+                  <SwapHorizontal size={24} />
+                </Button>
+                <Input
+                  onChange={(e: any) => setDesiredFrame({ ...desiredFrame, height: e.target.value })}
+                  value={desiredFrame.height}
+                  startEnhancer="H"
+                  size={SIZE.compact}
+                />
               </Block>
-            </Tab>
-          </Tabs>
-        </Block>
-        <Block $style={{ display: "flex", alignItems: "center", justifyContent: "center", paddingBottom: "2rem" }}>
-          <Button disabled={!isEnabled} onClick={applyResize} style={{ width: "190px" }}>
-            Resize template
-          </Button>
-        </Block>
-      </Modal>
+            </Block>
+          </Tab>
+        </Tabs>
+      </Block>
+      <Block $style={{ display: "flex", alignItems: "center", justifyContent: "center", paddingBottom: "2rem" }}>
+        <Button disabled={!isEnabled} onClick={applyResize} style={{ width: "190px" }}>
+          Resize template
+        </Button>
+      </Block>
     </>
   )
 }

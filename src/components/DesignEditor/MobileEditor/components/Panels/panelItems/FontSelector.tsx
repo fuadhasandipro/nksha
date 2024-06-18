@@ -50,7 +50,7 @@ const FontSelector = () => {
       })
 
       setIsSidebarOpen(false)
-      setActiveSubMenu("Text")
+      setActiveSubMenu(null);
     }
 
 
@@ -75,7 +75,7 @@ const FontSelector = () => {
         </Block>
         <Block onClick={() => {
           setIsSidebarOpen(false)
-          setActiveSubMenu("Text")
+          setActiveSubMenu(null);
         }} $style={{ cursor: "pointer", display: "flex" }}>
           <AngleDoubleLeft size={18} />
         </Block>

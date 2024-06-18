@@ -14,7 +14,7 @@ interface IAppContext {
   activePanel: PanelType
   setActivePanel: (option: PanelType) => void
   activeSubMenu: string | null
-  setActiveSubMenu: (option: string) => void
+  setActiveSubMenu: (option: string | null) => void
   currentTemplate: any
   setCurrentTemplate: any
   activeEffect: string
@@ -33,7 +33,7 @@ export const AppContext = createContext<IAppContext>({
   activePanel: PanelType.TEMPLATES,
   setActivePanel: () => { },
   activeSubMenu: null,
-  setActiveSubMenu: (value: string) => { },
+  setActiveSubMenu: (value: string | null) => { },
   currentTemplate: {},
   setCurrentTemplate: {},
   activeEffect: "",

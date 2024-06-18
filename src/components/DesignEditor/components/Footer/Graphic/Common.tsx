@@ -50,74 +50,7 @@ const Common = () => {
           <Icons.Layers size={20} />
         </Button>
       </div> */}
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
 
-        <Button
-          kind={KIND.tertiary}
-          size={SIZE.compact}
-          onClick={() => editor.zoom.zoomOut()}
-        >
-          <Icons.RemoveCircleOutline size={24} />
-        </Button>
-        <Slider
-          overrides={{
-            InnerThumb: () => null,
-            ThumbValue: () => null,
-            TickBar: () => null,
-            Root: {
-              style: { width: '120px', position: "relative", zIndex: 0 },
-            },
-            Thumb: {
-              style: {
-                height: '12px',
-                width: '12px',
-                paddingLeft: 0,
-              },
-            },
-            Track: {
-              style: {
-                paddingLeft: 0,
-                paddingRight: 0,
-              },
-            },
-          }}
-          value={[options.zoomRatio]}
-          onChange={({ value }) => {
-            handleChange('zoomRatio', value[0]);
-          }}
-          min={zoomMin}
-          max={zoomMax}
-        />
-        <Button
-          kind={KIND.tertiary}
-          size={SIZE.compact}
-          onClick={() => editor.zoom.zoomIn()}
-        >
-          <Icons.AddCircleOutline size={24} />
-        </Button>
-        <Input
-          type="number"
-          value={options.zoomRatio}
-          endEnhancer="%"
-          overrides={{
-            Root: {
-              style: {
-                width: '96px',
-              },
-            },
-          }}
-          size={SIZE.mini}
-          max={zoomMax}
-          min={zoomMin}
-          onChange={(e: any) => handleChange('zoomRatio', e.target.value)}
-        />
-      </div>
       <div
         style={{ display: 'flex', alignItems: 'center', justifyContent: 'end' }}
       >
@@ -128,16 +61,7 @@ const Common = () => {
         >
           <Icons.Compress size={16} />
         </Button>
-        <Button
-          kind={KIND.tertiary}
-          size={SIZE.compact}
-          onClick={() => {
-            editor.history.reset();
-          }}
-          title="Reset History"
-        >
-          <Icons.Refresh size={16} />
-        </Button>
+
         <Button
           kind={KIND.tertiary}
           size={SIZE.compact}
@@ -158,6 +82,84 @@ const Common = () => {
         >
           <Icons.Redo size={22} />
         </Button>
+        <Button
+          kind={KIND.tertiary}
+          size={SIZE.compact}
+          onClick={() => {
+            editor.history.reset();
+          }}
+          title="Reset History"
+        >
+          <Icons.Refresh size={16} />
+        </Button>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Input
+            type="number"
+            value={options.zoomRatio}
+            endEnhancer="%"
+            overrides={{
+              Root: {
+                style: {
+                  width: '96px',
+                },
+              },
+            }}
+            size={SIZE.mini}
+            max={zoomMax}
+            min={zoomMin}
+            onChange={(e: any) => handleChange('zoomRatio', e.target.value)}
+          />
+          <Button
+            kind={KIND.tertiary}
+            size={SIZE.compact}
+            onClick={() => editor.zoom.zoomOut()}
+          >
+            <Icons.RemoveCircleOutline size={24} />
+          </Button>
+          <Slider
+            overrides={{
+              InnerThumb: () => null,
+              ThumbValue: () => null,
+              TickBar: () => null,
+              Root: {
+                style: { width: '120px' },
+              },
+              Thumb: {
+                style: {
+                  height: '12px',
+                  width: '12px',
+                  paddingLeft: 0,
+                },
+              },
+              Track: {
+                style: {
+                  paddingLeft: 0,
+                  paddingRight: 0,
+                },
+              },
+            }}
+            value={[options.zoomRatio]}
+            onChange={({ value }) => {
+              handleChange('zoomRatio', value[0]);
+            }}
+            min={zoomMin}
+            max={zoomMax}
+          />
+          <Button
+            kind={KIND.tertiary}
+            size={SIZE.compact}
+            onClick={() => editor.zoom.zoomIn()}
+          >
+            <Icons.AddCircleOutline size={24} />
+          </Button>
+
+        </div>
         {/* <Button kind={KIND.tertiary} size={SIZE.compact}>
           <Icons.TimePast size={16} />
         </Button> */}
