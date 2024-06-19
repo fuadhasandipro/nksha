@@ -71,7 +71,7 @@ function CustomApp({ Component, pageProps }: AppPropsWithLayout) {
                       <SearchView />
                       <ModalsContainer />
                       <DrawersContainer />
-                      <Toaster containerClassName="!top-16 sm:!top-3.5 !bottom-16 sm:!bottom-3.5" />
+                      <Toaster containerClassName="!top-28 sm:!top-3.5 !bottom-16 sm:!bottom-3.5" />
                     </>
                   </AnimatePresence>
                 </ModalProvider>

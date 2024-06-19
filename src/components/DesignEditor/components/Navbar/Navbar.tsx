@@ -339,24 +339,46 @@ const Navbar = ({ isLargeScreen }) => {
     if (editor) {
       editor.on('history:changed', watcher);
     }
-    const handleBeforeUnload = (event) => {
-      if (isEditing) {
-        event.preventDefault();
-        event.returnValue = '';
-        toast.error('You have unsaved changes. Please save your work before leaving.');
-      }
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
 
     return () => {
       if (editor) {
         editor.off('history:changed', watcher);
       }
-      window.removeEventListener('beforeunload', handleBeforeUnload);
     };
 
-  }, [editor, isEditing]);
+  }, [editor]);
+
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      if (isEditing) {
+        event.preventDefault()
+      }
+    };
+
+    const handlePopState = (event) => {
+      if (isEditing) {
+        const message = 'You have unsaved changes. Are you sure you want to leave?';
+        if (!window.confirm(message)) {
+          // If user cancels, push state back to avoid the back navigation
+          window.history.pushState(null, null, window.location.href);
+        } else {
+          // Allow the back navigation
+          window.history.back();
+        }
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener('popstate', handlePopState);
+
+    // Push a new state to ensure popstate is triggered when back is pressed
+    window.history.pushState(null, null, window.location.href);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [isEditing]);
 
   const handleSaveDownload = async () => {
     if (currentDesign) {
@@ -365,6 +387,7 @@ const Navbar = ({ isLargeScreen }) => {
       setLoadingDownload(true)
       if (isEditing) {
         toast.error('Please Save Before Downloading')
+        setLoadingDownload(false)
       } else {
         const link = document.createElement('a');
         link.download = currentDesign.name;
@@ -501,7 +524,7 @@ const Navbar = ({ isLargeScreen }) => {
       {isLargeScreen ? <Container>
         <div style={{ color: '#ffffff' }}>
 
-          <Link href="/" target='_blank'>
+          <Link href="/" target="_blank">
             <Image alt='Logo' src={darkLogo} width={120} height={36} />
           </Link>
         </div>
@@ -552,7 +575,7 @@ const Navbar = ({ isLargeScreen }) => {
             isLoading={loadingSave}
 
           >
-            Save Image
+            Save
           </SaveButton>
 
           <SaveButton
@@ -568,35 +591,33 @@ const Navbar = ({ isLargeScreen }) => {
 
         </Block>
       </Container> :
-
-        <div className='bg-black flex items-center justify-between h-14 px-3 flex-none'>
-          <div className='flex-1'>
-            <Link href="/" target='_blank'>
-              <Image alt='Logo' src={editorLogo} width={30} height={30} />
+        <div className="bg-black flex items-center justify-between h-14 px-3">
+          <div className="flex items-center">
+            <Link href="/" target="_blank">
+              <Image alt="Logo" src={editorLogo} width={30} height={30} />
             </Link>
-
           </div>
-          <MobileDesignTitle />
-
-          <SaveButton
-            onClick={handleSave}
-            className='min-h-[15px] py-2.5 px-5 font-body mr-2 bg-dark-500'
-            // disabled={isLoadingMore}
-            isLoading={loadingSave}
-          >
-            Save
-          </SaveButton>
-
-          <SaveButton
-            onClick={handleSave}
-            className='min-h-[15px] py-2.5 px-5 font-body bg-dark-500'
-            // disabled={isLoadingMore}
-            isLoading={loadingDownload}
-
-          >
-            Download
-          </SaveButton>
-        </div>}
+          <div className="flex-1 flex items-center justify-center">
+            <MobileDesignTitle />
+          </div>
+          <div className="flex items-center space-x-2">
+            <SaveButton
+              onClick={handleSave}
+              className="py-3 !px-2 md:px-5 font-body text-sm md:text-base bg-dark-500"
+              isLoading={loadingSave}
+            >
+              Save
+            </SaveButton>
+            <SaveButton
+              onClick={handleSaveDownload}
+              className="py-3 !px-2 md:px-5 font-body text-sm md:text-base bg-dark-500"
+              isLoading={loadingDownload}
+            >
+              Download
+            </SaveButton>
+          </div>
+        </div>
+      }
 
     </ThemeProvider>
   );
