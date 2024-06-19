@@ -302,10 +302,12 @@ const Navbar = ({ isLargeScreen }) => {
 
     if (storedData) {
       fetchLS(storedData);
+
     } else {
       fetchData();
     }
-  }, [currentDesign.name, session, userId]);
+
+  }, [editor, session, userId]);
 
 
 
@@ -380,29 +382,6 @@ const Navbar = ({ isLargeScreen }) => {
     };
   }, [isEditing]);
 
-  const handleSaveDownload = async () => {
-    if (currentDesign) {
-      const currentScene = editor.scene.exportToJSON();
-      const image = (await editor.renderer.render(currentScene)) as string
-      setLoadingDownload(true)
-      if (isEditing) {
-        toast.error('Please Save Before Downloading')
-        setLoadingDownload(false)
-      } else {
-        const link = document.createElement('a');
-        link.download = currentDesign.name;
-
-        link.href = image;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-
-        toast.success('Downloaded Successfully')
-        setLoadingDownload(false);
-      }
-    }
-  }
-
   const handleSave = async () => {
     const supabase = createClerkSupabaseClient();
     const currentScene = editor.scene.exportToJSON();
@@ -465,7 +444,9 @@ const Navbar = ({ isLargeScreen }) => {
           .eq('session', router.query.session);
 
         if (updateError) {
-          toast.error(updateError.message)
+          toast.error(updateError.message || "Error on Saving, please try again")
+          setLoadingSave(false)
+          return
         }
         toast.success('Saved Succesfully')
         setLoadingSave(false);
@@ -504,13 +485,168 @@ const Navbar = ({ isLargeScreen }) => {
           localStorage.setItem(`design_${session}_${id}`, JSON.stringify(graphicTemplate));
 
           if (insertError) {
-            toast.error(insertError.message)
+            setLoadingSave(false);
+            toast.error(updateError.message || "Error on Saving, please try again")
+            return
           }
           toast.success('Saved Succesfully')
           setLoadingSave(false);
           setIsEditing(false)
         }).catch(e => {
           setLoadingSave(false);
+          toast.error("Error, Please try again later")
+        });
+      }
+    }
+  }
+
+  const handleSaveDownload = async () => {
+    const supabase = createClerkSupabaseClient();
+    const currentScene = editor.scene.exportToJSON();
+
+    const image = (await editor.renderer.render(currentScene)) as string
+    const baseImage = image.split(',')[1];
+
+    const apiKey = '007aff46bb49446f04020287cfbcb445';
+    const apiUrl = 'https://api.imgbb.com/1/upload';
+    const formData = new FormData();
+    formData.append('key', apiKey);
+    formData.append('image', baseImage);
+
+    const updatedScenes = scenes.map((scn) => {
+      if (scn.id === currentScene.id) {
+        return {
+          id: currentScene.id,
+          layers: currentScene.layers,
+          name: currentScene.name,
+        };
+      }
+      return {
+        id: scn.id,
+        layers: scn.layers,
+        name: scn.name,
+      };
+    });
+
+    if (currentDesign) {
+
+      const { data: existingThumbnail } = await supabase
+        .from('user_designs')
+        .select('thumbnail')
+        .eq('session', router.query.session)
+        .single();
+
+      if (existingThumbnail) {
+        setLoadingSave(true);
+        setLoadingDownload(true);
+        const graphicTemplate: IDesign = {
+          id: currentDesign.id,
+          type: 'GRAPHIC',
+          name: currentDesign.name,
+          frame: currentDesign.frame,
+          scenes: updatedScenes,
+          metadata: {},
+          preview: existingThumbnail,
+        };
+
+        localStorage.setItem(`design_${session}_${id}`, JSON.stringify(graphicTemplate));
+
+        const { error: updateError } = await supabase
+          .from('user_designs')
+          .update({
+            title: currentDesign.name,
+            json: JSON.stringify(graphicTemplate),
+            user_id: userId,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('session', router.query.session);
+
+        if (updateError) {
+          setLoadingSave(false);
+          setLoadingDownload(false);
+          toast.error(updateError.message || "Error on Saving, please try again")
+          return
+        }
+
+        const currentScene = editor.scene.exportToJSON();
+
+        try {
+          const image = (await editor.renderer.render(currentScene)) as string;
+          const link = document.createElement('a');
+          link.download = currentDesign.name;
+          link.href = image;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          toast.success('Downloaded Successfully');
+          setLoadingSave(false);
+          setIsEditing(false)
+          setLoadingDownload(false);
+        } catch (error) {
+          toast.error('Failed to download. Make sure you"re not using in-app browsers eg:facebook or check your internet', { duration: 5000 });
+          setLoadingSave(false);
+          setLoadingDownload(false);
+        }
+      } else {
+
+        setLoadingSave(true);
+        setLoadingDownload(true);
+        const response = await axios.post(apiUrl, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }).then(async (res) => {
+          const graphicTemplate: IDesign = {
+            id: currentDesign.id,
+            type: 'GRAPHIC',
+            name: currentDesign.name,
+            frame: currentDesign.frame,
+            scenes: updatedScenes,
+            metadata: {},
+            preview: res.data.data.display_url,
+          };
+
+          const { error: insertError } = await supabase
+            .from('user_designs')
+            .insert({
+              title: currentDesign.name,
+              json: JSON.stringify(graphicTemplate),
+              user_id: userId,
+              session: router.query.session,
+              thumbnail: res.data.data.display_url,
+              updated_at: new Date().toISOString(),
+              template_id: router.query.id,
+            });
+
+          localStorage.setItem(`design_${session}_${id}`, JSON.stringify(graphicTemplate));
+
+          if (insertError) {
+            setLoadingSave(false);
+            setLoadingDownload(false);
+            toast.error(insertError.message || "Error on Saving, please try again")
+          }
+          const currentScene = editor.scene.exportToJSON();
+
+          try {
+            const image = (await editor.renderer.render(currentScene)) as string;
+            const link = document.createElement('a');
+            link.download = currentDesign.name;
+            link.href = image;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            toast.success('Downloaded Successfully');
+            setLoadingSave(false);
+            setIsEditing(false)
+            setLoadingDownload(false);
+          } catch (error) {
+            toast.error('Failed to download. Make sure you"re not using in-app browsers eg:facebook');
+            setLoadingSave(false);
+            setLoadingDownload(false);
+          }
+        }).catch(e => {
+          setLoadingSave(false);
+          setLoadingDownload(false);
           toast.error("Error, Please try again later")
         });
       }
