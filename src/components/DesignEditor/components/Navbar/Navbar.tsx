@@ -25,6 +25,7 @@ import axios from 'axios';
 import Image from 'next/image';
 import { siteSettings } from '@/data/static/site-settings';
 import Link from 'next/link';
+import toast from 'react-hot-toast';
 
 const Container = styled<'div', {}, Theme>('div', ({ $theme }) => ({
   height: '64px',
@@ -50,6 +51,8 @@ const Navbar = ({ isLargeScreen }) => {
   const inputFileRef = React.useRef<HTMLInputElement>(null);
 
   const [loadingDownload, setLoadingDownload] = useState(false);
+  const [loadingSave, setLoadingSave] = useState(false);
+  const [isEditing, setIsEditing] = useState(false)
 
   const parseGraphicJSON = () => {
     const currentScene = editor.scene.exportToJSON();
@@ -178,7 +181,6 @@ const Navbar = ({ isLargeScreen }) => {
     }
   };
 
-
   const loadGraphicTemplate = async (payload: IDesign) => {
     const scenes = [];
     const { scenes: scns, ...design } = payload;
@@ -202,51 +204,6 @@ const Navbar = ({ isLargeScreen }) => {
   };
 
 
-
-  // const loadPresentationTemplate = async (payload: IDesign) => {
-  //   const scenes = [];
-  //   const { scenes: scns, ...design } = payload;
-
-  //   for (const scn of scns) {
-  //     const scene: IScene = {
-  //       name: scn.name,
-  //       frame: payload.frame,
-  //       id: scn,
-  //       layers: scn.layers,
-  //       metadata: {},
-  //     };
-  //     const loadedScene = await loadVideoEditorAssets(scene);
-
-  //     const preview = (await editor.renderer.render(loadedScene)) as string;
-  //     await loadTemplateFonts(loadedScene);
-  //     scenes.push({ ...loadedScene, preview });
-  //   }
-  //   return { scenes, design };
-  // };
-
-  // const loadVideoTemplate = async (payload: IDesign) => {
-  //   const scenes = [];
-  //   const { scenes: scns, ...design } = payload;
-
-  //   for (const scn of scns) {
-  //     const design: IScene = {
-  //       name: 'Awesome template',
-  //       frame: payload.frame,
-  //       id: scn.id,
-  //       layers: scn.layers,
-  //       metadata: {},
-  //       duration: scn.duration,
-  //     };
-  //     const loadedScene = await loadVideoEditorAssets(design);
-
-  //     const preview = (await editor.renderer.render(loadedScene)) as string;
-  //     await loadTemplateFonts(loadedScene);
-  //     scenes.push({ ...loadedScene, preview });
-  //   }
-  //   return { scenes, design };
-  // };
-
-
   const handleImportTemplate = useCallback(
 
     async (data: any) => {
@@ -265,12 +222,13 @@ const Navbar = ({ isLargeScreen }) => {
   );
 
 
+
   const router = useRouter();
   const { session, id } = router.query
   const { userId } = useAuth()
   const { user } = useUser()
 
-  const fetchData = useCallback(async () => {
+  const fetchData = async () => {
     const supabase = createClerkSupabaseClient();
 
     if (user?.unsafeMetadata.isSubscribed === false) {
@@ -322,12 +280,34 @@ const Navbar = ({ isLargeScreen }) => {
       setScenes(template.scenes);
       setCurrentDesign(template.design);
     }
-  }, [session, id, userId]);
+  }
 
+
+  const storageKey = `design_${session}_${id}`;
+  const storedData = localStorage.getItem(storageKey);
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+
+    const fetchLS = async (storedData) => {
+      try {
+        const jsonDesign = JSON.parse(storedData);
+        let template = await loadGraphicTemplate(jsonDesign);
+        setScenes(template.scenes);
+        setCurrentDesign(template.design);
+      } catch (error) {
+        console.error("Error fetching from localStorage:", error);
+        router.push("/"); // Handle error by redirecting or other appropriate action
+      }
+    };
+
+    if (storedData) {
+      fetchLS(storedData);
+    } else {
+      fetchData();
+    }
+  }, [currentDesign.name, session, userId]);
+
+
 
   const handleInputFileRefClick = () => {
     inputFileRef?.current?.click()
@@ -349,10 +329,58 @@ const Navbar = ({ isLargeScreen }) => {
     }
 
   }
-
   const { editorLogo, darkLogo } = siteSettings;
 
+  useEffect(() => {
+    let watcher = () => {
+      setIsEditing(true)
+    };
+
+    if (editor) {
+      editor.on('history:changed', watcher);
+    }
+    const handleBeforeUnload = (event) => {
+      if (isEditing) {
+        event.preventDefault();
+        event.returnValue = '';
+        toast.error('You have unsaved changes. Please save your work before leaving.');
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      if (editor) {
+        editor.off('history:changed', watcher);
+      }
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+
+  }, [editor, isEditing]);
+
   const handleSaveDownload = async () => {
+    if (currentDesign) {
+      const currentScene = editor.scene.exportToJSON();
+      const image = (await editor.renderer.render(currentScene)) as string
+      setLoadingDownload(true)
+      if (isEditing) {
+        toast.error('Please Save Before Downloading')
+      } else {
+        const link = document.createElement('a');
+        link.download = currentDesign.name;
+
+        link.href = image;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        toast.success('Downloaded Successfully')
+        setLoadingDownload(false);
+      }
+    }
+  }
+
+  const handleSave = async () => {
     const supabase = createClerkSupabaseClient();
     const currentScene = editor.scene.exportToJSON();
 
@@ -389,7 +417,7 @@ const Navbar = ({ isLargeScreen }) => {
         .single();
 
       if (existingThumbnail) {
-        setLoadingDownload(true);
+        setLoadingSave(true);
 
         const graphicTemplate: IDesign = {
           id: currentDesign.id,
@@ -400,6 +428,8 @@ const Navbar = ({ isLargeScreen }) => {
           metadata: {},
           preview: existingThumbnail,
         };
+
+        localStorage.setItem(`design_${session}_${id}`, JSON.stringify(graphicTemplate));
 
         const { error: updateError } = await supabase
           .from('user_designs')
@@ -412,20 +442,14 @@ const Navbar = ({ isLargeScreen }) => {
           .eq('session', router.query.session);
 
         if (updateError) {
-          alert(updateError.message)
+          toast.error(updateError.message)
         }
-
-        const link = document.createElement('a');
-        link.download = currentDesign.name;
-
-        link.href = image;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        setLoadingDownload(false);
+        toast.success('Saved Succesfully')
+        setLoadingSave(false);
+        setIsEditing(false)
       } else {
 
-        setLoadingDownload(true);
+        setLoadingSave(true);
 
         const response = await axios.post(apiUrl, formData, {
           headers: {
@@ -454,22 +478,17 @@ const Navbar = ({ isLargeScreen }) => {
               template_id: router.query.id,
             });
 
+          localStorage.setItem(`design_${session}_${id}`, JSON.stringify(graphicTemplate));
+
           if (insertError) {
-            alert(insertError.message)
+            toast.error(insertError.message)
           }
-
-          const link = document.createElement('a');
-          link.download = currentDesign.name;
-
-          link.href = image;
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-
-          setLoadingDownload(false);
+          toast.success('Saved Succesfully')
+          setLoadingSave(false);
+          setIsEditing(false)
         }).catch(e => {
-          setLoadingDownload(false);
-          alert("Error, Please try again later")
+          setLoadingSave(false);
+          toast.error("Error, Please try again later")
         });
       }
     }
@@ -496,7 +515,7 @@ const Navbar = ({ isLargeScreen }) => {
             ref={inputFileRef}
             style={{ display: "none" }}
           />
-          <Button
+          {/* <Button
             size="compact"
             onClick={handleInputFileRefClick}
             kind={KIND.tertiary}
@@ -524,24 +543,17 @@ const Navbar = ({ isLargeScreen }) => {
             }}
           >
             Export
-          </Button>
-          {/* 
-          <Button
-            size="compact"
-            onClick={() => {
-              handleSaveDownload()
-            }}
-            kind={KIND.tertiary}
-            overrides={{
-              StartEnhancer: {
-                style: {
-                  marginRight: '4px',
-                },
-              },
-            }}
-          >
-            Save & Download
           </Button> */}
+
+          <SaveButton
+            onClick={handleSave}
+            className='font-body mr-3 '
+            // disabled={isLoadingMore}
+            isLoading={loadingSave}
+
+          >
+            Save Image
+          </SaveButton>
 
           <SaveButton
             onClick={handleSaveDownload}
@@ -550,7 +562,7 @@ const Navbar = ({ isLargeScreen }) => {
             isLoading={loadingDownload}
 
           >
-            Save Image
+            Download
           </SaveButton>
 
 
@@ -567,13 +579,22 @@ const Navbar = ({ isLargeScreen }) => {
           <MobileDesignTitle />
 
           <SaveButton
-            onClick={handleSaveDownload}
-            className='min-h-[15px] py-2.5 px-5 font-body'
+            onClick={handleSave}
+            className='min-h-[15px] py-2.5 px-5 font-body mr-2 bg-dark-500'
+            // disabled={isLoadingMore}
+            isLoading={loadingSave}
+          >
+            Save
+          </SaveButton>
+
+          <SaveButton
+            onClick={handleSave}
+            className='min-h-[15px] py-2.5 px-5 font-body bg-dark-500'
             // disabled={isLoadingMore}
             isLoading={loadingDownload}
 
           >
-            Save
+            Download
           </SaveButton>
         </div>}
 
