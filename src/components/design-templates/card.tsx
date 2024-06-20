@@ -83,7 +83,7 @@ export default function Card({ product }: { product: Product }) {
             title={name}
             className="mb-0.5 truncate font-medium text-dark-100 dark:text-light"
           >
-            <AnchorLink href={routes.productUrl(id)}>{name}</AnchorLink>
+            <AnchorLink href={routes.templateUrl(id)}>{name}</AnchorLink>
           </h3>
         </div>
       </div>
