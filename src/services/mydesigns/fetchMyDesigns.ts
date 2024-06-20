@@ -26,3 +26,18 @@ export const fetchMyDesigns = async ({ pageParam = 0, queryKey }) => {
 
   return data;
 };
+
+export const deleteDesign = async (designId) => {
+  const supabase = createClerkSupabaseClient();
+
+  const { data, error } = await supabase
+    .from('user_designs')
+    .delete()
+    .eq('id', designId);
+
+  if (error) {
+    throw new Error('Error deleting design');
+  }
+
+  return data;
+};

@@ -32,13 +32,26 @@ import { DetailsIcon } from '@/components/icons/details-icon';
 import Seo from '@/layouts/_seo';
 import HomeButton from '@/components/ui/button';
 import { useRouter } from 'next/router';
+import { deleteDesign } from '@/services/mydesigns/fetchMyDesigns';
+import toast from 'react-hot-toast';
 
 dayjs.extend(relativeTime);
 
-function OrderedItem({ item }: { item: OrderedFile }) {
+function OrderedItem({ item, onDelete }) {
   const { t } = useTranslation('common');
   const { openModal } = useModalAction();
   const { title, session, template_id, updated_at, thumbnail } = item;
+
+  const handleDelete = async () => {
+    try {
+      await deleteDesign(item.id);
+      onDelete(item.id);
+      toast.success("Deleted Succesfully")
+    } catch (error) {
+      toast.success("Deletion Failed")
+      console.error('Failed to delete design:', error);
+    }
+  };
 
   return (
     <div className="flex items-center gap-4 border-b border-light-400 py-4 last:border-b-0 dark:border-dark-400 sm:gap-5">
@@ -84,7 +97,7 @@ function OrderedItem({ item }: { item: OrderedFile }) {
             <DetailsIcon className="h-auto w-4" />
             Edit
           </a>
-          {/* <div className="relative shrink-0">
+          <div className="relative shrink-0">
             <Menu>
               <Menu.Button className="flex items-center space-x-[3px] font-semibold text-brand hover:text-brand-dark sm:h-12 sm:rounded sm:border sm:border-light-500 sm:px-4 sm:py-3 sm:dark:border-dark-600">
                 <span className="inline-flex h-1 w-1 shrink-0 rounded-full bg-dark-700 dark:bg-light-800"></span>
@@ -102,19 +115,17 @@ function OrderedItem({ item }: { item: OrderedFile }) {
               >
                 <Menu.Items className="absolute top-[110%] z-30 mt-4 w-48 rounded-md bg-light py-1.5 text-dark  shadow-dropdown ltr:right-0 ltr:origin-top-right rtl:left-0 rtl:origin-top-left dark:bg-dark-400 dark:text-light md:top-[78%]">
                   <Menu.Item>
-                    <Link
-                      href={routes.existingTemplateUrl(
-                        `${session}/${template_id}`
-                      )}
+                    <button
+                      onClick={handleDelete}
                       className="transition-fill-colors block w-full px-5 py-2.5 font-medium hover:bg-light-400 ltr:text-left rtl:text-right dark:hover:bg-dark-600"
                     >
-                      {t('text-order-details')}
-                    </Link>
+                      Delete Design
+                    </button>
                   </Menu.Item>
                 </Menu.Items>
               </Transition>
             </Menu>
-          </div> */}
+          </div>
         </div>
       </div>
     </div>
@@ -146,21 +157,26 @@ const Purchases: NextPageWithLayout = () => {
     hasNextPage,
     isFetchingNextPage,
     isLoading,
+    refetch,
   } = useUserAllDesigns();
 
-
+  const handleDelete = (deletedId) => {
+    refetch();
+  };
 
   if (!downloadableFiles?.pages[0]?.length) {
-    return <div className="flex justify-center items-center h-full flex-col">
-      <h1 className='text-2xl font-bold'>No Design Found</h1>
-      <Link
-        href="/"
-        rel="noreferrer"
-        className="focus:ring-accent-700  mt-5 inline-flex h-9 w-36 shrink-0 items-center justify-center rounded border border-transparent bg-brand px-3 py-0 text-sm font-semibold leading-none text-light outline-none transition duration-300 ease-in-out hover:bg-brand-dark focus:shadow focus:outline-none focus:ring-1"
-      >
-        Browse Designs
-      </Link>
-    </div>
+    return (
+      <div className="flex justify-center items-center h-full flex-col">
+        <h1 className='text-2xl font-bold'>No Design Found</h1>
+        <Link
+          href="/"
+          rel="noreferrer"
+          className="focus:ring-accent-700  mt-5 inline-flex h-9 w-36 shrink-0 items-center justify-center rounded border border-transparent bg-brand px-3 py-0 text-sm font-semibold leading-none text-light outline-none transition duration-300 ease-in-out hover:bg-brand-dark focus:shadow focus:outline-none focus:ring-1"
+        >
+          Browse Designs
+        </Link>
+      </div>
+    );
   }
 
   return (
@@ -178,7 +194,7 @@ const Purchases: NextPageWithLayout = () => {
         ))
         : downloadableFiles?.pages?.map((product) =>
           product.map((mini) => {
-            return <OrderedItem key={mini.id} item={mini} />;
+            return <OrderedItem key={mini.id} item={mini} onDelete={handleDelete} />;
           })
         )}
 
@@ -196,6 +212,7 @@ const Purchases: NextPageWithLayout = () => {
     </motion.div>
   );
 };
+
 
 Purchases.authorization = true;
 Purchases.getLayout = function getLayout(page) {

@@ -13,6 +13,7 @@ export const useUserAllDesigns = () => {
     hasNextPage,
     isFetchingNextPage,
     isLoading,
+    refetch
   } = useInfiniteQuery(['userdesigns', userId], fetchMyDesigns, {
     getNextPageParam: (lastPage, allPages) => {
       if (lastPage.length < PAGE_SIZE) {
@@ -33,5 +34,6 @@ export const useUserAllDesigns = () => {
     hasNextPage,
     isFetchingNextPage,
     isLoading,
+    refetch
   };
 };
