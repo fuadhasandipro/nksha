@@ -3,7 +3,7 @@ import { Block } from "baseui/block"
 import Scrollable from "@/components/DesignEditor/components/Scrollable"
 import { HexColorInput, HexColorPicker } from "react-colorful"
 import { Delete } from "baseui/icon"
-import { throttle } from "lodash"
+import { debounce } from "lodash"
 import { useActiveObject, useEditor } from "@layerhub-io/react"
 import useSetIsSidebarOpen from "@/components/DesignEditor/hooks/useSetIsSidebarOpen"
 import useAppContext from "@/components/DesignEditor/hooks/useAppContext"
@@ -28,13 +28,13 @@ const TextFill = () => {
   const activeObject = useActiveObject()
   const editor = useEditor()
 
-  const updateObjectFill = throttle((color: string) => {
+  const updateObjectFill = debounce((color: string) => {
     if (activeObject) {
       editor.objects.update({ fill: color })
     }
 
     setColor(color)
-  }, 100)
+  }, 50)
 
   const setIsSidebarOpen = useSetIsSidebarOpen()
 

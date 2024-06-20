@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { Block } from "baseui/block"
 import Scrollable from "@/components/DesignEditor/components/Scrollable"
 import { Delete } from "baseui/icon"
-import { throttle } from "lodash"
+import { debounce } from "lodash"
 import { useActiveObject, useEditor } from "@layerhub-io/react"
 import { TEXT_EFFECTS } from "@/components/DesignEditor/constants/design-editor"
 import Outline from "./Common/Outline"
@@ -90,13 +90,13 @@ const TextEffects = () => {
   const setIsSidebarOpen = useSetIsSidebarOpen()
 
 
-  const updateObjectFill = throttle((color: string) => {
-    if (activeObject) {
-      editor.objects.update({ fill: color })
-    }
+  // const updateObjectFill = debounce((color: string) => {
+  //   if (activeObject) {
+  //     editor.objects.update({ fill: color })
+  //   }
 
-    setColor(color)
-  }, 100)
+  //   setColor(color)
+  // }, 100)
 
   const applyEffect = (name: string) => {
     if (editor) {

@@ -10,7 +10,7 @@ import OpacityIcon from "@/components/DesignEditor/components/Icons/Opacity."
 
 const Opacity = () => {
   const editor = useEditor()
-  const [state, setState] = React.useState({ opacity: 1 })
+  const [state, setState] = React.useState({ opacity: 100 })
   const activeObject = useActiveObject() as Required<ILayer>
 
   React.useEffect(() => {
@@ -19,13 +19,28 @@ const Opacity = () => {
     }
   }, [activeObject])
 
-  const onChange = React.useCallback(
-    (value: number) => {
-      setState({ opacity: value })
-      editor.objects.update({ opacity: value / 100 })
-    },
-    [editor]
-  )
+  const onChange = (value: number) => {
+    editor.objects.update({ opacity: value / 100 })
+  }
+
+  const handleSliderChange = ({ value }: { value: number[] }) => {
+    const newOpacity = value[0]
+    setState({ opacity: newOpacity })
+    requestAnimationFrame(() => onChange(newOpacity))
+  }
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    let newOpacity = parseInt(event.target.value, 10)
+    if (isNaN(newOpacity)) {
+      newOpacity = 0
+    } else if (newOpacity > 100) {
+      newOpacity = 100
+    } else if (newOpacity < 0) {
+      newOpacity = 0
+    }
+    setState({ opacity: newOpacity })
+    requestAnimationFrame(() => onChange(newOpacity))
+  }
 
   return (
     <StatefulPopover
@@ -59,8 +74,11 @@ const Opacity = () => {
                   InputContainer: {},
                 }}
                 size={SIZE.mini}
-                onChange={() => { }}
-                value={Math.round(state.opacity)}
+                onChange={handleInputChange}
+                value={state.opacity}
+                type="number"
+                min={0}
+                max={100}
               />
             </Block>
           </Block>
@@ -88,8 +106,7 @@ const Opacity = () => {
               max={100}
               marks={false}
               value={[state.opacity]}
-              // @ts-ignore
-              onChange={({ value }) => onChange(value)}
+              onChange={handleSliderChange}
             />
           </Block>
         </Block>
