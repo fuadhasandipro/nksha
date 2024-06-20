@@ -1,25 +1,26 @@
-// import { useProducts } from '@/data/product';
-// import Grid from '@/components/product/grid';
+
+
+import { useAllDesigns, useSearchDesigns } from '@/data/designs';
+import Grid from '../design-templates/grid';
 
 export default function SearchResults({ searchText }: { searchText: string }) {
-  // const { products, loadMore, hasNextPage, isLoadingMore, isLoading } =
-  //   useProducts(
-  //     {
-  //       name: searchText,
-  //     }
-  //     // {
-  //     //   enabled: Boolean(searchText),
-  //     // }
-  //   );
+  const {
+    templates,
+    error,
+    loadMore,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+  } = useSearchDesigns(searchText);
   return (
-    // <Grid
-    //   products={products}
-    //   onLoadMore={loadMore}
-    //   hasNextPage={hasNextPage}
-    //   isLoadingMore={isLoadingMore}
-    //   isLoading={isLoading}
-    // />
+    //@ts-ignore
+    <Grid
+      products={templates}
+      onLoadMore={loadMore}
+      hasNextPage={hasNextPage}
+      isLoadingMore={isFetchingNextPage}
+      isLoading={isLoading}
+    />
 
-    <div>Search</div>
   );
 }

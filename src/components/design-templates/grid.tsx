@@ -29,6 +29,8 @@ export default function Grid({
   const { isGridCompact } = useGridSwitcher();
   const { t } = useTranslation('common');
 
+  const noProducts = !isLoading && products?.pages[0]?.length === 0;
+
   return (
     <div className="w-full px-4 pb-9 pt-5 md:px-6 md:pb-10 md:pt-6 lg:px-7 lg:pb-12 3xl:px-8">
       <motion.div
@@ -43,16 +45,22 @@ export default function Grid({
           }
         )}
       >
-        {isLoading && !products?.pages.length
+        {isLoading && !products?.pages?.length
           ? rangeMap(limit, (i) => (
-              <ProductCardLoader key={i} uniqueKey={`product-${i}`} />
-            ))
+            <ProductCardLoader key={i} uniqueKey={`product-${i}`} />
+          ))
           : products?.pages?.map((product) =>
-              product.map((mini) => {
-                return <Card key={mini.id} product={mini} />;
-              })
-            )}
+            product.map((mini) => {
+              return <Card key={mini.id} product={mini} />;
+            })
+          )}
       </motion.div>
+
+      {noProducts && (
+        <div className="mt-8 text-center">
+          <p>No Templates Found</p>
+        </div>
+      )}
 
       {hasNextPage && (
         <div className="mt-8 grid place-content-center md:mt-10">

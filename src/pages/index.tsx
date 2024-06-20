@@ -61,6 +61,7 @@ function Products() {
 
   return (
     <Grid
+      //@ts-ignore
       products={templates}
       onLoadMore={loadMore}
       hasNextPage={hasNextPage}

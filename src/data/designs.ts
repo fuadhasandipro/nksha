@@ -58,3 +58,58 @@ export const useAllDesigns = () => {
         isLoading,
     };
 };
+
+
+
+export const useSearchDesigns = (searchText) => {
+    const fetchDesigns = async ({ pageParam = 0, queryKey }) => {
+        const [, searchText] = queryKey;
+
+        let query = supabases
+            .from('designs')
+            .select('*')
+            .range(pageParam * PAGE_SIZE, (pageParam + 1) * PAGE_SIZE - 1)
+            .order("id", { ascending: false });
+
+        if (searchText) {
+            query = query.ilike('name', `%${searchText}%`);
+        }
+
+        const { data, error } = await query;
+
+        if (error) {
+            throw new Error('Error fetching designs');
+        }
+
+        return data;
+    };
+
+    const {
+        data,
+        error,
+        fetchNextPage,
+        hasNextPage,
+        isFetchingNextPage,
+        isLoading,
+    } = useInfiniteQuery(['searchDesigns', searchText], fetchDesigns, {
+        getNextPageParam: (lastPage, allPages) => {
+            if (lastPage.length < PAGE_SIZE) {
+                return undefined; // No more pages
+            }
+            return allPages.length; // This will be used as the pageParam in the next fetch
+        },
+    });
+
+    const loadMore = () => {
+        fetchNextPage();
+    };
+
+    return {
+        templates: data,
+        error,
+        loadMore,
+        hasNextPage,
+        isFetchingNextPage,
+        isLoading,
+    };
+};
