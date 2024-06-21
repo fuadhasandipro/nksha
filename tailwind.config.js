@@ -28,8 +28,12 @@ module.exports = {
     extend: {
       colors: {
         brand: {
-          DEFAULT: '#24b47e',
+          DEFAULT: '#24b43a',
           dark: '#00997B',
+        },
+        buy: {
+          DEFAULT: '#feb602',
+          dark: '#f4980a',
         },
         light: {
           DEFAULT: '#ffffff',
@@ -80,6 +84,7 @@ module.exports = {
       },
       fontFamily: {
         body: ["'Inter', sans-serif"],
+        tiro: ['var(--font-tiro)'],
       },
     },
   },
