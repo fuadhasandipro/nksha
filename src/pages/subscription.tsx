@@ -90,7 +90,7 @@ const Subscription = () => {
                     </div>
 
                     <div className='flex flex-col justify-center mt-7'>
-                        <h2 className='font-tiro sm:text-xl text-base dark:text-white text-black'>যেকোন আপডেট পেতে যুক্ত থাকুন আমাদের ফেসবুক গ্রুপে।</h2>
+                        <h2 className='font-tiro sm:text-xl text-base dark:text-white text-black text-center'>যেকোন আপডেট পেতে যুক্ত থাকুন আমাদের ফেসবুক গ্রুপে।</h2>
                         <Link
                             href="https://www.facebook.com/groups/noksha.site"
                             rel="noreferrer"
