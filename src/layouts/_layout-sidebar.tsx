@@ -184,7 +184,7 @@ export function Sidebar({
               >
                 Buy Now
                 <span className="ml-1 flex w-auto flex-shrink-0 items-center justify-start xl:w-3">
-                  <CrownIcon />
+                   <CrownIcon className="h-[14px] w-[14px] text-current" />
                 </span>
               </Link>
             </nav>
