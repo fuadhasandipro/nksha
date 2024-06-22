@@ -4,7 +4,7 @@ import InformationCircleOutline from "@/components/DesignEditor/components/Icons
 import Underline from "@/components/DesignEditor/components/Icons/Underline"
 import Spacing from "@/components/DesignEditor/components/Icons/Spacing"
 
-import Shadow from "./Common/Shadow"
+import Shadow from "@/components/DesignEditor/components/Panels/panelItems/Common/Shadow"
 import { Input, SIZE } from "baseui/input"
 import { Button } from "baseui/button"
 import { ChevronRight } from "baseui/icon"
