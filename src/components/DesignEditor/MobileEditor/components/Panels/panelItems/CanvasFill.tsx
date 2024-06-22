@@ -28,10 +28,10 @@ const CanvasFill = () => {
 
   const updateCanvasBackground = debounce((color: string) => {
     editor.canvas.setBackgroundColor(color)
-  }, 50)
+  }, 1000)
 
   const setIsSidebarOpen = useSetIsSidebarOpen()
-  const { setActiveSubMenu, setActivePanel } = useAppContext()
+  const { setActivePanel } = useAppContext()
 
   return (
     <Block $style={{ flex: 1, display: "flex", flexDirection: "column" }}>
@@ -48,7 +48,6 @@ const CanvasFill = () => {
 
         <Block $style={{ cursor: "pointer", display: "flex" }} onClick={() => {
           setIsSidebarOpen(false)
-          setActiveSubMenu(null)
           setActivePanel("Customize")
         }}>
           <Delete size={24} />
@@ -57,8 +56,8 @@ const CanvasFill = () => {
       <Scrollable>
         <Block padding="0 1.5rem">
           <HexColorPicker onChange={updateCanvasBackground} color={editor.canvas.backgroundColor} style={{ width: "100%" }} />
-          <p className="text-xs text-left ">Hex Code</p>
-          <HexColorInput onChange={updateCanvasBackground} color={editor.canvas.backgroundColor} style={{ border: "1px solid #000", background: "#ddd" }} placeholder="Enter Color" />
+          <p className="text-xs text-left my-3 text-black">Hex Code</p>
+          <HexColorInput onChange={updateCanvasBackground} color={editor.canvas.backgroundColor} placeholder="Type a color" prefixed alpha style={{ width: "100%", marginTop: "4px", padding: "4px", border: "1px solid #000", borderRadius: "5px", textAlign: "center", background: "#fff", color: "#000" }} />
           <Block>
             <Block $style={{ padding: "0.75rem 0", fontWeight: 500, fontSize: "14px" }}>Preset colors</Block>
             <Block $style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr 1fr", gap: "0.25rem" }}>

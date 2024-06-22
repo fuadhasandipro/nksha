@@ -7,7 +7,7 @@ import useSetIsSidebarOpen from '../../hooks/useSetIsSidebarOpen';
 
 const Canvas = () => {
   const [state, setState] = React.useState({ fill: '#000000' });
-  const { setActiveSubMenu, setActivePanel } = useAppContext();
+  const { setActivePanel } = useAppContext();
   const editor = useEditor();
   const activeObject = useActiveObject() as any;
 
@@ -52,7 +52,7 @@ const Canvas = () => {
       >
         <Block
           onClick={() => {
-            setActiveSubMenu('CanvasFill');
+            setActivePanel('CanvasFill');
             setIsSidebarOpen(true);
           }}
         >

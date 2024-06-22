@@ -22,7 +22,7 @@ import { getTextOptions } from "@/components/DesignEditor/utils/object-options"
 const TextProperties = () => {
   const fonts = useSelector(selectFonts)
   const [state, setState] = React.useState<TextOptions>(defaultTextOptions)
-  const { setActiveSubMenu } = useAppContext()
+  const { setActivePanel } = useAppContext()
   const activeObject = useActiveObject() as any
   const editor = useEditor()
 
@@ -110,7 +110,7 @@ const TextProperties = () => {
                 },
               },
             }}
-            onFocus={() => setActiveSubMenu("FontSelector")}
+            onFocus={() => setActivePanel("FontSelector")}
             endEnhancer={<ChevronRight size="18px" />}
             size={SIZE.compact}
             value={state.fontFamily}

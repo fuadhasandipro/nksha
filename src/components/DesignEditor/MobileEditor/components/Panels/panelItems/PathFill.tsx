@@ -33,7 +33,7 @@ const PathFill = () => {
     }
 
     setColor(color)
-  }, 50)
+  }, 1000)
 
   const setIsSidebarOpen = useSetIsSidebarOpen()
 

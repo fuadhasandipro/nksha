@@ -11,10 +11,8 @@ interface IAppContext {
   setUploads: (templates: any[]) => void
   shapes: any[]
   setShapes: (templates: any[]) => void
-  activePanel: PanelType
-  setActivePanel: (option: PanelType) => void
-  activeSubMenu: string | null
-  setActiveSubMenu: (option: string | null) => void
+  activePanel: string | null
+  setActivePanel: (option: string | null) => void
   currentTemplate: any
   setCurrentTemplate: any
   activeEffect: string
@@ -30,10 +28,8 @@ export const AppContext = createContext<IAppContext>({
   setUploads: () => { },
   shapes: [],
   setShapes: () => { },
-  activePanel: PanelType.TEMPLATES,
+  activePanel: "Text",
   setActivePanel: () => { },
-  activeSubMenu: null,
-  setActiveSubMenu: (value: string | null) => { },
   currentTemplate: {},
   setCurrentTemplate: {},
   activeEffect: "",
@@ -45,8 +41,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [templates, setTemplates] = useState<Template[]>([])
   const [uploads, setUploads] = useState<any[]>([])
   const [shapes, setShapes] = useState<Template[]>([])
-  const [activePanel, setActivePanel] = useState<PanelType>(PanelType.TEMPLATES)
-  const [activeSubMenu, setActiveSubMenu] = useState<string | null>(null)
+  const [activePanel, setActivePanel] = useState("Text")
   const [currentTemplate, setCurrentTemplate] = useState(null)
   const [activeEffect, setActiveEffect] = useState("")
   const context = {
@@ -58,8 +53,6 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     setActivePanel,
     shapes,
     setShapes,
-    activeSubMenu,
-    setActiveSubMenu,
     uploads,
     setUploads,
     currentTemplate,

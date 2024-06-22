@@ -9,85 +9,68 @@ import Outline from "./Common/Outline"
 import Shadow from "./Common/Shadow"
 import useSetIsSidebarOpen from "@/components/DesignEditor/hooks/useSetIsSidebarOpen"
 import useAppContext from "@/components/DesignEditor/hooks/useAppContext"
+import { getTextProperties } from "@/components/DesignEditor/utils/text"
+import { EFFECTS, SAMPLE_FONTS } from "@/components/DesignEditor/constants/editor"
+import { IStaticText } from "@layerhub-io/types"
+import Gradient from "./Common/Gradient"
 
-const EFFECTS = {
-  None: {
-    fill: "#333333",
-    strokeWidth: 0,
-    shadow: {
-      blur: 2,
-      color: "#afafaf",
-      offsetX: 10,
-      offsetY: 10,
-      enabled: false,
-    },
-  },
-  Shadow: {
-    fill: "#333333",
-    shadow: {
-      blur: 2,
-      color: "#afafaf",
-      offsetX: 10,
-      offsetY: 10,
-      enabled: true,
-    },
-  },
-  Lift: {
-    fill: "#333333",
-    shadow: {
-      blur: 25,
-      color: "rgba(0,0,0,0.45)",
-      offsetX: 0,
-      offsetY: 0,
-      enabled: true,
-    },
-  },
-  Hollow: {
-    stroke: "#000000",
-    fill: "#fff",
-    strokeWidth: 2,
-    shadow: {
-      blur: 25,
-      color: "rgba(0,0,0,0.45)",
-      offsetX: 0,
-      offsetY: 0,
-      enabled: false,
-    },
-  },
-  Splice: {
-    stroke: "#000000",
-    fill: null,
-    strokeWidth: 2,
-    shadow: {
-      blur: 0,
-      color: "#afafaf",
-      offsetX: 10,
-      offsetY: 10,
-      enabled: true,
-    },
-  },
-  Neon: {
-    stroke: "#e84393",
-    fill: "#fd79a8",
-    strokeWidth: 2,
-    shadow: {
-      blur: 25,
-      color: "#fd79a8",
-      offsetX: 0,
-      offsetY: 0,
-      enabled: true,
-    },
-  },
-
+export interface TextState {
+  stroke: string;
+  strokeWidth: number;
+  shadow: {
+    blur: number;
+    color: string;
+    offsetX: number;
+    offsetY: number;
+    enabled: boolean;
+  }
 }
+
+const initialOptions: TextState = {
+  stroke: "#000",
+  strokeWidth: 0,
+  shadow: {
+    blur: 0,
+    color: "#afafaf",
+    offsetX: 10,
+    offsetY: 10,
+    enabled: false,
+  },
+};
+
 const TextEffects = () => {
   const [color, setColor] = React.useState("#b32aa9")
-  const activeObject = useActiveObject()
+  const activeObject = useActiveObject() as Required<IStaticText>;
   const editor = useEditor()
   const [activeEffect, setActiveEffect] = useState("None");
 
-  const { setActiveSubMenu } = useAppContext()
   const setIsSidebarOpen = useSetIsSidebarOpen()
+
+  const [state, setState] = React.useState<TextState>(initialOptions);
+
+  React.useEffect(() => {
+    if (activeObject && activeObject.type === 'StaticText') {
+      const textProperties = getTextProperties(activeObject, SAMPLE_FONTS);
+      setState({ ...state, ...textProperties });
+    }
+  }, [activeObject]);
+
+  React.useEffect(() => {
+    let watcher = async () => {
+      if (activeObject && activeObject.type === 'StaticText') {
+        const textProperties = getTextProperties(activeObject, SAMPLE_FONTS);
+        setState({ ...state, ...textProperties });
+      }
+    };
+    if (editor) {
+      editor.on('history:changed', watcher);
+    }
+    return () => {
+      if (editor) {
+        editor.off('history:changed', watcher);
+      }
+    };
+  }, [editor, activeObject]);
 
 
   // const updateObjectFill = debounce((color: string) => {
@@ -110,7 +93,6 @@ const TextEffects = () => {
   }
 
 
-
   return (
     <Block $style={{ flex: 1, display: "flex", flexDirection: "column" }}>
       <Block
@@ -125,7 +107,6 @@ const TextEffects = () => {
         <Block>Effects</Block>
         <Block $style={{ cursor: "pointer", display: "flex" }} onClick={() => {
           setIsSidebarOpen(false)
-          setActiveSubMenu(null)
         }}>
           <Delete size={24} />
         </Block>
@@ -164,10 +145,11 @@ const TextEffects = () => {
               )
             })}
           </Block>
-          {/* <Block>
-            <Outline />
-            <Shadow />
-          </Block> */}
+          <Block>
+            <Outline state={state} />
+            <Shadow state={state} />
+            {/* <Gradient /> */}
+          </Block>
         </Block>
       </Scrollable>
     </Block>

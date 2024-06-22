@@ -38,6 +38,15 @@ type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 };
 
+
+import { Tiro_Bangla } from 'next/font/google';
+
+const tiro = Tiro_Bangla({
+  subsets: ['bengali'],
+  weight: ["400"],
+  variable: '--font-tiro',
+});
+
 function CustomApp({ Component, pageProps }: AppPropsWithLayout) {
   const { locale } = useRouter();
   const [queryClient] = useState(() => new QueryClient());
@@ -67,7 +76,9 @@ function CustomApp({ Component, pageProps }: AppPropsWithLayout) {
                   >
                     <>
                       {/* <DefaultSeo /> */}
-                      {getLayout(<Component {...pageProps} />)}
+                      <div className={`${tiro.variable}`}>
+                        {getLayout(<Component {...pageProps} />)}
+                      </div>
                       <SearchView />
                       <ModalsContainer />
                       <DrawersContainer />

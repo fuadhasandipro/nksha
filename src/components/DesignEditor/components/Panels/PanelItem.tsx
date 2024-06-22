@@ -11,19 +11,12 @@ interface State {
 const PanelsList = () => {
   const [state, setState] = React.useState<State>({ panel: "Text" })
   const isSidebarOpen = useIsSidebarOpen()
-  const { activePanel, activeSubMenu } = useAppContext()
+  const { activePanel } = useAppContext()
 
   React.useEffect(() => {
     setState({ panel: activePanel })
   }, [activePanel])
 
-  React.useEffect(() => {
-    if (activeSubMenu) {
-      setState({ panel: activeSubMenu })
-    } else {
-      setState({ panel: activePanel })
-    }
-  }, [activeSubMenu])
 
   // @ts-ignore
   const Component = panelItems[state.panel]

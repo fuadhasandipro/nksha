@@ -1,93 +1,108 @@
-import React from "react"
-import { Checkbox } from "baseui/checkbox"
-import { StatefulPopover, PLACEMENT } from "baseui/popover"
-import { HexColorPicker } from "react-colorful"
-import { Slider } from "baseui/slider"
-import { Input } from "baseui/input"
-import { useActiveObject, useEditor } from "@layerhub-io/react"
+import React from "react";
+import { HexColorPicker } from "react-colorful";
+import { useActiveObject, useEditor } from "@layerhub-io/react";
+import { TextState } from "../../../../MobileEditor/components/Panels/panelItems/TextEffects";
+import { StatefulPopover } from "baseui/popover";
+import { PLACEMENT } from "baseui/toast";
+import { debounce } from "lodash";
 
 interface Options {
-  enabled: boolean
-  stroke: string
-  strokeWidth: number
+  enabled: boolean;
+  stroke: string;
+  strokeWidth: number;
 }
 
-const Outline = () => {
-  const editor = useEditor()
-  const activeObject = useActiveObject()
+const Outline = ({ state }: { state: TextState }) => {
+  const editor = useEditor();
+  const activeObject = useActiveObject();
 
   const [options, setOptions] = React.useState<Options>({
-    enabled: true,
-    stroke: "#000000",
-    strokeWidth: 1,
-  })
+    enabled: false,
+    stroke: state.stroke || "#000000", // Default stroke color
+    strokeWidth: state.strokeWidth || 0, // Default strokeWidth
+  });
 
   React.useEffect(() => {
     if (activeObject) {
-      updateOptions(activeObject)
+      updateOptions(activeObject);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeObject])
+  }, [activeObject, state]);
+
 
   const updateOptions = (object: any) => {
-    const { stroke, strokeWidth } = object
-    setOptions({ ...options, stroke, strokeWidth, enabled: !!strokeWidth })
-  }
+    const { stroke, strokeWidth, metadata } = object;
+    setOptions({ ...options, stroke, strokeWidth, enabled: metadata?.outline || false });
+  };
+
+  // Debounced function for backend updates
+  const updateEditorObjects = React.useCallback(
+    debounce((key: string, value: any) => {
+      if (editor) {
+        if (key === "enabled") {
+          editor.objects.update({
+            metadata: { ...activeObject.metadata, outline: value },
+          });
+        } else {
+          editor.objects.update({ [key]: value });
+        }
+      }
+    }, 100),
+    [editor, activeObject]
+  );
 
   const handleChange = (type: string, value: any) => {
-    setOptions({ ...options, [type]: value })
-    if (type === "enabled") {
-      if (value) {
-        editor.objects.update(options)
+    setOptions((prevOptions) => {
+      const updatedOptions = { ...prevOptions, [type]: value };
+      if (type === "enabled") {
+        updateEditorObjects(type, value); // Debounced backend update
+        if (value) {
+          // If enabling outline, set stroke and metadata
+          editor.objects.update({
+            strokeWidth: options.strokeWidth || 1, // Ensure a default width if not set
+            metadata: { ...activeObject.metadata, outline: true },
+          });
+        } else {
+          // If disabling outline, set strokeWidth to 0 and update metadata
+          editor.objects.update({
+            strokeWidth: 0,
+            metadata: { ...activeObject.metadata, outline: false },
+          });
+        }
       } else {
-        editor.objects.update({ strokeWidth: 0 })
+        // For other properties like stroke and strokeWidth
+        updateEditorObjects(type, value); // Debounced backend update
       }
-    } else {
-      if (editor && options.enabled) {
-      editor.objects.update({ [type]: value })
-      }
-    }
-  }
+      return updatedOptions;
+    });
+  };
 
   return (
-    <div style={{ padding: "2rem 2rem 0" }}>
-      <div>
-        <div
-          style={{
-            margin: "0 0 0.5rem",
-            fontSize: "14px",
-            background: "rgba(0,0,0,0.05)",
-            padding: "10px 8px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <Checkbox checked={options.enabled} onChange={(e) => handleChange("enabled", (e.target as any).checked)} />
-            Outline
-          </div>
+    <div className="p-6 bg-gray-100 rounded-lg shadow-md my-5">
+      <div className="flex justify-between items-center bg-gray-200 p-2 rounded-lg mb-4">
+        <div className="flex items-center space-x-2">
+          <input
+            type="checkbox"
+            checked={options.enabled}
+            onChange={(e) => handleChange("enabled", e.target.checked)}
+            className="form-checkbox h-5 w-5 text-blue-600"
+          />
+          <span className="text-sm font-medium">Outline</span>
+        </div>
+        <div className="relative">
           <StatefulPopover
-            placement={PLACEMENT.bottomLeft}
+            placement={PLACEMENT.topLeft}
             content={
-              <div
-                style={{
-                  padding: "1rem",
-                  background: "#ffffff",
-                  width: "200px",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "1rem",
-                  textAlign: "center",
-                }}
-              >
-                <HexColorPicker onChange={(color) => handleChange("stroke", color)} />
-                <Input
-                  overrides={{ Input: { style: { textAlign: "center" } } }}
+              <div className="p-4 bg-white rounded-lg shadow-lg w-[233px] text-center">
+                <HexColorPicker
+                  color={options.stroke}
+                  onChange={(color) => handleChange("stroke", color)}
+                />
+                <input
+                  type="text"
                   value={options.stroke}
-                  onChange={(e) => handleChange("color", (e.target as any).value)}
+                  onChange={(e) => handleChange("stroke", e.target.value)}
+                  className="w-full mt-2 p-1 border rounded-md text-center"
                   placeholder="#000000"
-                  clearOnEscape
                 />
               </div>
             }
@@ -95,52 +110,30 @@ const Outline = () => {
           >
             <div>
               <div
-                style={{
-                  height: "28px",
-                  width: "28px",
-                  backgroundSize: "100% 100%",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  cursor: "pointer",
-                  backgroundColor: options.stroke,
-                }}
+                className="w-7 h-7 cursor-pointer rounded-full"
+                style={{ backgroundColor: options.stroke }}
               />
             </div>
           </StatefulPopover>
         </div>
       </div>
-      <div style={{ height: "10px" }} />
 
-      <div style={{ padding: "0 8px" }}>
-        <div>
-          <div style={{ fontSize: "14px" }}>Size</div>
-          <Slider
-            overrides={{
-              InnerThumb: () => null,
-              ThumbValue: () => null,
-              TickBar: () => null,
-              Thumb: {
-                style: {
-                  height: "12px",
-                  width: "12px",
-                  paddingLeft: 0,
-                },
-              },
-              Track: {
-                style: {
-                  paddingLeft: 0,
-                  paddingRight: 0,
-                },
-              },
-            }}
-            value={[options.strokeWidth]}
-            onChange={({ value }) => handleChange("strokeWidth", value[0])}
+      <div className="mb-4">
+        <label className="text-sm font-medium">Size</label>
+        <div className="mt-1">
+          <input
+            type="range"
+            min="0"
+            max="100"
+            value={options.strokeWidth}
+            onChange={(e) => handleChange("strokeWidth", Number(e.target.value))}
+            className="w-full"
           />
         </div>
+        <div className="text-right text-sm">{options.strokeWidth}</div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Outline
+export default Outline;

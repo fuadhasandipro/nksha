@@ -8,7 +8,7 @@ import useSetIsSidebarOpen from '../../hooks/useSetIsSidebarOpen';
 
 const Path = () => {
   const [state, setState] = React.useState({ fill: '#000000' });
-  const { setActiveSubMenu } = useAppContext();
+  const { setActivePanel } = useAppContext();
   const editor = useEditor();
   const activeObject = useActiveObject() as any;
 
@@ -53,7 +53,7 @@ const Path = () => {
       >
         <Block
           onClick={() => {
-            setActiveSubMenu('PathFill');
+            setActivePanel('PathFill');
             setIsSidebarOpen(true);
           }}
         >

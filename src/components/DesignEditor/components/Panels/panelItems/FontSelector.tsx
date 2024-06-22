@@ -16,7 +16,6 @@ import useSetIsSidebarOpen from '@/components/DesignEditor/hooks/useSetIsSidebar
 
 const FontSelector = () => {
   const [query, setQuery] = React.useState('');
-  const { setActiveSubMenu } = useAppContext();
   const setIsSidebarOpen = useSetIsSidebarOpen();
 
   const [commonFonts, setCommonFonts] = React.useState<any[]>([]);
@@ -73,8 +72,6 @@ const FontSelector = () => {
         <Block
           onClick={() => {
             setIsSidebarOpen(false)
-            setActiveSubMenu(null)
-
           }}
           $style={{ cursor: 'pointer', display: 'flex' }}
         >

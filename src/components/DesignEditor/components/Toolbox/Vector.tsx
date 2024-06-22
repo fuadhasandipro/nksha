@@ -70,10 +70,10 @@ const Vector = () => {
                         }}
                         color={state.colorMap[c]}
                       />
-                      <p className="text-xs text-left ">Hex Code</p>
+                      <p className="text-xs text-left text-black">Hex Code</p>
                       <HexColorInput onChange={(color) => {
                         changeBackgroundColor(c, color)
-                      }} color={state.colorMap[c]} style={{ border: "1px solid #000", background: "#ddd" }} placeholder="Enter Color" />
+                      }} color={state.colorMap[c]} placeholder="Type a color" prefixed alpha style={{ width: "100%", marginTop: "-12px", padding: "4px", border: "1px solid #000", borderRadius: "5px", textAlign: "center", background: "#fff", color: "#000" }} />
 
                     </div>
                   }

@@ -46,10 +46,10 @@ const MobileContainer = ({ children }: { children: React.ReactNode }) => {
     }, [])
 
     useEffect(() => {
-        dispatch(getFonts())
-        dispatch(getUploads())
-        dispatch(getPixabayResources())
-        loadFonts()
+        // dispatch(getFonts())
+        // dispatch(getUploads())
+        // dispatch(getPixabayResources())
+        // loadFonts()
         setTimeout(() => {
             setLoaded(true)
         }, 1000)

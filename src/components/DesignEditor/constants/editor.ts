@@ -4193,8 +4193,8 @@ const textComponent1 = {
     {
       id: "CN3w3235359VUbq-CMkRxQ",
       angle: 0,
-      stroke: "#ffffff",
-      strokeWidth: 0,
+      stroke: "#ff0000",
+      strokeWidth: 5,
       left: 0,
       top: 0,
       width: 900,
@@ -4400,3 +4400,100 @@ const VideoTemplate = {
     },
   ],
 }
+
+
+export const EFFECTS = {
+  None: {
+    fill: "#333333",
+    strokeWidth: 0,
+    shadow: {
+      blur: 2,
+      color: "#afafaf",
+      offsetX: 10,
+      offsetY: 10,
+      enabled: false,
+    },
+    metadata: {
+      outline: false,
+      shadow: false
+    }
+  },
+  Shadow: {
+    fill: "#333333",
+    shadow: {
+      blur: 2,
+      color: "#afafaf",
+      offsetX: 10,
+      offsetY: 10,
+      enabled: true,
+    },
+    metadata: {
+      outline: false,
+      shadow: true
+    }
+  },
+  Lift: {
+    fill: "#333333",
+    shadow: {
+      blur: 25,
+      color: "rgba(0,0,0,0.45)",
+      offsetX: 0,
+      offsetY: 0,
+      enabled: true,
+    },
+    metadata: {
+      outline: false,
+      shadow: true
+    }
+  },
+  Hollow: {
+    stroke: "#000000",
+    fill: "#fff",
+    strokeWidth: 2,
+    shadow: {
+      blur: 25,
+      color: "rgba(0,0,0,0.45)",
+      offsetX: 0,
+      offsetY: 0,
+      enabled: false,
+    },
+    metadata: {
+      outline: true,
+      shadow: false
+    }
+  },
+  Splice: {
+    stroke: "#000000",
+    fill: null,
+    strokeWidth: 2,
+    shadow: {
+      blur: 0,
+      color: "#afafaf",
+      offsetX: 10,
+      offsetY: 10,
+      enabled: true,
+    },
+    metadata: {
+      outline: true,
+      shadow: true
+    }
+  },
+  Neon: {
+    stroke: "#e84393",
+    fill: "#fd79a8",
+    strokeWidth: 2,
+    shadow: {
+      blur: 25,
+      color: "#fd79a8",
+      offsetX: 0,
+      offsetY: 0,
+      enabled: true,
+    },
+    metadata: {
+      outline: true,
+      shadow: true
+    }
+  },
+
+}
+

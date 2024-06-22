@@ -24,6 +24,8 @@ import { useRouter } from 'next/router';
 import subscriptionTimeLeft from '@/lib/getSubscriptionDuration';
 import { DetailsIcon } from '@/components/icons/details-icon';
 import { event } from '@/lib/events';
+import { FacebookIcon } from '@/components/icons/facebook-icon';
+import { CrownIcon } from '@/components/icons/crown-icon';
 
 interface NavLinkProps {
   href: string;
@@ -136,7 +138,7 @@ export function Sidebar({
               title="Your Subscription"
               href={routes.subscription}
               isCollapse={isCollapse}
-              icon={<FeedIcon className="h-[17px] w-[17px] text-current" />}
+              icon={<CrownIcon className="h-[17px] w-[17px] text-current" />}
             />
           </nav>
 
@@ -156,7 +158,7 @@ export function Sidebar({
               <Link
                 href=""
                 rel="noreferrer"
-                className="focus:ring-accent-700  mt-5 inline-flex h-9 w-36 shrink-0 items-center justify-center rounded border border-transparent bg-brand px-3 py-0 text-sm font-semibold leading-none text-light outline-none transition duration-300 ease-in-out hover:bg-brand-dark focus:shadow focus:outline-none focus:ring-1"
+                className="focus:ring-accent-700  mt-5 inline-flex h-9 w-36 shrink-0 items-center justify-center rounded border border-transparent bg-buy px-3 py-0 text-sm font-semibold leading-none text-dark outline-none transition duration-300 ease-in-out hover:bg-buy-dark focus:shadow focus:outline-none focus:ring-1"
                 onClick={async (e) => {
 
                   event({
@@ -182,7 +184,7 @@ export function Sidebar({
               >
                 Buy Now
                 <span className="ml-1 flex w-auto flex-shrink-0 items-center justify-start xl:w-3">
-                  <DetailsIcon />
+                  <CrownIcon className="h-[14px] w-[14px] text-current" />
                 </span>
               </Link>
             </nav>
@@ -196,6 +198,23 @@ export function Sidebar({
           isCollapse ? 'flex xl:hidden' : 'hidden xl:flex'
         )}
       >
+        {differenceInDays === null || differenceInDays > 30 ? <div className='flex flex-col justify-center mt-7'>
+          <h2 className='font-tiro text-base dark:text-white text-black'>যেকোন আপডেট পেতে যুক্ত থাকুন আমাদের ফেসবুক গ্রুপে।</h2>
+          <Link
+            href="https://www.facebook.com/groups/noksha.site"
+            rel="noreferrer"
+            target="_blank"
+            className="focus:ring-accent-700 h-9 w-48 shrink-0 items-center justify-center self-center rounded border border-transparent bg-blue-600 px-3 py-0 text-sm font-semibold leading-none text-light outline-none transition duration-300 ease-in-out hover:bg-blue-800 focus:shadow focus:outline-none focus:ring-1 inline-flex mt-4 "
+          >
+            <span className="mr-2 flex flex-shrink-0 items-center justify-start w-3">
+              <FacebookIcon />
+            </span>
+            Join Our FB Group
+
+          </Link>
+        </div> : ""}
+
+
         <nav className="flex items-center justify-center gap-5 pb-1.5 text-13px font-medium capitalize tracking-[0.2px]">
           <ActiveLink
             href="https://www.facebook.com/noksha.site"

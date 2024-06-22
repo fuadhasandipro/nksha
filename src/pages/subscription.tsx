@@ -1,5 +1,7 @@
 
+import { CrownIcon } from '@/components/icons/crown-icon';
 import { DetailsIcon } from '@/components/icons/details-icon';
+import { FacebookIcon } from '@/components/icons/facebook-icon';
 import routes from '@/config/routes';
 import Layout from '@/layouts/_layout';
 import Seo from '@/layouts/_seo';
@@ -15,6 +17,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react'
+import catUnsubscribe from '@/assets/images/cat_un.png'
+import catUnsubscribeDark from '@/assets/images/cat_un_dark.png'
+import catSubscribed from '@/assets/images/happy_cat.png'
+
+
 
 const Subscription = () => {
 
@@ -30,93 +37,120 @@ const Subscription = () => {
     }
 
 
+
+
     return (
-        <div className="flex justify-center items-center max-h-full h-full">
+        <div className="flex flex-col justify-center items-center max-h-full h-full">
             {differenceInDays === null || differenceInDays > 30 ?
+                <>
+                    <div className="group cursor-pointer rounded-md bg-light px-4 py-7 text-center dark:bg-dark-250 w-96 ">
+                        <div className="flex justify-center">
+                            <Image src={isDarkMode ? catUnsubscribeDark : catUnsubscribe} width={130} height={130} />
+                        </div>
+                        <h3 className="my-1.5 text-xl font-tiro font-medium text-dark dark:text-light">আপনার সাবস্ক্রিপশন নেই <br /> অথবা মেয়াদ শেষ হয়ে গিয়েছে!</h3>
+                        <div className="flex justify-center my-4">
+                            <Image
+                                src={
+                                    isDarkMode
+                                        ? '/package/offer-dark.png'
+                                        : '/package/offer-light.png'
+                                }
+                                alt="offer dark"
+                                width={150}
+                                height={150}
+                            />
+                        </div>
+                        <Link
+                            href=""
+                            rel="noreferrer"
+                            target="_blank"
+                            className="focus:ring-accent-700 h-9 w-36 shrink-0 items-center justify-center self-center rounded border border-transparent bg-buy px-3 py-0 text-sm font-semibold leading-none text-dark outline-none transition duration-300 ease-in-out hover:bg-buy-dark focus:shadow focus:outline-none focus:ring-1 inline-flex mt-4"
+                            onClick={async (e) => {
+                                e.preventDefault();
 
+                                event({
+                                    action: 'click',
+                                    category: 'Button',
+                                    label: 'Pay Button',
+                                    value: 'Clicked on Pay Button '
+                                });
+                                // openModal('PRODUCT_DETAILS')
 
-                <div className="group cursor-pointer rounded-md bg-light px-4 py-7 text-center dark:bg-dark-250 w-96 ">
-                    <div className="flex justify-center">
-                        <svg width="100" height="100" viewBox="0 0 32 32" fill="#fdbc68" xmlns="http://www.w3.org/2000/svg">
-                            <path fillRule="evenodd" clipRule="evenodd" d="M18.546 6.545c0 .992-.568 1.851-1.395 2.272 1.304 3.493 2.67 5.21 3.871 5.344 1.35.152 2.586-.47 3.796-2.004a1.23 1.23 0 0 1 .512-.39A2.545 2.545 0 1 1 27 12.869c.002.112-.01.23-.04.353l-1.981 7.981A3.67 3.67 0 0 1 21.423 24H10.577a3.67 3.67 0 0 1-3.556-2.797l-1.98-7.981a1.329 1.329 0 0 1-.04-.353 2.545 2.545 0 1 1 1.67-1.102c.193.076.376.21.527.41 1.152 1.525 2.375 2.142 3.78 1.984 1.259-.14 2.618-1.852 3.872-5.344a2.545 2.545 0 1 1 3.696-2.272ZM7 27.25c0-.69.56-1.25 1.25-1.25h15.5a1.25 1.25 0 1 1 0 2.5H8.25c-.69 0-1.25-.56-1.25-1.25Z" fill="#cccccc">
-                            </path>
-                        </svg>
-                    </div>
-                    <h3 className="my-1.5 text-xl font-medium text-dark dark:text-light">You don't have subscription or subscription has expired</h3>
-                    <div className="flex justify-center my-4">
-                        <Image
-                            src={
-                                isDarkMode
-                                    ? '/package/offer-dark.png'
-                                    : '/package/offer-light.png'
-                            }
-                            alt="offer dark"
-                            width={150}
-                            height={150}
-                        />
-                    </div>
-                    <Link
-                        href=""
-                        rel="noreferrer"
-                        target="_blank"
-                        className="focus:ring-accent-700 h-9 w-36 shrink-0 items-center justify-center self-center rounded border border-transparent bg-brand px-3 py-0 text-sm font-semibold leading-none text-light outline-none transition duration-300 ease-in-out hover:bg-brand-dark focus:shadow focus:outline-none focus:ring-1 inline-flex mt-4"
-                        onClick={async (e) => {
-                            e.preventDefault();
+                                const paymentUrl = await fetchPaymentUrl();
 
-                            event({
-                                action: 'click',
-                                category: 'Button',
-                                label: 'Pay Button',
-                                value: 'Clicked on Pay Button '
-                            });
-                            // openModal('PRODUCT_DETAILS')
-
-                            const paymentUrl = await fetchPaymentUrl();
-
-                            window.open(paymentUrl, '_blank');
-                            router.push('/subscription');
-                        }}
-                    >
-                        Buy Now
-                        <span className="ml-1 flex flex-shrink-0 items-center justify-start w-3">
-                            <DetailsIcon />
-                        </span>
-                    </Link>
-
-
-                </div>
-
-                : <div className="group cursor-pointer rounded-md bg-light px-4 py-7 text-center dark:bg-dark-250 w-80">
-                    <div className="flex justify-center">
-                        <svg width="100" height="100" viewBox="0 0 32 32" fill="#fdbc68" xmlns="http://www.w3.org/2000/svg">
-                            <path fillRule="evenodd" clipRule="evenodd" d="M18.546 6.545c0 .992-.568 1.851-1.395 2.272 1.304 3.493 2.67 5.21 3.871 5.344 1.35.152 2.586-.47 3.796-2.004a1.23 1.23 0 0 1 .512-.39A2.545 2.545 0 1 1 27 12.869c.002.112-.01.23-.04.353l-1.981 7.981A3.67 3.67 0 0 1 21.423 24H10.577a3.67 3.67 0 0 1-3.556-2.797l-1.98-7.981a1.329 1.329 0 0 1-.04-.353 2.545 2.545 0 1 1 1.67-1.102c.193.076.376.21.527.41 1.152 1.525 2.375 2.142 3.78 1.984 1.259-.14 2.618-1.852 3.872-5.344a2.545 2.545 0 1 1 3.696-2.272ZM7 27.25c0-.69.56-1.25 1.25-1.25h15.5a1.25 1.25 0 1 1 0 2.5H8.25c-.69 0-1.25-.56-1.25-1.25Z" fill="#fdbc68">
-                            </path>
-                        </svg>
-                    </div>
-                    <h3 className="my-1.5 text-xl font-medium text-dark dark:text-light"> Noksha Premium Activated</h3>
-                    <div className="font-medium text-dark-800 dark:text-dark-base">
-                        Date Purchased: {dayjs(user?.unsafeMetadata.subscriptionDate).format('D MMMM, YYYY [at] hh:mm A')}
-                    </div>
-                    <div className="font-medium text-dark-800 dark:text-dark-base mb-3">
-                        Expires in: {Math.trunc(30 - subscriptionTimeLeft(user?.unsafeMetadata.subscriptionDate))} Day(s)
+                                window.open(paymentUrl, '_blank');
+                                router.push('/subscription');
+                            }}
+                        >
+                            Buy Now
+                            <span className="ml-2 flex flex-shrink-0 items-center justify-start w-3">
+                                <CrownIcon />
+                            </span>
+                        </Link>
                     </div>
 
-                    <Link
-                        href="/"
-                        rel="noreferrer"
-                        className="focus:ring-accent-700 h-9 w-36 shrink-0 items-center justify-center self-center rounded border border-transparent bg-brand px-3 py-0 text-sm font-semibold leading-none text-light outline-none transition duration-300 ease-in-out hover:bg-brand-dark focus:shadow focus:outline-none focus:ring-1 inline-flex mt-4"
-                    >
-                        Start Editing
-                        <span className="ml-1 flex flex-shrink-0 items-center justify-start w-3">
-                            <DetailsIcon />
-                        </span>
-                    </Link>
+                    <div className='flex flex-col justify-center mt-7'>
+                        <h2 className='font-tiro sm:text-xl text-base dark:text-white text-black text-center'>যেকোন আপডেট পেতে যুক্ত থাকুন আমাদের ফেসবুক গ্রুপে।</h2>
+                        <Link
+                            href="https://www.facebook.com/groups/noksha.site"
+                            rel="noreferrer"
+                            target="_blank"
+                            className="focus:ring-accent-700 h-9 w-60 shrink-0 items-center justify-center self-center rounded border border-transparent px-3 py-0 text-sm font-semibold leading-non outline-none transition duration-300 ease-in-out underline text-blue-600 focus:shadow focus:outline-none focus:ring-1 inline-flex "
+                        >
+                            <span className="mr-2 flex flex-shrink-0 items-center justify-start w-3">
+                                <FacebookIcon />
+                            </span>
+                            Join Our Facebook Group
 
-                </div>}
+                        </Link>
+                    </div>
+                </>
+
+                : <>
+                    <div className="group cursor-pointer rounded-md bg-light px-4 py-7 text-center dark:bg-dark-250 w-80">
+                        <div className="flex justify-center">
+                            <Image src={catSubscribed} width={130} height={130} />
+                        </div>
+                        <h3 className="text-xl font-tiro font-medium text-dark dark:text-light my-4">আপনার নকশা প্রিমিয়াম একটিভেট হয়েছে।</h3>
+                        <div className="font-medium text-dark-800 dark:text-dark-base">
+                            Date Purchased: {dayjs(user?.unsafeMetadata.subscriptionDate).format('D MMMM, YYYY [at] hh:mm A')}
+                        </div>
+                        <div className="font-medium text-dark-800 dark:text-dark-base mb-3">
+                            Expires in: {Math.trunc(30 - subscriptionTimeLeft(user?.unsafeMetadata.subscriptionDate))} Day(s)
+                        </div>
+
+                        <Link
+                            href="/"
+                            rel="noreferrer"
+                            className="focus:ring-accent-700 h-9 w-full shrink-0 items-center justify-center self-center rounded border border-transparent bg-brand px-3 py-0 text-sm font-semibold leading-none text-light outline-none transition duration-300 ease-in-out hover:bg-brand-dark focus:shadow focus:outline-none focus:ring-1 inline-flex mt-4"
+                        >
+                            Start Editing
+                            <span className="ml-1 flex flex-shrink-0 items-center justify-start w-3">
+                                <DetailsIcon />
+                            </span>
+                        </Link>
+                    </div>
+                    <div className='flex flex-col justify-center mt-7'>
+                        <h2 className='font-tiro sm:text-xl text-base dark:text-white text-black text-center'>যেকোন টেমপ্লেট বা ডিজাইন রিকোয়েস্ট অথবা <br /> আপনার ফিডব্যাক পোস্ট করতে পারেন আমাদের গ্রুপে।</h2>
+                        <Link
+                            href="https://www.facebook.com/groups/noksha.site"
+                            rel="noreferrer"
+                            target="_blank"
+                            className="focus:ring-accent-700 h-9 w-60 shrink-0 items-center justify-center self-center rounded border border-transparent px-3 py-0 text-sm font-semibold leading-non outline-none transition duration-300 ease-in-out underline text-blue-600 focus:shadow focus:outline-none focus:ring-1 inline-flex"
+                        >
+                            <span className="mr-2 flex flex-shrink-0 items-center justify-start w-3">
+                                <FacebookIcon />
+                            </span>
+                            Join Our Facebook Group
+
+                        </Link>
+                    </div>
+                </>}
 
         </div>
     )
 }
+
 
 Subscription.getLayout = function getLayout(page: any) {
     return <>
@@ -125,6 +159,7 @@ Subscription.getLayout = function getLayout(page: any) {
             description="You Subscription"
             url={routes.subscription}
         />
+
         <Layout>{page}</Layout>
     </>
 };

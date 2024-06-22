@@ -283,29 +283,31 @@ const Navbar = ({ isLargeScreen }) => {
   }
 
 
-  const storageKey = `design_${session}_${id}`;
-  const storedData = localStorage.getItem(storageKey);
+  // const storageKey = `design_${session}_${id}`;
+  // const storedData = localStorage.getItem(storageKey);
 
   useEffect(() => {
 
-    const fetchLS = async (storedData) => {
-      try {
-        const jsonDesign = JSON.parse(storedData);
-        let template = await loadGraphicTemplate(jsonDesign);
-        setScenes(template.scenes);
-        setCurrentDesign(template.design);
-      } catch (error) {
-        console.error("Error fetching from localStorage:", error);
-        router.push("/"); // Handle error by redirecting or other appropriate action
-      }
-    };
+    // const fetchLS = async (storedData) => {
+    //   try {
+    //     const jsonDesign = JSON.parse(storedData);
+    //     let template = await loadGraphicTemplate(jsonDesign);
+    //     setScenes(template.scenes);
+    //     setCurrentDesign(template.design);
+    //   } catch (error) {
+    //     console.error("Error fetching from localStorage:", error);
+    //     router.push("/"); // Handle error by redirecting or other appropriate action
+    //   }
+    // // };
 
-    if (storedData) {
-      fetchLS(storedData);
+    // if (storedData) {
+    //   fetchLS(storedData);
 
-    } else {
-      fetchData();
-    }
+    // } else {
+    //   fetchData();
+    // }
+
+    fetchData();
 
   }, [editor, session, userId]);
 
@@ -431,7 +433,7 @@ const Navbar = ({ isLargeScreen }) => {
           preview: existingThumbnail,
         };
 
-        localStorage.setItem(`design_${session}_${id}`, JSON.stringify(graphicTemplate));
+        // localStorage.setItem(`design_${session}_${id}`, JSON.stringify(graphicTemplate));
 
         const { error: updateError } = await supabase
           .from('user_designs')
@@ -482,7 +484,7 @@ const Navbar = ({ isLargeScreen }) => {
               template_id: router.query.id,
             });
 
-          localStorage.setItem(`design_${session}_${id}`, JSON.stringify(graphicTemplate));
+          // localStorage.setItem(`design_${session}_${id}`, JSON.stringify(graphicTemplate));
 
           if (insertError) {
             setLoadingSave(false);
@@ -549,7 +551,7 @@ const Navbar = ({ isLargeScreen }) => {
           preview: existingThumbnail,
         };
 
-        localStorage.setItem(`design_${session}_${id}`, JSON.stringify(graphicTemplate));
+        // localStorage.setItem(`design_${session}_${id}`, JSON.stringify(graphicTemplate));
 
         const { error: updateError } = await supabase
           .from('user_designs')
@@ -618,7 +620,7 @@ const Navbar = ({ isLargeScreen }) => {
               template_id: router.query.id,
             });
 
-          localStorage.setItem(`design_${session}_${id}`, JSON.stringify(graphicTemplate));
+          // localStorage.setItem(`design_${session}_${id}`, JSON.stringify(graphicTemplate));
 
           if (insertError) {
             setLoadingSave(false);

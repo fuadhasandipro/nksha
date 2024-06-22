@@ -3,7 +3,7 @@ import { Block } from "baseui/block"
 import Scrollable from "@/components/DesignEditor/components/Scrollable"
 import { HexColorInput, HexColorPicker } from "react-colorful"
 import { Delete } from "baseui/icon"
-import { debounce } from "lodash"
+import { debounce, throttle } from "lodash"
 import { useActiveObject, useEditor } from "@layerhub-io/react"
 import useSetIsSidebarOpen from "@/components/DesignEditor/hooks/useSetIsSidebarOpen"
 import useAppContext from "@/components/DesignEditor/hooks/useAppContext"
@@ -34,10 +34,10 @@ const TextFill = () => {
     }
 
     setColor(color)
-  }, 50)
+  }, 1000)
 
   const setIsSidebarOpen = useSetIsSidebarOpen()
-  const { setActiveSubMenu } = useAppContext();
+
 
   return (
     <Block $style={{ flex: 1, display: "flex", flexDirection: "column" }}>
@@ -54,7 +54,7 @@ const TextFill = () => {
 
         <Block $style={{ cursor: "pointer", display: "flex" }} onClick={() => {
           setIsSidebarOpen(false)
-          setActiveSubMenu(null);
+
         }}>
           <Delete size={24} />
         </Block>
@@ -62,8 +62,8 @@ const TextFill = () => {
       <Scrollable>
         <Block padding="0 1.5rem">
           <HexColorPicker onChange={updateObjectFill} color={color} style={{ width: "100%" }} />
-          <p className="text-xs text-left my-3">Hex Code</p>
-          <HexColorInput onChange={updateObjectFill} color={color} placeholder="Type a color" prefixed alpha style={{ display: "block", border: "1px solid #000", background: "#ddd" }} />
+          <p className="text-xs text-left my-3 text-black">Hex Code</p>
+          <HexColorInput onChange={updateObjectFill} color={color} placeholder="Type a color" prefixed alpha style={{ width: "100%", marginTop: "4px", padding: "4px", border: "1px solid #000", borderRadius: "5px", textAlign: "center", background: "#fff", color: "#000" }} />
 
           <Block>
             <Block $style={{ padding: "0.75rem 0", fontWeight: 500, fontSize: "14px" }}>Preset colors</Block>

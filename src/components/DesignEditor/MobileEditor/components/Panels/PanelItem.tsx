@@ -7,24 +7,17 @@ import useAppContext from "@/components/DesignEditor/hooks/useAppContext"
 import useIsSidebarOpen from "@/components/DesignEditor/hooks/useIsSidebarOpen"
 
 interface State {
-  panel: string
+  panel: string | null
 }
 const PanelsList = () => {
   const [state, setState] = React.useState<State>({ panel: "Text" })
   const isSidebarOpen = useIsSidebarOpen()
-  const { activePanel, activeSubMenu } = useAppContext()
+  const { activePanel } = useAppContext()
 
   React.useEffect(() => {
     setState({ panel: activePanel })
   }, [activePanel])
 
-  React.useEffect(() => {
-    if (activeSubMenu) {
-      setState({ panel: activeSubMenu })
-    } else {
-      // setState({ panel: "Uploads" })
-    }
-  }, [activeSubMenu])
 
   // @ts-ignore
   const Component = panelItems[state.panel]
