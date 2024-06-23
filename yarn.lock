@@ -6804,6 +6804,11 @@ react-share@4.4.1:
     classnames "^2.3.2"
     jsonp "^0.2.1"
 
+react-spinners@^0.13.8:
+  version "0.13.8"
+  resolved "https://registry.npmjs.org/react-spinners/-/react-spinners-0.13.8.tgz"
+  integrity sha512-3e+k56lUkPj0vb5NDXPVFAOkPC//XyhKPJjvcGjyMNPWsBKpplfeyialP74G7H7+It7KzhtET+MvGqbKgAqpZA==
+
 react-uid@^2.3.0:
   version "2.3.0"
   resolved "https://registry.npmjs.org/react-uid/-/react-uid-2.3.0.tgz"

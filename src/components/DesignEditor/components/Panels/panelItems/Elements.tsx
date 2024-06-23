@@ -136,7 +136,7 @@ const CategoryPreview = ({ title, items, onClick }) => {
         ))}
       </Block>}
 
-      {title == "Graphics" && <Block padding="0" $style={{ display: "grid", gap: "8px", gridTemplateColumns: "1fr 1fr 1fr" }}>
+      {/* {title == "Graphics" && <Block padding="0" $style={{ display: "grid", gap: "8px", gridTemplateColumns: "1fr 1fr 1fr" }}>
         {items.map((vector, index) => (
           <GraphicItem key={index} onClick={() => {
             if (editor) {
@@ -148,7 +148,7 @@ const CategoryPreview = ({ title, items, onClick }) => {
             }
           }} preview={vector} />
         ))}
-      </Block>}
+      </Block>} */}
 
       {title == "Images" && <Block padding="0">
         <div style={{ display: "grid", gap: "8px", gridTemplateColumns: "1fr 1fr 1fr" }}>
