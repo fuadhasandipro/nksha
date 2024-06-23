@@ -54,7 +54,7 @@ const Images = () => {
   )
 }
 
-const ImageItem = ({ preview, onClick }: { preview: any; onClick?: (option: any) => void }) => {
+export const ImageItem = ({ preview, onClick }: { preview: any; onClick?: (option: any) => void }) => {
   const [css] = useStyletron()
   return (
     <div

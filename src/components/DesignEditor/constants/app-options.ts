@@ -4,12 +4,12 @@ export const BASE_ITEMS = [
   //   name: 'Templates',
   // },
   {
-    id: 'graphics',
-    name: 'Graphics',
+    id: 'elements',
+    name: 'Elements',
   },
   {
-    id: 'uploadlogo',
-    name: 'UploadLogo',
+    id: 'graphics',
+    name: 'Graphics',
   },
   {
     id: 'text',
@@ -19,14 +19,11 @@ export const BASE_ITEMS = [
     id: 'uploads',
     name: 'Uploads',
   },
-  {
-    id: 'elements',
-    name: 'Elements',
-  },
-  {
-    id: 'images',
-    name: 'Images',
-  },
+
+  // {
+  //   id: 'images',
+  //   name: 'Images',
+  // },
 
   {
     id: 'customize',
@@ -45,12 +42,12 @@ export const BASE_ITEMS = [
 
 export const BASE_MOBILE_ITEMS = [
   {
-    id: 'graphics',
-    name: 'Graphics',
+    id: 'elements',
+    name: 'Elements',
   },
   {
-    id: 'uploadlogo',
-    name: 'UploadLogo',
+    id: 'graphics',
+    name: 'Graphics',
   },
   {
     id: 'text',
@@ -59,14 +56,6 @@ export const BASE_MOBILE_ITEMS = [
   {
     id: 'uploads',
     name: 'Uploads',
-  },
-  {
-    id: 'elements',
-    name: 'Elements',
-  },
-  {
-    id: 'images',
-    name: 'Images',
   },
   {
     id: 'customize',
