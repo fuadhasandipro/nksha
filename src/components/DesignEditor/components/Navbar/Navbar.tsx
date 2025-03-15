@@ -231,10 +231,10 @@ const Navbar = ({ isLargeScreen }) => {
   const fetchData = async () => {
     const supabase = createClerkSupabaseClient();
 
-    if (user?.unsafeMetadata.isSubscribed === false) {
-      router.push("/subscription");
-      return;
-    }
+    // if (user?.unsafeMetadata.isSubscribed === false) {
+    //   router.push("/subscription");
+    //   return;
+    // }
 
     const subscriptionDateStr = user?.unsafeMetadata.subscriptionDate;
 
