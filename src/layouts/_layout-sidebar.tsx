@@ -199,7 +199,7 @@ export function Sidebar({
           isCollapse ? 'flex xl:hidden' : 'hidden xl:flex'
         )}
       >
-        {differenceInDays > 30 ? <div className='flex flex-col justify-center mt-7'>
+        <div className='flex flex-col justify-center mt-7'>
           <h2 className='font-tiro text-base dark:text-white text-black'>যেকোন আপডেট পেতে যুক্ত থাকুন আমাদের ফেসবুক গ্রুপে।</h2>
           <Link
             href="https://www.facebook.com/groups/noksha.site"
@@ -213,7 +213,7 @@ export function Sidebar({
             Join Our FB Group
 
           </Link>
-        </div> : ""}
+        </div> : ""
 
 
         <nav className="flex items-center justify-center gap-5 pb-1.5 text-13px font-medium capitalize tracking-[0.2px]">
