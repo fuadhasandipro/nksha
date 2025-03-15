@@ -142,7 +142,7 @@ export function Sidebar({
             />
           </nav>
 
-          {differenceInDays === null || differenceInDays > 30 ? (
+          {differenceInDays > 30 ? (
             <nav className="mt-auto flex flex-col items-center pb-4">
               <Image
                 src={

@@ -41,7 +41,7 @@ const Subscription = () => {
 
     return (
         <div className="flex flex-col justify-center items-center max-h-full h-full">
-            {differenceInDays === null || differenceInDays > 30 ?
+            {differenceInDays > 30 ?
                 <>
                     <div className="group cursor-pointer rounded-md bg-light px-4 py-7 text-center dark:bg-dark-250 w-96 ">
                         <div className="flex justify-center">
@@ -111,7 +111,7 @@ const Subscription = () => {
                         <div className="flex justify-center">
                             <Image src={catSubscribed} width={130} height={130} />
                         </div>
-                        {/* <h3 className="text-xl font-tiro font-medium text-dark dark:text-light my-4">আপনার নকশা প্রিমিয়াম একটিভেট হয়েছে।</h3> */}
+                        <h3 className="text-xl font-tiro font-medium text-dark dark:text-light my-4">নকশা ব্যবহার করার জন্য আপনাকে আন্তরিকভাবে ধন্যবাদ।</h3>
                         {/* <div className="font-medium text-dark-800 dark:text-dark-base">
                             Date Purchased: {dayjs(user?.unsafeMetadata.subscriptionDate).format('D MMMM, YYYY [at] hh:mm A')}
                         </div>
