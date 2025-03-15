@@ -7,7 +7,7 @@ const subscriptionTimeLeft = (subscriptionDateStr) => {
 
     // Convert the difference to days
     // const differenceInDays = differenceInMilliseconds / (1000 * 60 * 60 * 24);
-    const differenceInDays = 2;
+    const differenceInDays = 1;
 
     return differenceInDays
 }
