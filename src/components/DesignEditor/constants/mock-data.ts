@@ -420,6 +420,7 @@ export const images = [
     photographer_url: "https://www.pexels.com/@aleksey-kuprikov-1883853",
     photographer_id: 1883853,
     avg_color: "#6B7874",
+    scale: 4,
     src: {
       original: "https://images.pexels.com/photos/3493777/pexels-photo-3493777.jpeg",
       large2x:

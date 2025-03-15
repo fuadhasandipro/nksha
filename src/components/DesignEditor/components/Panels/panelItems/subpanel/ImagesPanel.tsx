@@ -5,6 +5,8 @@ import AngleDoubleLeft from "@/components/DesignEditor/components/Icons/AngleDou
 import Scrollable from "@/components/DesignEditor/components/Scrollable";
 import { images } from "@/components/DesignEditor/constants/mock-data";
 import { useEditor } from "@layerhub-io/react";
+import { StaticPathObject, StaticPathOptions } from "@layerhub-io/objects"
+import { fabric } from "fabric"
 
 const ImagesPanel = ({ onBack }) => {
     const editor = useEditor();
@@ -20,6 +22,7 @@ const ImagesPanel = ({ onBack }) => {
         }
     };
 
+
     return (
         <Block $style={{ flex: 1, display: "flex", flexDirection: "column" }}>
             <Block
@@ -34,7 +37,7 @@ const ImagesPanel = ({ onBack }) => {
                 <Block onClick={onBack} $style={{ cursor: "pointer", display: "flex" }}>
                     <AngleDoubleLeft size={18} />
                 </Block>
-                <Block>Images</Block>
+                <Block>Imagesx</Block>
             </Block>
             <Scrollable>
                 <Block padding="0 1rem">

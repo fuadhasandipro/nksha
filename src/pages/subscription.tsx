@@ -111,13 +111,13 @@ const Subscription = () => {
                         <div className="flex justify-center">
                             <Image src={catSubscribed} width={130} height={130} />
                         </div>
-                        <h3 className="text-xl font-tiro font-medium text-dark dark:text-light my-4">আপনার নকশা প্রিমিয়াম একটিভেট হয়েছে।</h3>
-                        <div className="font-medium text-dark-800 dark:text-dark-base">
+                        {/* <h3 className="text-xl font-tiro font-medium text-dark dark:text-light my-4">আপনার নকশা প্রিমিয়াম একটিভেট হয়েছে।</h3> */}
+                        {/* <div className="font-medium text-dark-800 dark:text-dark-base">
                             Date Purchased: {dayjs(user?.unsafeMetadata.subscriptionDate).format('D MMMM, YYYY [at] hh:mm A')}
                         </div>
                         <div className="font-medium text-dark-800 dark:text-dark-base mb-3">
                             Expires in: {Math.trunc(30 - subscriptionTimeLeft(user?.unsafeMetadata.subscriptionDate))} Day(s)
-                        </div>
+                        </div> */}
 
                         <Link
                             href="/"
